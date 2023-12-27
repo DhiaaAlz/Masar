@@ -1,0 +1,256 @@
+﻿@using AlwasataNew.Data;
+@model AddCustomerViewModel
+
+@{
+    ViewData["Title"] = "Add New Customer";
+    using var DbContext = new ApplicationDbContext();
+}
+<link rel="stylesheet" href="~/assets/css/addNew.css"/>
+<form action="AddNew" method="post" class="fromInput" style="text-align:right" dir="rtl">
+    <h2>اضافة عميل جديد</h2>
+    <hr />
+     @* <div asp-validation-summary="All" class="text-danger"></div>  *@
+
+    <div class="replaceBetween">
+        <span id="custInfoBtn" class="active">معلومات العميل</span>
+        <span id="projInfoBtn">معلومات المشروع</span>
+    </div>
+    <div class="CustomerInfo">
+        <div class="form-floating">
+            <select asp-for="Type" class="form-control" autocomplete="username" aria-required="true" id="CustomerTypeSelect">
+                <option>فرد</option>
+                <option>شركة</option>
+                <option>مؤوسسة</option>
+                <option>مكتب</option>
+            </select>
+            <label asp-for="Type"></label>
+            <span asp-validation-for="Type" class="text-danger"></span>
+        </div>
+        <div class="form-floating">
+            <select asp-for="ForCompany" class="form-control" autocomplete="ForCompany" aria-required="true">
+                @{
+                    
+                        
+                    foreach (var item in DbContext.Companies)
+                    {
+                        <option value="@item.Id">
+                            @item.Name
+                        </option>
+                    }
+                    
+                }
+            </select>
+            <label asp-for="ForCompany"></label>
+            <span asp-validation-for="ForCompany" class="text-danger"></span>
+        </div>
+        <div class="form-floating" id="customerName">
+            <input asp-for="CustomerName" class="form-control" autocomplete="firstName" aria-required="false" maxlength="100" />
+            <label asp-for="CustomerName"></label>
+            <span asp-validation-for="CustomerName" class="text-danger"></span>
+
+        </div>
+       
+        <div id="CompanyInformation" style="display:none">
+            <div class="form-floating">
+                <input asp-for="CompnayName" class="form-control" autocomplete="username" aria-required="false" />
+                <label asp-for="CompnayName" style="text-align:right"></label>
+                <span asp-validation-for="CompnayName" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <input asp-for="EmployeeName" class="form-control" autocomplete="username" aria-required="false" />
+                <label asp-for="EmployeeName" style="text-align:right"></label>
+                <span asp-validation-for="EmployeeName" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <input asp-for="JobTitle" class="form-control" autocomplete="username" aria-required="false" />
+                <label asp-for="JobTitle" style="text-align:right"></label>
+                <span asp-validation-for="JobTitle" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="CompanySite" class="form-control" autocomplete="username" aria-required="false" />
+                <label asp-for="CompanySite" style="text-align:right"></label>
+                <span asp-validation-for="CompanySite" class="text-danger"></span>
+            </div>
+           
+        </div>
+
+        <div class="form-floating">
+            <input asp-for="Phone" class="form-control" autocomplete="username" aria-required="true" />
+            <label asp-for="Phone"></label>
+            <span asp-validation-for="Phone" class="text-danger"></span>
+        </div>
+        <div class="form-floating">
+            <input asp-for="Email" class="form-control" autocomplete="username" aria-required="false" />
+            <label asp-for="Email" style="text-align:right"></label>
+            <span asp-validation-for="Email" class="text-danger"></span>
+
+        </div>
+
+        <div class="form-floating">
+            <input asp-for="CustomerDescription" class="form-control" autocomplete="CustomerDescription" aria-required="false" />
+            <label asp-for="CustomerDescription" style="text-align:right"></label>
+            <span asp-validation-for="CustomerDescription" class="text-danger"></span>
+        </div>
+
+       
+    </div>
+    <div class="ProjectInfo">
+        <div class="form-floating">
+            <input asp-for="Description" class="form-control" autocomplete="description" aria-required="false" />
+            <label asp-for="Description"></label>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating">
+            <select asp-for="ProjectType" class="form-control" autocomplete="project type" aria-required="true" id="projectTypeSelect">
+                <option>مباني سكنية</option>
+                <option>مباني تجارية</option>
+                <option>مباني حكومية</option>
+                <option>مشاريع تعليمية</option>
+                <option>مشاريع طبية وصحية</option>
+                <option>مشاريع فنادق ومنتجعات</option>
+                <option>مشاريع زراعية</option>
+                <option>مشاريع تخزين ولوجستية</option>
+                <option>مشاريع بنية تحتية</option>
+                <option>مشاريع ترفيهية</option>
+                <option>مشاريع دينية</option>
+                <option>مشاريع طاقة وبيئة</option>
+                <option>مشاريع نقل ومواصلات</option>
+                <option>مشاريع هندسية ميكانيكية وكهربائية</option>
+                <option>مشاريع تخطيط عمراني</option>
+                <option>مشاريع لاندسكيب وتصميم حدائق</option>
+                <option>مشاريع انشاء مساكن خاصة</option>
+                <option>مشاريع تصنيعية</option>
+                <option>مشاريع تخطيط عمراني</option>
+                <option>مشاريع لتوليد الطاقة</option>
+                <option>مشاريع هندسية معمارية</option>
+                <option>مشاريع ملاعب ومرافق رياضية</option>
+                <option>مشاريع بنية تحتية للأنابيب والصرف الصحي</option>
+                <option>مشاريع محطات طاقة نووية</option>
+                <option>مشاريع محطات تحلية المياه</option>
+                <option>مشاريع تجديد المباني القائمة (ترميم و تحديث)</option>
+                <option>مشاريع ابراج الاتصالات والاتصالات</option>
+                <option>مشاريع تطوير المناطق الصناعية</option>
+                <option>مشاريع انشاء محطات وشبكات الكهرباء</option>
+                <option>مشاريع مواقف للسيارات والمرافق المرتبطة بها</option>
+                <option>مشاريع انشاء محطات الغاز ومحطات معالجة النفايات</option>
+                <option>مشاريع ابراج سكنية عالية الارتفاع</option>
+                <option>مشاريع تصميم مدارس ومراكز تعليمية</option>
+                <option>مشاريع اعادة تطوير المناطق الحضارية والتجديد الحضاري</option>
+                <option>مشاريع تصميم المطارات المحطات العامة</option>
+            </select>
+            <label asp-for="ProjectType"></label>
+            <span asp-validation-for="ProjectType" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating" id="ProjectDescriptionDiv">
+            <select asp-for="DescriptionType" class="form-control" autocomplete="description type" aria-required="false">
+                <option>شقة</option>
+                <option>فيلا</option>
+                <option>شقة فندقية</option>
+                <option>شاليه</option>
+                <option>منزل  تاونهاوس</option>
+                <option>مبنى شقق متعددة</option>
+                <option>مجمع سكني</option>
+            </select>
+            <label asp-for="DescriptionType"></label>
+            <span asp-validation-for="DescriptionType" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating">
+
+            <input asp-for="LandAreaByM" class="form-control" autocomplete="land area by metters" aria-required="false" value="0"/>
+            <label asp-for="LandAreaByM" style="text-align:right"></label>
+            <span asp-validation-for="LandAreaByM" class="text-danger"></span>
+
+        </div>
+        <div class="form-floating">
+            <input asp-for="Address" class="form-control" autocomplete="username" aria-required="false" />
+            <label asp-for="Address" style="text-align:right"></label>
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+        <div class="form-floating">
+            <select asp-for="ProjectModel" class="form-control" autocomplete="description type" aria-required="true" id="projectModelSelect">
+                <option>كلاسيكي</option>
+                <option>مودرن</option>
+                <option>نيوكلاسيك</option>
+                <option>صناعي</option>
+                <option>غجري</option>
+                <option>أندلسي</option>
+                <option>اخرى</option>
+            </select>
+            <label asp-for="ProjectModel"></label>
+            <span asp-validation-for="ProjectModel" class="text-danger"></span>
+        </div>
+        <div class="form-floating" id="otherProjectModel" style="display:none">
+
+            <input asp-for="OtherProjectModel" class="form-control" autocomplete="land area by metters" aria-required="false"  />
+            <label asp-for="OtherProjectModel" style="text-align:right"></label>
+            <span asp-validation-for="OtherProjectModel" class="text-danger"></span>
+
+        </div>
+    </div>
+    <hr />
+    <div class="form-floating">
+
+        <select asp-for="FollowByEmployee" class="form-control" autocomplete="description type" aria-required="true" id="FollowByEmployee">
+           @foreach(var item in DbContext.Users)
+            {
+                <option>@item.FirstName @item.LastName</option>
+            }
+        </select>
+        <label asp-for="FollowByEmployee"></label>
+        <span asp-validation-for="FollowByEmployee" class="text-danger"></span>
+
+    </div>
+    <div class="form-floating">
+        <input asp-for="ClientSource" class="form-control" autocomplete="مصدر العميل" aria-required="false" />
+        <label asp-for="ClientSource" style="text-align:right"></label>
+        <span asp-validation-for="ClientSource" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btnForm btn btn-primary">اضافة</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+
+<script>
+
+
+    document.getElementById("CustomerTypeSelect").addEventListener("change", function () {
+        if ($(this).val() == "فرد") {
+            $("#CompanyInformation").css("display", "none");
+            $("#customerName").css("display", "block");
+        }
+        else {
+            $("#CompanyInformation").css("display", "block");
+            $("#customerName").css("display", "none");
+        }
+    });
+
+
+    document.getElementById("projectTypeSelect").addEventListener("change", function () {
+        if ($(this).val() != "مباني سكنية") {
+            document.getElementById("ProjectDescriptionDiv").style.display = "none";
+        }
+        else {
+            document.getElementById("ProjectDescriptionDiv").style.display = "block";
+        }
+    });
+
+
+    document.getElementById("projectModelSelect").addEventListener("change", function () {
+        if ($(this).val() == "اخرى") {
+            $("#otherProjectModel").css("display", "block");
+        }
+        else{
+            $("#otherProjectModel").css("display", "none");
+            $("#otherProjectModel input").val("");
+        }
+    });
+  
+</script>

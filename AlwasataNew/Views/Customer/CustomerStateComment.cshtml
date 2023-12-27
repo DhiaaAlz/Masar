@@ -1,0 +1,114 @@
+﻿@using AlwasataNew.Data;
+@using System.Security.Claims;
+@model Customer
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<style>
+    .allComments
+    {
+        display:flex;
+        justify-content:center;
+        flex-direction:column;
+        align-items:center;
+        margin-top:40px;
+    }
+    .comment
+    {
+        position:relative;
+        display: flex;
+        justify-content: center;
+        padding: 30px;
+        width: 100%;
+        border: 1px solid;
+        border-radius: 5px;
+        margin: 10px;
+        font-weight:bold;
+    }
+    .createAt
+    {
+        position:absolute;
+        right:5px;
+        bottom:1px;
+        color:darkcyan;
+    }
+    .empName
+    {
+        position:absolute;
+        left:10px;
+        top:2px;
+        color:darkgreen;
+    }
+</style>
+  
+@{
+    var userId = "";
+    var customerName = "";
+}
+
+@using (var dbContext = new ApplicationDbContext())
+{
+    userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    customerName = dbContext.Customers.Where(x => x.Id == Model.Id).Select(x => x.CustomerName).FirstOrDefault();
+    if (customerName == null)
+    {
+        customerName ="شركة "+ dbContext.Customers.Where(x => x.Id == Model.Id).Select(x => x.CompanyName).FirstOrDefault();
+    }
+}
+
+<div class="container">
+     <form method="post" class="fromInput">
+        <h4 style="margin-top:20px;text-align:center">اسم العميل : @customerName</h4>
+        <hr />
+        <h3 style="text-align:center">اكتب تعليقاً لحالة هذا العميل</h3>
+        <input type="hidden" value="@Model.Id" name="customerId"/>
+        <input type="hidden" value="@userId" name="employeeId"/>
+        <textarea name="comment" style="padding: 10px;border-radius: 6px;">
+
+        </textarea>
+        <button class="btn btn-primary" type="submit">حسناً</button>
+     </form>
+
+    <div class="allComments">
+        <h3 style="color:darkred">جميع التعليقات السابقة</h3>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    @{
+                        using var dbContextt = new ApplicationDbContext();
+
+                        var result = dbContextt.CustomerStateDescriptions.Where(x => x.CustomerId == Model.Id).ToList();
+
+                        if(result.Count() == 0)
+                        {
+                            <span class="comment">
+                                <span style="color:darkred;text-align:center">لا يوجد تعليقات <i class="fa-solid fa-comment-slash"></i></span>
+                            </span>
+                        }
+                        else
+                        {
+                            @foreach (var item in result)
+                            {
+                                <span class="comment">
+                                    @item.CommentText
+                                    <span class="empName">
+                                        @{
+                                            var empName = dbContextt.Users.Where(x => x.Id == item.EmployeeId).Select(x => new { firstName = x.FirstName, lastName = x.LastName }).FirstOrDefault();
+                                            @empName.firstName <span> </span> @empName.lastName
+                                        }
+                                    </span>
+                                    <span class="createAt">
+                                        @item.CreatedAt
+                                    </span>
+                                </span>
+                            }
+                        }
+                       
+                    }
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

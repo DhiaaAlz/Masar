@@ -1,0 +1,139 @@
+﻿@using AlwasataNew.Data;
+@model IEnumerable<CustomerViewModel>
+
+@{
+    ViewData["Title"] = "CustomersManage";
+}
+
+<link rel="stylesheet" href="~/css/site.css"/>
+<style>
+    .table{
+        border-collapse: collapse !important;
+        width: 100% !important;
+    }
+    .table thead th{
+      position: sticky !important; 
+      top: 0 !important; 
+      background-color:#5d87ff;
+    }
+
+    .btnActive{
+        background-color: #6eb6cd;
+        color:white;
+        font-weight:bold;
+    }
+</style>
+    <h1>ادارة العملاء</h1>
+    <a asp-action="AddNew" class="btn btn-primary m-3">اضافة عميل جديد</a>
+    <div class="FilterCustomers" dir="rtl">
+        <div>
+            <span>ابحث عن عميل</span>
+            <input type="text" id="keyWord" placeholder="ادخل ماتريد البحث عنه" />
+        </div>
+        <div class="hint">يتم البحث من خلال الاسم او اسم الشركة او رقم الهاتف او الايميل</div>
+    </div>
+<div class="table-responsive" style="max-height:525px;">
+    <table class="table table-striped text-center">
+        <thead>
+            <tr class="bg-primary text-white mt-4">
+                <th>اسم العميل</th>
+                <th>اسم الشركة</th>
+                <th>رقم الهاتف</th>
+                <th>حالة العميل</th>
+                <th>العمليات</th>
+            </tr>
+        </thead>
+        <tbody id="TableBody">
+            @foreach (var customer in Model)
+            {
+                <tr>
+                    <td>
+                        @if (customer.Name == null)
+                        {
+                            <span>اسم الموظف : @customer.EmployeeName</span>
+                        }
+                        else
+                        {
+                            <span>@customer.Name</span>
+                        }
+                    </td>
+                    <td>
+                        @if (customer.CompanyName == null)
+                        {
+                            <span>لا يوجد</span>
+                        }
+                        else
+                        {
+                            <span>@customer.CompanyName</span>
+                        }
+                    </td>
+                    <td>@customer.Phone</td>
+                 
+                    <td>
+                        @{
+                            using var dbContext = new ApplicationDbContext();
+                        }
+                        @if (customer.CustomerState == "متفاعل")
+                        {
+                            <a asp-controller="Customer" asp-action="CustomerStateComment" asp-route-customerId="@customer.Id" class="customerSta">
+                                <span style="position:relative;color:darkgreen;font-weight:bold">@customer.CustomerState
+                                    <span class="addComm">التعليقات<div class="commentCount">@dbContext.CustomerStateDescriptions.Where(x=>x.CustomerId==customer.Id).Count()</div></span>
+                                </span>
+                            </a>
+                        }
+                        else if (customer.CustomerState == "جديد")
+                        {
+                            <a asp-controller="Customer" asp-action="CustomerStateComment" asp-route-customerId="@customer.Id" class="customerSta">
+                                <span style="position:relative;color:darkcyan;font-weight:bold">@customer.CustomerState
+                                    <span class="addComm">التعليقات<div class="commentCount">@dbContext.CustomerStateDescriptions.Where(x=>x.CustomerId==customer.Id).Count()</div></span></span>
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Customer" asp-action="CustomerStateComment" asp-route-customerId="@customer.Id" class="customerSta">
+                                <span style="position:relative;color:darkred;font-weight:bold">@customer.CustomerState
+                                    <span class="addComm">التعليقات<div class="commentCount">@dbContext.CustomerStateDescriptions.Where(x=>x.CustomerId==customer.Id).Count()</div></span>
+                                </span>
+                            </a>
+                        }
+                    </td>
+                 
+
+                    <td>
+                        <a class="btn btn-primary" asp-controller="Customer" asp-action="ShowProjects" asp-route-Id="@customer.Id">تفاصيل المشاريع</a>
+                        <a class="btn btn-outline-primary" asp-controller="Customer" asp-action="EditInformation" asp-route-Id="@customer.Id">تعديل معلومات العميل</a>
+                        <a class="btn btn-outline-success" href="mailto: @customer.Email">مراسلة العميل</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    </div>
+    <div class="SortCustomers" dir="rtl">
+        <div>
+            <span> فرز العملاء بحسب الحالة</span>
+            <button id="active">متفاعل</button>
+            <button id="notAnswer">لم يرد</button>
+            <button id="waiting">منتظر</button>
+            <button id="new">جديد</button>
+            <button id="unActive">غير متفاعل</button>
+            <button id="following">متابعة</button>
+            <button id="complete">مكتمل</button>
+            <button id="interview">مقابلة</button>
+        </div>
+        <div>
+            <span> فرز العملاء بحسب الشركة</span>
+
+            @{
+                using var dbContext2 = new ApplicationDbContext();
+                foreach (var item in dbContext2.Companies)
+                {
+                                    <button id="comp-@item.Id">@item.Name</button>
+                }
+            }
+        </div>
+    </div>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/assets/js/manageCustomer.js"></script>

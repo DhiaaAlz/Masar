@@ -1,0 +1,68 @@
+﻿@using AlwasataNew.Data;
+@using System.Security.Claims;
+@model IEnumerable<ShowProjectsViewModel>
+
+@{
+}
+<link rel="stylesheet" href="~/css/ShowProjects.css"/>
+
+@if(Model.Count() > 0)
+{
+    <div class="card mt-4">
+
+        <h3 class="customerName">
+            المشاريع الخاصة بهذا العميل  :
+            @{
+                var dbContect = new ApplicationDbContext();
+
+                var customer = dbContect.Customers.Where(x => x.Id == Model.Select(x => x.CustomerId).FirstOrDefault()).FirstOrDefault();
+
+                <span>@customer.CustomerName</span>
+
+            }
+        </h3>
+        <div class="AppContainer" dir="rtl">
+            @{
+                int index = 1;
+            }
+            <div class="container">
+                <div class="row rowProject">
+
+
+                    @foreach (var project in Model)
+                    {
+                        <div class="Project col-md-4 col-sm-12">
+                            <div class="ProjectNumber">
+                                @(index++)
+                            </div>
+                        
+
+                            <div class="projectDesc">@project.Description</div>
+                            <div class="EmpFollow"> الموظف المتابع لهذا المشروع :
+                                <span class="FollowEmp">
+                                    @if (@dbContect.Customers.Where(x => x.Id == Model.Select(x => x.CustomerId).FirstOrDefault()).Select(x => x.FollowBy).SingleOrDefault() == null)
+                                    {
+                                        <span>لا يوجد</span>
+                                    }
+                                    else
+                                    {
+                                        @dbContect.Customers.Where(x => x.Id == Model.Select(x => x.CustomerId).FirstOrDefault()).Select(x => x.FollowBy).SingleOrDefault()
+                                    }
+                                </span>
+                                </div>
+                            <div class="projectDesc">وصف المشروع : <span style="color:darkgreen;font-weight:bold">@project.Description</span></div>
+                            <div class="projectDesc">رقم المشروع : <span style="color:darkred;font-weight:bold">@project.Id</span></div>
+                            <div class="projectDesc">تابع لأي شركة : <span style="color:#0545a9;font-weight:bold">@dbContect.Companies.Where(x=>x.Id==customer.CompanyId).Select(x=>x.Name).FirstOrDefault()</span></div>
+                            <a class="showMore" asp-controller="Customer" asp-action="ShowProjectsDescription" asp-route-projId="@project.Id">معلومات اكثر</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+else
+{
+    <h1 style="text-align:center">لا يوجد معلومات لعرضها</h1>
+}

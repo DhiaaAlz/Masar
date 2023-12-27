@@ -1,0 +1,17 @@
+﻿@model RoleViewModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<form method="post" asp-action="UpdateRoleName">
+    <div class="form-group">
+        <input asp-for="RoleName" class="form-control" placeholder="Role Name ..." />
+        <input asp-for="RoleId" class="form-control" placeholder="Role Id ..." disabled/>
+        <div class="input-group-append">
+            <button type="submit" class="btn btn-primary">تحديث الاسم</button>
+        </div>
+    </div>
+    <span asp-validation-for="RoleName" class="text-danger"></span>
+    <span asp-validation-for="RoleId" class="text-danger"></span>
+</form>

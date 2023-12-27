@@ -1,0 +1,145 @@
+﻿@model List<Customer>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<style>
+    .table {
+        border-collapse: collapse !important;
+        width: 100% !important;
+    }
+
+        .table thead th {
+            position: sticky !important;
+            top: 0 !important;
+            background-color: #5d87ff;
+        }
+</style>
+<div class="container-fluid">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-body">
+                <div class="row" style="text-align:center;">
+                    <h2 style="text-align:center;margin-bottom:30px;">تقارير خاصة في العملاء</h2>
+
+                    <div class="col-md-12">
+                        <div class="card">
+                            <h3 style="margin-top:20px;">عدد العملاء : <span style="font-weight:bold;color:darkred;margin:10px;" id="customerCount">@Model.Count()</span></h3>
+                          
+                            
+                            <div class="tableDiv">
+                              
+                                <div class="table-responsive" style="max-height:525px;">
+                                    <table class="table table-striped text-center">
+                                        <thead>
+                                            <tr class="bg-primary text-white mt-4">
+                                                <th></th>
+                                                <th>اسم العميل</th>
+                                                <th>تم انشائه بتاريخ</th>
+                                                <th>اسم الشركة</th>
+                                                <th>رقم الهاتف</th>
+                                                <th>الايميل</th>
+                                                <th>نوع العميل</th>
+                                                <th>حالة العميل</th>
+                                                <th>الموظف المتابع له</th>
+                                                <th>تم انشائه بواسطة</th>
+                                                <th>العمليات</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="TableBody">
+                                            @{
+                                                int i = 0;
+                                            }
+                                            @foreach (var customer in Model)
+                                            {
+
+                                                <tr>
+                                                    <td>
+
+                                                        <span>@{
+                                                                i = i + 1;
+                                                            }@i</span>
+                                                    </td>
+                                                    <td>
+                                                        @if (customer.CustomerName == null)
+                                                        {
+                                                            <span>اسم الموظف : @customer.EmployeeName</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>@customer.CustomerName</span>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            @Convert.ToDateTime(customer.CreatedAt).ToShortDateString()
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        @if (customer.CompanyName == null)
+                                                        {
+                                                            <span>لا يوجد</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>@customer.CompanyName</span>
+                                                        }
+                                                    </td>
+                                                    <td>@customer.Phone</td>
+                                                    <td>
+                                                        <a href="mailto: @customer.Email">@customer.Email</a>
+                                                    </td>
+                                                    <td>@customer.Type</td>
+                                                    <td>
+                                                        @if (customer.CustomerState == "متفاعل")
+                                                        {
+                                                            <a asp-controller="Customer" asp-action="CustomerStateComment" asp-route-customerId="@customer.Id" class="customerSta">
+                                                                <span style="position:relative;color:darkgreen;font-weight:bold">@customer.CustomerState <span class="addComm">اضف تعليقاً</span></span>
+                                                            </a>
+                                                        }
+                                                        else if (customer.CustomerState == "جديد")
+                                                        {
+                                                            <a asp-controller="Customer" asp-action="CustomerStateComment" asp-route-customerId="@customer.Id" class="customerSta">
+                                                                <span style="position:relative;color:darkcyan;font-weight:bold">@customer.CustomerState <span class="addComm">اضف تعليقاً</span></span>
+                                                            </a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a asp-controller="Customer" asp-action="CustomerStateComment" asp-route-customerId="@customer.Id" class="customerSta">
+                                                                <span style="position:relative;color:darkred;font-weight:bold">@customer.CustomerState<span class="addComm">اضف تعليقاً</span></span>
+                                                            </a>
+                                                        }
+                                                    </td>
+                                          
+                                                    <td>
+                                                        @if (customer.FollowBy == null)
+                                                        {
+                                                            <span style="color:darkred;font-weight:bold;">لا يوجد</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            @customer.FollowBy
+                                                            ;
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @customer.CreatedBy
+                                                    </td>
+                                                    <td> <a class="btn btn-outline-primary" asp-controller="Customer" asp-action="EditInformation" asp-route-Id="@customer.Id">تعديل المعلومات </a></td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                               
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

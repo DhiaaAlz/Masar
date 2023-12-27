@@ -1,0 +1,224 @@
+﻿@using AlwasataNew.Data;
+@model EditCustomerViewModel
+
+@{
+    ViewData["Title"] = "Update User Prifle";
+}
+<style>
+    h5{
+        text-align: center;
+        color: darkgreen;
+        border: 1px solid;
+        width: fit-content;
+        margin: 5px auto;
+        padding: 5px 10px;
+        border-radius: 3px;
+    }
+</style>
+@if(Model.Id > 0)
+{
+    <form asp-action="EditInformation" method="post" class="fromInput">
+        <h2>تعديل بيانات العميل</h2>
+        @if(ViewBag.done != null)
+        {
+            <h5 id="messageDone">@ViewBag.done</h5>
+        }
+        <hr />
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="ProjectId" />
+        @* <div asp-validation-summary="All" class="text-danger"></div> *@
+        @if (Model.Type == "فرد")
+        {
+            <div class="form-floating">
+                <input asp-for="CustomerName" class="form-control" autocomplete="Name" aria-required="false" maxlength="100" />
+                <label asp-for="CustomerName"></label>
+                <span asp-validation-for="CustomerName" class="text-danger"></span>
+            </div>
+        }
+
+        @if (Model.Type == "شركة")
+        {
+            <div class="form-floating">
+                <input asp-for="CompanyName" class="form-control" autocomplete="Name" aria-required="false" maxlength="100" />
+                <label asp-for="CompanyName"></label>
+                <span asp-validation-for="CompanyName" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <input asp-for="CompanySite" class="form-control" autocomplete="Name" aria-required="false" maxlength="100" />
+                <label asp-for="CompanySite"></label>
+                <span asp-validation-for="CompanySite" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <input asp-for="EmployeeName" class="form-control" autocomplete="Name" aria-required="false" maxlength="100" />
+                <label asp-for="EmployeeName"></label>
+                <span asp-validation-for="EmployeeName" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <input asp-for="JobTitle" class="form-control" autocomplete="Name" aria-required="false" maxlength="100" />
+                <label asp-for="JobTitle"></label>
+                <span asp-validation-for="JobTitle" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <input asp-for="Address" class="form-control" autocomplete="Name" aria-required="false" maxlength="100" />
+                <label asp-for="Address"></label>
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+        }
+
+        <div class="form-floating">
+            <input asp-for="Phone" class="form-control" autocomplete="Phone" aria-required="true" maxlength="100" />
+            <label asp-for="Phone"></label>
+            <span asp-validation-for="Phone" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating">
+            <input asp-for="Email" class="form-control" autocomplete="Email" aria-required="false" />
+            <label asp-for="Email"></label>
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating">
+            <input asp-for="Type" class="form-control" autocomplete="Type" aria-required="false" maxlength="100" />
+            <label asp-for="Type"></label>
+            <span asp-validation-for="Type" class="text-danger"></span>
+        </div>
+        <div class="form-floating">
+            <select asp-for="ForCompany" class="form-control" autocomplete="ForCompany" aria-required="true">
+                @{
+
+                    using (var dbContect = new ApplicationDbContext())
+                    {
+                        var companies = dbContect.Companies;
+                        foreach (var item in companies)
+                        {
+                            var companyName = item.Name;
+                            var companyNameFromTable = dbContect.Companies.Where(x => x.Id == Model.ForCompany).Select(x => x.Name).FirstOrDefault();
+                            if (companyName == companyNameFromTable)
+                                {
+                                        <option selected value="@item.Id">
+                                            @companyName
+                                        </option>
+                                }
+                                else
+                                {
+                                        <option value="@item.Id">
+                                            @companyName
+                                        </option>
+                                }
+                        }
+                        
+                    }
+                }
+            </select>
+            <label asp-for="ForCompany"></label>
+            <span asp-validation-for="ForCompany" class="text-danger"></span>
+        </div>
+        <div class="form-floating">
+            <input asp-for="ProjectDescription" class="form-control" autocomplete="ProjectDescription" aria-required="false" maxlength="100" />
+            <label asp-for="ProjectDescription"></label>
+            <span asp-validation-for="ProjectDescription" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating">
+            <input asp-for="ProjectType" class="form-control" autocomplete="ProjectType" aria-required="false" maxlength="100" />
+            <label asp-for="ProjectType"></label>
+            <span asp-validation-for="ProjectType" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating">
+            <input asp-for="DescriptionProjectType" class="form-control" autocomplete="ProjectType" aria-required="false" maxlength="100" />
+            <label asp-for="DescriptionProjectType"></label>
+            <span asp-validation-for="DescriptionProjectType" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating">
+            <input asp-for="ProjectLandArea" class="form-control" autocomplete="ProjectLandArea" aria-required="false" maxlength="100" />
+            <label asp-for="ProjectLandArea"></label>
+            <span asp-validation-for="ProjectLandArea" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating">
+            <input asp-for="ProjectModel" class="form-control" autocomplete="ProjectModel" aria-required="false" maxlength="100" />
+            <label asp-for="ProjectModel"></label>
+            <span asp-validation-for="ProjectModel" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating">
+            <select asp-for="CustomerState" class="form-control" autocomplete="CustomerState" aria-required="true" id="WorkTypeSelect">
+                <option>جديد</option>
+                <option>متفاعل</option>
+                <option>غير متفاعل</option>
+                <option>لم يرد</option>
+                <option>متابعة</option>
+                <option>منتظر</option>
+                <option>مقابلة</option>
+                <option>مكتمل</option>
+            </select>
+            <label asp-for="CustomerState"></label>
+            <span asp-validation-for="CustomerState" class="text-danger"></span>
+        </div>
+
+        @if (User.IsInRole("Admin"))
+        {
+
+            <div class="form-floating">
+                <input asp-for="CreatedBy" class="form-control" autocomplete="CreatedBy" aria-required="false" maxlength="100" />
+                <label asp-for="CreatedBy"></label>
+                <span asp-validation-for="CreatedBy" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <select asp-for="FollowBy" class="form-control" autocomplete="username" aria-required="true">
+                    @{
+
+                        using (var dbContect = new ApplicationDbContext())
+                        {
+                            var Users = dbContect.Users;
+                            foreach (var item in Users)
+                            {
+                                var empName = item.FirstName + " " + item.LastName;
+                                if (item.UserName != "admin")
+                                {
+                                    if (empName == Model.FollowBy)
+                                    {
+                                            <option selected>
+                                                @empName
+                                            </option>
+                                    }
+                                    else
+                                    {
+                                            <option>
+                                                @empName
+                                            </option>
+                                    }
+                                }
+                            }
+                        }
+                    }
+                </select>
+                <label asp-for="FollowBy"></label>
+                <span asp-validation-for="FollowBy" class="text-danger"></span>
+            </div>
+
+        }
+        <button type="submit" class="w-100 btn btn-lg btn-primary d-block nt-4">Save</button>
+    </form>
+}
+else
+{
+    <h2>لا يوجد معلومات لعرضها</h2>
+}
+<script src="~/assets/libs/jquery/dist/jquery.min.js"></script>
+<script>
+    if ($("#messageDone").css("display") == "block") {
+        $("#messageDone").fadeOut(3000);
+    }
+    
+</script>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

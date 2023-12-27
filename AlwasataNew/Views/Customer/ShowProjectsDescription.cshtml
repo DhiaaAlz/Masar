@@ -1,0 +1,163 @@
+﻿@using AlwasataNew.Data;
+@model Project
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<link rel="stylesheet" href="~/css/ShowProjects.css" />
+
+
+<style>
+    .lvlDone{
+        background-color: #008b8b54;
+    }
+    .lvlProccess{
+        background-color: #008b8b54;
+        animation:1s inProgress linear infinite;
+    }
+    .col-md-12 span{
+        font-weight:bold;
+    }
+</style>
+
+@if(Model != null)
+{
+    
+    var dbContect = new ApplicationDbContext();
+    var CustomerInformation = dbContect.Customers.Where(x => x.Id == Model.CustomerId).FirstOrDefault();
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 sectionDiv">
+                <h3>معلومات عن المشروع</h3>
+                <div class="projectInformation">
+                    <div class="row" dir="rtl">
+                        @{
+                            var CustomerName = "";
+                            if(CustomerInformation.CustomerName == null)
+                            {
+                                CustomerName = CustomerInformation.CompanyName;
+                                <div class="col-md-12">
+                                  صاحب المشروع الشركة  : <span>@CustomerName</span>
+                                </div>
+                                <div class="col-md-12">
+                                    اسم الموظف : <span>@CustomerInformation.EmployeeName</span>
+                                </div>
+                                <div class="col-md-12">
+                                    المسمى الوظيفي : <span>@CustomerInformation.JobTitle</span>
+                                </div>
+                                <div class="col-md-12">
+                                    رقم الشركة : <span>@CustomerInformation.Phone</span>
+                                </div>
+                                <div class="col-md-12">
+                                    عنوان الشركة : <span>@CustomerInformation.Address</span>
+                                </div>
+                                <div class="col-md-12">
+                                    موقع الشركة : <a href="https://@CustomerInformation.CompanySite">@CustomerInformation.CompanySite</a>
+                                </div>
+                            }
+                            else
+                            {
+                                CustomerName = CustomerInformation.CustomerName;
+                                <div class="col-md-12">
+                                    صاحب المشروع : <span>@CustomerName</span>
+                                </div>
+                                <div class="col-md-12">
+                                    رقم صاحب المشروع : <span>@CustomerInformation.Phone</span>
+                                </div>
+                               
+                            }
+                        }
+                        <div class="col-md-12">
+                            ملاحظات عن العميل :@{
+                                    if(@CustomerInformation.CustomerDescription != null)
+                                    {
+                                    <span>@CustomerInformation.CustomerDescription</span>
+                                }
+                                else
+                                {
+                                    <span>لا يوجد</span>
+                                }
+                            }
+
+                        </div>
+                        <div class="col-md-12">
+                            الايميل : <span><a href="mailto: @CustomerInformation.Email">@CustomerInformation.Email</a></span>
+                            
+                        </div>
+                        <div class="col-md-12">
+                            وصف المشروع : <span>@Model.Description</span>
+                        </div>
+                        <div class="col-md-12">
+                            نوع المشروع : <span>@Model.Type</span>
+                        </div>
+                        <div class="col-md-12">
+                            وصف نوع المشروع : <span>@Model.DescriptionType</span>
+                        </div>
+                        <div class="col-md-12">
+                           مساحة المشروع بالمتر : <span>@Model.LandAreaByM</span>
+                        </div>
+                        <div class="col-md-12">
+                            موديل المشروع : <span>@Model.Model</span>
+                        </div>
+                      
+                        <div class="col-md-12">
+                            رقم المشروع : <span>@Model.Id</span>
+                        </div>
+                        <div class="col-md-12">
+                            حالة العميل : 
+                            @if (CustomerInformation.CustomerState == "متفاعل")
+                            {
+                                <span style="color:darkgreen;font-weight:bold">@CustomerInformation.CustomerState</span>
+                            }
+                            else if (CustomerInformation.CustomerState == "جديد")
+                            {
+                                <span style="color:darkcyan;font-weight:bold">@CustomerInformation.CustomerState</span>
+                            }
+                            else
+                            {
+                                <span style="color:darkred;font-weight:bold">@CustomerInformation.CustomerState</span>
+                            }
+                        </div>
+                        <div class="col-md-12">
+                            تاريخ اضافة العميل : 
+                            @CustomerInformation.CreatedAt.ToShortDateString()
+                        </div>
+                        <div class="col-md-12">
+                            مصدر العميل :
+                            @(CustomerInformation.ClientSource == null ? "لا يوجد" : CustomerInformation.ClientSource)
+                        </div>
+                        <div class="col-md-12">
+                            الموظف الذي قام بأضافة العميل :
+                            <span style="color:brown">@CustomerInformation.CreatedBy</span>
+                        </div>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            if(CustomerInformation.FollowBy == null)
+                            {
+                                <div class="col-md-12">
+                                    الموظف المتابع لهذا المشروع : <span style="color:darkred">لا يوجد موظف متابع لهذا المشروع</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-md-12">
+                                    الموظف المتابع لهذا المشروع : <span>@CustomerInformation.FollowBy</span>
+                                </div>
+                            }
+
+                        }
+                        <a class="showMore" asp-controller="Customer" asp-action="EditInformation" asp-route-Id="@CustomerInformation.Id">تحديث المعلومات</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <h1 style="text-align:center">لا يوجد معلومات لعرضها</h1>
+}

@@ -1,0 +1,398 @@
+﻿@font-face {
+    font-family: "myFont";
+    src: url(../Fonts/Cairo-VariableFont_slnt,wght.ttf);
+}
+
+body{
+    font-family:"myFont" !important;
+}
+.EmpName {
+    /*position: absolute;
+    top: 24px;
+    right: 63px;*/
+    width: 80px;
+    color:black;
+    transition:0.3s;
+    font-size:18px;
+    font-weight:normal;
+}
+
+.EmpName span{
+    font-weight:bold;
+}
+
+.fromInput {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 550px;
+    margin: 10px auto;
+}
+
+.fromInput label {
+    width: 117%;
+    font-size: 16px;
+}
+.fromInput h2{
+    text-align:center;
+}
+
+@media (max-width : 850px) {
+    .fromInput {
+        width: 290px;
+    }
+}
+
+.fromInput  div{
+    margin:3px;
+}
+
+.replaceBetween{
+    text-align:center;
+}
+
+.replaceBetween span{
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: aliceblue;
+    cursor:pointer
+}
+.replaceBetween span.active{
+     background-color: #5d87ff !important;
+     color:white;
+}
+
+.CustomerInfo{
+    transition:0.1s;
+}
+
+.ProjectInfo{
+    display:none;
+    transition:0.1s;
+}
+
+/*main page style*/
+
+.EmpDivInformation {
+    width: 100%;
+    background-color: #f3f3f3;
+    margin: 20px 2px;
+    text-align: center;
+    padding: 20px 10px;
+    border-radius: 10px;
+    position: relative;
+}
+
+.EmpDivInformation .empImg img {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 55px;
+    height: 55px;
+}
+
+.empRole {
+    display: block;
+    margin: 5px auto;
+    border-radius: 5px;
+    background-color: #5d87ff87;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 5px 10px;
+    width: fit-content;
+    border: 2px solid #5d87ff;
+}
+
+.customerInfo {
+}
+
+
+
+.divState {
+    display: flex;
+    flex-direction: column !important;
+    background: #5d87ff66;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 5px;
+    justify-content:center;
+    align-items:center;
+}
+
+.custState {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.custState div {
+    display: flex;
+    flex-direction: row;
+}
+
+
+
+@media (max-width:992px){
+    .divState{
+        width:90px;
+    }
+}
+
+.StateCount {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.ManageUser {
+    padding: 10px;
+    display: flex;
+    border-radius: 10px;
+    margin: 10px auto;
+    width: fit-content;
+    background-color: white;
+    cursor: pointer;
+}
+
+
+
+/*customer form Style*/
+body {
+  background-color: #ffffff;
+  color: #444444;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  margin: 0;
+  padding: 0;
+}
+.wizard-content-left {
+  background-blend-mode: darken;
+  background-color: rgba(0, 0, 0, 0.45);
+  background-image: url('../images/WEB ICONS-03.svg');
+  background-position: center center;
+  background-size: cover;
+  height: 50vh;
+  padding: 30px;
+  border-radius:4px;
+}
+.wizard-content-left h1 {
+  color: #ffffff;
+  font-size: 38px;
+  font-weight: 600;
+  padding: 12px 20px;
+  text-align: center;
+}
+
+.form-wizard {
+  color: #888888;
+  padding: 30px;
+}
+.form-wizard .wizard-form-radio {
+  display: inline-block;
+  margin-left: 5px;
+  position: relative;
+}
+.form-wizard .wizard-form-radio input[type="radio"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+  background-color: #dddddd;
+  height: 25px;
+  width: 25px;
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+}
+.form-wizard .wizard-form-radio input[type="radio"]:focus {
+  outline: 0;
+}
+.form-wizard .wizard-form-radio input[type="radio"]:checked {
+  background-color: #639eff;
+}
+.form-wizard .wizard-form-radio input[type="radio"]:checked::before {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  background-color: #ffffff;
+  border-radius: 50%;
+  left: 1px;
+  right: 0;
+  margin: 0 auto;
+  top: 8px;
+}
+.form-wizard .wizard-form-radio input[type="radio"]:checked::after {
+  content: "";
+  display: inline-block;
+  webkit-animation: click-radio-wave 0.65s;
+  -moz-animation: click-radio-wave 0.65s;
+  animation: click-radio-wave 0.65s;
+  background: #000000;
+  content: '';
+  display: block;
+  position: relative;
+  z-index: 100;
+  border-radius: 50%;
+}
+.form-wizard .wizard-form-radio input[type="radio"] ~ label {
+  padding-left: 10px;
+  cursor: pointer;
+}
+.form-wizard .form-wizard-header {
+  text-align: center;
+}
+.form-wizard .form-wizard-next-btn, .form-wizard .form-wizard-previous-btn, .form-wizard .form-wizard-submit {
+  background-color: #639eff;
+  color: #ffffff;
+  display: inline-block;
+  min-width: 100px;
+  min-width: 120px;
+  padding: 10px;
+  text-align: center;
+  border-radius:4px;
+}
+.form-wizard .form-wizard-next-btn:hover, .form-wizard .form-wizard-next-btn:focus, .form-wizard .form-wizard-previous-btn:hover, .form-wizard .form-wizard-previous-btn:focus, .form-wizard .form-wizard-submit:hover, .form-wizard .form-wizard-submit:focus {
+  color: #ffffff;
+  opacity: 0.6;
+  text-decoration: none;
+}
+.form-wizard .wizard-fieldset {
+  display: none;
+}
+.form-wizard .wizard-fieldset.show {
+  display: block;
+}
+.form-wizard .wizard-form-error {
+  display: none;
+  background-color: #d70b0b;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+}
+.form-wizard .form-wizard-previous-btn {
+  background-color: #615dff;
+}
+.form-wizard .form-control {
+  font-weight: 300;
+  height: auto !important;
+  padding: 15px;
+  color: #888888;
+  background-color: #f1f1f1;
+  border: none;
+}
+.form-wizard .form-control:focus {
+  box-shadow: none;
+}
+.form-wizard .form-group {
+  position: relative;
+  margin: 25px 0;
+}
+.form-wizard .wizard-form-text-label {
+  position: absolute;
+  left: 10px;
+  top: 16px;
+  transition: 0.2s linear all;
+}
+.form-wizard .focus-input .wizard-form-text-label {
+  color: #639eff;
+  top: -18px;
+  transition: 0.2s linear all;
+  font-size: 12px;
+}
+.form-wizard .form-wizard-steps {
+    margin: 30px auto;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+.form-wizard .form-wizard-steps li {
+  width: 25%;
+  float: left;
+  position: relative;
+}
+.form-wizard .form-wizard-steps li::after {
+  background-color: #f3f3f3;
+  content: "";
+  height: 5px;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  border-bottom: 1px solid #dddddd;
+  border-top: 1px solid #dddddd;
+}
+.form-wizard .form-wizard-steps li span {
+  background-color: #dddddd;
+  border-radius: 50%;
+  display: inline-block;
+  height: 40px;
+  line-height: 40px;
+  position: relative;
+  text-align: center;
+  width: 40px;
+  z-index: 1;
+}
+.form-wizard .form-wizard-steps li:last-child::after {
+  width: 50%;
+}
+.form-wizard .form-wizard-steps li.active span, .form-wizard .form-wizard-steps li.activated span {
+  background-color: #639eff;
+  color: #ffffff;
+}
+.form-wizard .form-wizard-steps li.active::after, .form-wizard .form-wizard-steps li.activated::after {
+  background-color: #639eff;
+  left: 50%;
+  width: 50%;
+  border-color: #639eff;
+}
+.form-wizard .form-wizard-steps li.activated::after {
+  width: 100%;
+  border-color: #639eff;
+}
+.form-wizard .form-wizard-steps li:last-child::after {
+  left: 0;
+}
+.form-wizard .wizard-password-eye {
+  position: absolute;
+  right: 32px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+@keyframes click-radio-wave {
+  0% {
+    width: 25px;
+    height: 25px;
+    opacity: 0.35;
+    position: relative;
+  }
+  100% {
+    width: 60px;
+    height: 60px;
+    margin-left: -15px;
+    margin-top: -15px;
+    opacity: 0.0;
+  }
+}
+@media screen and (max-width: 767px) {
+  .wizard-content-left {
+    height: auto;
+  }
+}

@@ -1,0 +1,76 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<link rel="stylesheet" href="~/assets/css/task.css"/>
+<div class="container">
+    <div class="left">
+        <div class="calendar">
+            <div class="month">
+                <span class="prev">
+                    <i class="fas fa-angle-left"></i>
+                </span>
+                <div class="date">december 2015</div>
+                <span class="next">
+                    <i class="fas fa-angle-right next"></i>
+                </span>
+            </div>
+            <div class="weekdays">
+                <div>Sun</div>
+                <div>Mon</div>
+                <div>Tue</div>
+                <div>Wed</div>
+                <div>Thu</div>
+                <div>Fri</div>
+                <div>Sat</div>
+            </div>
+            <div class="days"></div>
+            <div class="goto-today">
+                <div class="goto">
+                    <input type="text" placeholder="mm/yyyy" class="date-input" />
+                    <button class="goto-btn">Go</button>
+                </div>
+                <button class="today-btn">Today</button>
+            </div>
+        </div>
+    </div>
+    <div class="right">
+        <div class="today-date">
+            <div class="event-day">wed</div>
+            <div class="event-date">12th december 2022</div>
+        </div>
+        <div class="events"></div>
+        <div class="add-event-wrapper">
+            <div class="add-event-header">
+                <div class="title">Add Event</div>
+                <span class="close">
+                    <i class="fas fa-times"></i>
+                </span>
+            </div>
+            <div class="add-event-body">
+                <div class="add-event-input">
+                    <input type="text" placeholder="Event Name" class="event-name" />
+                </div>
+                <div class="add-event-input">
+                    <input type="text"
+                           placeholder="Event Time From"
+                           class="event-time-from" />
+                </div>
+                <div class="add-event-input">
+                    <input type="text"
+                           placeholder="Event Time To"
+                           class="event-time-to" />
+                </div>
+            </div>
+            <div class="add-event-footer">
+                <button class="add-event-btn">Add Event</button>
+            </div>
+        </div>
+    </div>
+    <button class="add-event" style="z-index:999">
+        <i class="fas fa-plus"></i>
+    </button>
+</div>
+

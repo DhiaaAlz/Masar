@@ -1,0 +1,131 @@
+﻿@using AlwasataNew.Data;
+@model IEnumerable<Project>
+
+<style>
+    .ProjectsDiv{
+        text-align: center;
+        padding: 10px;
+        border-radius: 10px;
+        margin:10px;
+        cursor:pointer;
+    }
+
+    .row{
+        display:flex;
+        justify-content:center;
+    }
+
+    .UnFollow{
+        border: 1px solid darkred;
+        background-color: #8b000026;
+    }
+
+    .Done{
+        border: 1px solid darkgreen;
+        background-color: #0064002e;
+    }
+
+    .Proccess{
+        border: 1px solid cyan;
+        background-color: #008b8b29;
+    }
+
+    .NumberProjects{
+        font-size:22px;
+        font-weight:bold;
+    }
+
+    .ProjectsTable{
+        margin-top:40px;
+    }
+
+    .table {
+        border-collapse: collapse !important;
+        width: 100% !important;
+    }
+
+    .table thead th {
+        position: sticky !important;
+        top: 0 !important;
+        background-color: #5d87ff;
+        text-align:center;
+    }
+
+    .table tbody tr td:not(:first-child){
+        width:20% !important;
+        text-align:center !important;
+    }
+    
+    </style>
+
+
+@{
+    var dbContext = new ApplicationDbContext();
+    int CompleteProjects = 0;
+    int ProccessProjects = 0;
+    int UnFollowProjects = 0;
+}
+ 
+
+@foreach(var item in Model)
+{
+    var IsProjectFollow = dbContext.Customers.Where(x => x.Id == item.CustomerId).FirstOrDefault().FollowBy;
+    if(item.IsDone == true)
+    {
+        CompleteProjects++;
+    }
+    else if (IsProjectFollow == null)
+    {
+        UnFollowProjects++;
+    }
+    else
+    {
+        ProccessProjects++;
+    }
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3 col-sm-12 ProjectsDiv Done" id="Done">
+            <i class="fa-solid fa-check fa-3x" style="color: #218343;margin-bottom:20px;"></i>
+            <h4>المشاريع المكتملة</h4>
+            <span class="NumberProjects">@CompleteProjects</span>
+        </div>
+        <div class="col-md-3 col-sm-12 ProjectsDiv UnFollow" id="UnFollow">
+            <i class="fa-solid fa-exclamation fa-3x" style="color: darkred;margin-bottom:20px"></i>
+            <h4>العملاء الغير متابعين</h4>
+            <span class="NumberProjects">@UnFollowProjects</span>
+        </div>
+        <div class="col-md-3 col-sm-12 ProjectsDiv Proccess" id="Proccess">
+            <i class="fa-solid fa-spinner fa-3x" style="color: #30c3c5;margin-bottom:20px;"></i>
+            <h4>العملاء المتابعين</h4>
+            <span class="NumberProjects">@ProccessProjects</span>
+        </div>
+    </div>
+    <div class="row ProjectsTable">
+        <div class="col-md-12">
+            <div class="table-responsive" style="max-height:525px;">
+                <table class="table table-striped">
+                    <thead>
+                        <tr class="bg-primary text-white mt-4">
+                            <th>كود العميل</th>
+                            <th>تاريخ اضافة المشروع</th>
+                            <th>وصف المشروع</th>
+                            <th>اسم العميل</th>
+                            <th class="thChange">متابع من قبل</th>
+                            <th>حالة المشروع</th>
+                            <th>العمليات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ProjectTbody">
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/assets/js/manageProjects.js"></script>

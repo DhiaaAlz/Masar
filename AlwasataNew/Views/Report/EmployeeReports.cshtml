@@ -1,0 +1,105 @@
+﻿@using AlwasataNew.Data;
+@model IEnumerable<ApplicationUser>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<link rel="stylesheet" href="~/css/site.css" />
+<style>
+
+
+
+</style>
+
+
+<div class="container-fluid">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-body">
+                <div class="row" style="text-align:center;">
+                    <h2 style="text-align:center;margin-bottom:30px;">تقارير خاصة في الموظفين</h2>
+
+                    <div class="col-md-12">
+                        <div class="card">
+                            <h3 style="margin:20px auto;">عدد الموظفين : <span style="font-weight:bold;color:darkred;margin:10px;" id="customerCount">@Model.Count()</span></h3>
+                            
+                            <div class="tableDiv">
+                                
+                                <div class="table-responsive" style="max-height:525px;">
+                                    <table class="table table-striped text-center">
+                                        <thead>
+                                            <tr class="bg-primary text-white mt-4">
+                                                <th></th>
+                                                <th>اسم الموظف</th>
+                                                <th>تم انشائه بتاريخ</th>
+                                                <th>تم انشائه بواسطة</th>
+                                                <th>رقم الهاتف</th>
+                                                <th>الايميل</th>
+                                                <th>المسمى الوظيفي</th>
+                                                <th>كم عميل متابع من قبله</th>
+                                                <th>كم عميل اضاف للنظام</th>
+                                                <th>كم تعليق لديه</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="TableBody">
+                                            @{
+
+                                                using var dbContext = new ApplicationDbContext();
+                                                foreach (var employee in Model)
+                                                {
+                                                // var userId = dbContext.Users.Where(x => x.Id == employee.Id).Select(x => x.Id).FirstOrDefault();
+                                                    var result = @dbContext.Roles.Where(x => x.Id == dbContext.UserRoles.Where(x => x.UserId == employee.Id).Select(x => x.RoleId).FirstOrDefault()).Select(x => x.Name).FirstOrDefault();
+                                                    <tr>
+                                                        <td>
+                                                            @if (employee.ProfilePicture != null)
+                                                            {
+                                                                <img class="rounded-circle avatar" alt="ProfilePicture" src="data:image/*;base64,@(Convert.ToBase64String(employee.ProfilePicture))" />
+                                                            }
+                                                            else
+                                                            {
+                                                                <img class="rounded-circle avatar" alt="ProfilePicture" src="~/assets/images/defaultPictureForProfile.jpg" />
+                                                            }
+                                                        </td>
+                                                        <td>@employee.FirstName @employee.LastName</td>
+                                                        <td>@employee.CreatedAt</td>
+                                                        <td>@employee.CreatedBy</td>
+                                                        <td>@employee.PhoneNumber</td>
+                                                        <td>@employee.Email</td>
+                                                        <td>
+                                                            @if(result == "Admin")
+                                                            {
+                                                                <span style="color:darkred;font-weight:bold">@result</span>
+                                                            }                                                        
+                                                            else if(result == "Marketer"){
+                                                                <span style="color:darkcyan;font-weight:bold">@result</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span style="color:darkgreen;font-weight:bold">@result</span>
+                                                            }
+                                                        </td>
+                                                        <td>@dbContext.Customers.Where(x=>x.FollowBy == (employee.FirstName+" "+employee.LastName).ToString()).Count()</td>
+                                                        <td>@dbContext.Customers.Where(x=>x.CreatedBy == (employee.FirstName+" "+employee.LastName).ToString()).Count()</td>
+                                                        <td>@dbContext.CustomerStateDescriptions.Where(x=>x.EmployeeId == employee.Id).Count()</td>
+                                                    </tr>
+                                                }
+                                            }
+                                            
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/assets/js/customerReport.js"></script>

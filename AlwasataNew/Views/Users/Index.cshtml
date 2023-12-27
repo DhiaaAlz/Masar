@@ -1,0 +1,91 @@
+﻿@model IEnumerable<UserViewModel>
+
+@{
+    ViewData["Title"] = "Users";
+}
+
+<h1>ادارة المستخدمين</h1>
+<a asp-action="AddNewUser" class="btn btn-primary m-3">اضافة مستخدم جديد</a>
+
+<div id="alert" class="alert alert-success alert-dismissible fade show mt-4 d-none" role="alert">
+    User Deleted .
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr class="bg-primary text-white mt-4">
+            <th>الاسم الاول</th>
+            <th>الاسم الاخير</th>
+            <th>اسم المستخدم</th>
+            <th>الايميل</th>
+            <th>الصلاحيات</th>
+            <th>العمليات</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var user in Model)
+        {
+            <tr>
+                <td>@user.FirstName</td>
+                <td>@user.LastName</td>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>@string.Join(" , ",user.RolesName.ToList())</td>
+                <td>
+                    <a class="btn btn-primary" asp-controller="Users" asp-action="ManageRoles" asp-route-userId="@user.Id">ادارة الصلاحيات</a>
+                    <a class="btn btn-outline-primary" asp-controller="Users" asp-action="EditProfile" asp-route-userId="@user.Id">تعديل البيانات</a>
+                    <a href="javascript:;" class="btn btn-danger js-delete" data-id="@user.Id">حذف المستخدم</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts{
+    <script>
+        $(document).ready(function(){
+            $(".js-delete").on('click',function(){
+                var btn=$(this);
+
+
+                bootbox.confirm({
+                    message: 'هل انت متأكد انك تريد حذف هذا المستخدم ?',
+                    buttons: {
+                        confirm: {
+                            label: 'نعم',
+                            className: 'btn-danger'
+                        },
+                        cancel: {
+                            label: 'لا',
+                            className: 'btn-secondary'
+                        }
+                    },
+                    callback: function (result) {
+                        if(result){
+                            $.ajax({
+                                url:"/api/Users/?Id="+btn.data('id'),
+                                method:'DELETE',
+                                success:function(){
+                                    btn.parents("tr").fadeOut();
+                                    $("#alert").removeClass("d-none");
+
+                                    setTimeout(function(){
+                                        $("#alert").addClass("d-none");
+                                    },3000);
+                                },
+                                error:function(){
+                                    alert("somethis went wrong !");
+                                }
+                            })
+                        }
+                    }
+                });
+
+
+       
+
+            });
+        });
+    </script>
+}

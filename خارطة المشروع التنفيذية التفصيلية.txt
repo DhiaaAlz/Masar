@@ -1,0 +1,51 @@
+@* <div class="col-md-6 col-sm-12 sectionDiv mapDiv">
+    <h3>خارطة لتتبع مراحل <span style="color:darkred;font-weight:bold">تنفيذ</span> المشروع</h3>
+    <div class="projectMap row">
+        <div class="MainLevelDiv">
+            <div class="levelDiv" style="margin-top:30px">
+                <h3 style="margin-bottom:30px;">المرحلة الاولى : <span style="color:darkgreen">الاساسات</span></h3>
+                <div class="LevelProjectDesc" dir="rtl">
+                    <span class="LevelDone"><p class="LevelTextDesc">حفر وتسوية</p>1</span>
+                    <span class="LevelDone"><p class="LevelTextDesc">خرسانة نظافة</p>2</span>
+                    <span><span class="LevelPinding"></span><p class="LevelTextDesc">خرسانة مسلحة للقواعد</p>3</span>
+                    <span><p class="LevelTextDesc">خرسانة مسلحة لرقبة العمود</p>4</span>
+                    <span><p class="LevelTextDesc">خرسانة مسلحة للميده</p>5</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="MainLevelDiv">
+            <div class="levelDiv" style="margin-top:30px">
+                <h3 style="margin-bottom:30px;">المرحلة الثانية : <span style="color:darkgreen">الدور الارضي</span></h3>
+                <div class="LevelProjectDesc" dir="rtl">
+                    <span class="LevelDone"><p class="LevelTextDesc">أعمدة الارضي</p>1</span>
+                    <span class="LevelDone"><p class="LevelTextDesc">خرسانة ارضية</p>2</span>
+                    <span><span class="LevelPinding"></span><p class="LevelTextDesc">مباني الارضي</p>3</span>
+                    <span><p class="LevelTextDesc">خرسانة سقف الارضي</p>4</span>
+                </div>
+            </div>
+        </div>
+         <div class="MainLevelDiv">
+            <div class="levelDiv" style="margin-top:30px">
+                <h3 style="margin-bottom:30px;">المرحلة الثالثة : <span style="color:darkgreen">الدور الاول</span></h3>
+                <div class="LevelProjectDesc" dir="rtl">
+                    <span class="LevelDone"><p class="LevelTextDesc">اعمدة الاول</p>1</span>
+                    <span class="LevelDone"><p class="LevelTextDesc">مباني الاول</p>2</span>
+                    <span><span class="LevelPinding"></span><p class="LevelTextDesc">سقف الاول</p>3</span>
+                </div>
+            </div>
+        </div>
+        <div class="MainLevelDiv">
+            <div class="levelDiv" style="margin-top:30px">
+                <h3 style="margin-bottom:30px;">المرحلة الرابعة : <span style="color:darkgreen">الدور الثاني</span></h3>
+                <div class="LevelProjectDesc" dir="rtl">
+                    <span class="LevelDone"><p class="LevelTextDesc">اعمدة الثاني</p>1</span>
+                    <span class="LevelDone"><p class="LevelTextDesc">مباني الثاني</p>2</span>
+                    <span><span class="LevelPinding"></span><p class="LevelTextDesc">سقف الثاني</p>3</span>
+                </div>
+            </div>
+        </div> 
+
+    </div>
+</div> *@
+        
