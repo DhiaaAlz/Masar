@@ -322,3 +322,160 @@ $("#new").click(() => {
 
     }
 });
+
+
+$("#whatsapp").click(() => {
+    $("#TableBody").empty();
+
+    for (let i = 0; i < AllCustomer.length; i++) {
+        if (AllCustomer[i].clientSource == "واتس اب") {
+            $("#TableBody").append(
+                "<tr><td>" + AllCustomer[i].customerName + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td>"
+                + "<td>"
+                + "<a href='../Customer/CustomerStateComment?customerId=" + AllCustomer[i].id + "' class='customerSta'><span style='position: relative'> "
+                + AllCustomer[i].customerState
+                + "<span class='addComm'>اضف تعليقاً</span></span></a></td>"
+                + "<td>"
+                + "<a class='btn btn-primary' href='../Customer/ShowProjectsDescription/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
+                + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
+                + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
+                + "</td>"
+                + "</tr>");
+        }
+
+    }
+});
+
+$("#telgram").click(() => {
+    $("#TableBody").empty();
+
+    for (let i = 0; i < AllCustomer.length; i++) {
+        if (AllCustomer[i].clientSource == "تيلغرام") {
+            $("#TableBody").append(
+                "<tr><td>" + AllCustomer[i].customerName + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td>"
+                + "<td>"
+                + "<a href='../Customer/CustomerStateComment?customerId=" + AllCustomer[i].id + "' class='customerSta'><span style='position: relative'> "
+                + AllCustomer[i].customerState
+                + "<span class='addComm'>اضف تعليقاً</span></span></a></td>"
+                + "<td>"
+                + "<a class='btn btn-primary' href='../Customer/ShowProjectsDescription/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
+                + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
+                + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
+                + "</td>"
+                + "</tr>");
+        }
+
+    }
+});
+
+$("#facebook").click(() => {
+    $("#TableBody").empty();
+
+    for (let i = 0; i < AllCustomer.length; i++) {
+        if (AllCustomer[i].clientSource == "فيسبوك") {
+            $("#TableBody").append(
+                "<tr><td>" + AllCustomer[i].customerName + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td>"
+                + "<td>"
+                + "<a href='../Customer/CustomerStateComment?customerId=" + AllCustomer[i].id + "' class='customerSta'><span style='position: relative'> "
+                + AllCustomer[i].customerState
+                + "<span class='addComm'>اضف تعليقاً</span></span></a></td>"
+                + "<td>"
+                + "<a class='btn btn-primary' href='../Customer/ShowProjectsDescription/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
+                + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
+                + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
+                + "</td>"
+                + "</tr>");
+        }
+
+    }
+});
+
+$("#youtube").click(() => {
+    $("#TableBody").empty();
+
+    for (let i = 0; i < AllCustomer.length; i++) {
+        if (AllCustomer[i].clientSource == "يوتيوب") {
+            $("#TableBody").append(
+                "<tr><td>" + AllCustomer[i].customerName + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td>"
+                + "<td>"
+                + "<a href='../Customer/CustomerStateComment?customerId=" + AllCustomer[i].id + "' class='customerSta'><span style='position: relative'> "
+                + AllCustomer[i].customerState
+                + "<span class='addComm'>اضف تعليقاً</span></span></a></td>"
+                + "<td>"
+                + "<a class='btn btn-primary' href='../Customer/ShowProjectsDescription/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
+                + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
+                + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
+                + "</td>"
+                + "</tr>");
+        }
+
+    }
+});
+
+$("#instgram").click(() => {
+    $("#TableBody").empty();
+
+    for (let i = 0; i < AllCustomer.length; i++) {
+        if (AllCustomer[i].clientSource == "انستغرام") {
+            $("#TableBody").append(
+                "<tr><td>" + AllCustomer[i].customerName + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td>"
+                + "<td>"
+                + "<a href='../Customer/CustomerStateComment?customerId=" + AllCustomer[i].id + "' class='customerSta'><span style='position: relative'> "
+                + AllCustomer[i].customerState
+                + "<span class='addComm'>اضف تعليقاً</span></span></a></td>"
+                + "<td>"
+                + "<a class='btn btn-primary' href='../Customer/ShowProjectsDescription/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
+                + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
+                + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
+                + "</td>"
+                + "</tr>");
+        }
+
+    }
+});
+
+
+$("#tektok").click(() => {
+    $("#TableBody").empty();
+
+    for (let i = 0; i < AllCustomer.length; i++) {
+        if (AllCustomer[i].clientSource == "تيك توك") {
+            $("#TableBody").append(
+                "<tr><td>" + AllCustomer[i].customerName + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td>"
+                + "<td>"
+                + "<a href='../Customer/CustomerStateComment?customerId=" + AllCustomer[i].id + "' class='customerSta'><span style='position: relative'> "
+                + AllCustomer[i].customerState
+                + "<span class='addComm'>اضف تعليقاً</span></span></a></td>"
+                + "<td>"
+                + "<a class='btn btn-primary' href='../Customer/ShowProjectsDescription/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
+                + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
+                + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
+                + "</td>"
+                + "</tr>");
+        }
+
+    }
+});
+
+
+$("#data").click(() => {
+    $("#TableBody").empty();
+
+    for (let i = 0; i < AllCustomer.length; i++) {
+        if (AllCustomer[i].clientSource == "داتا") {
+            $("#TableBody").append(
+                "<tr><td>" + AllCustomer[i].customerName + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td>"
+                + "<td>"
+                + "<a href='../Customer/CustomerStateComment?customerId=" + AllCustomer[i].id + "' class='customerSta'><span style='position: relative'> "
+                + AllCustomer[i].customerState
+                + "<span class='addComm'>اضف تعليقاً</span></span></a></td>"
+                + "<td>"
+                + "<a class='btn btn-primary' href='../Customer/ShowProjectsDescription/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
+                + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
+                + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
+                + "</td>"
+                + "</tr>");
+        }
+
+    }
+});

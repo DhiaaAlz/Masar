@@ -438,10 +438,7 @@ namespace AlwasataNew.Controllers
                 customer.Email = model.Email;
                 customer.Type = model.Type;
                 customer.CompanyId = dbContext.Companies.Where(x => x.Id == model.ForCompany).Select(x => x.Id).FirstOrDefault();
-                if (model.FollowBy != null)
-                {
-                    customer.FollowBy = model.FollowBy;
-                }
+                
 
                 customer.CompanyName = model.CompanyName;
                 customer.EmployeeName = model.EmployeeName;
@@ -455,15 +452,39 @@ namespace AlwasataNew.Controllers
                 project.LandAreaByM = model.ProjectLandArea;
                 project.Type = model.ProjectType;
                 project.Model = model.ProjectModel;
+
                 if (customer.CustomerState == "مكتمل")
                 {
                     project.IsDone = true;
                 }
-                dbContext.Projects.Update(project);
-                dbContext.Customers.Update(customer);
-                dbContext.SaveChanges();
+
+                
+
                 ViewBag.done = "تم التعديل بنجاح";
-                return View(model);
+
+                if(customer.FollowBy != model.FollowBy && customer.FollowBy==null)
+                {
+                    if (model.FollowBy != null)
+                    {
+                        customer.FollowBy = model.FollowBy;
+                    }
+                    dbContext.Projects.Update(project);
+                    dbContext.Customers.Update(customer);
+                    dbContext.SaveChanges();
+                    return RedirectToAction("Index", "ManageProject");
+                }
+                else
+                {
+                    if (model.FollowBy != null)
+                    {
+                        customer.FollowBy = model.FollowBy;
+                    }
+                    dbContext.Projects.Update(project);
+                    dbContext.Customers.Update(customer);
+                    dbContext.SaveChanges();
+                    return View(model);
+                }
+                
             }
         }
 
@@ -538,6 +559,20 @@ namespace AlwasataNew.Controllers
                 cmd.ExecuteNonQuery();
                 con.Close();
 
+                var result = dbcontext.CustomerStateDescriptions.Where(x=>x.CustomerId==customerId && (x.CommentText== "تم التواصل عن طريق المكالمات" || x.CommentText== "تم التواصل عن طريق الايميل" || x.CommentText== "تم التواصل عن طريق الواتس اب")).ToList();
+                if(result.Count>=3)
+                {
+                    var customer = dbcontext.Customers.Where(x => x.Id == customerId).FirstOrDefault();
+                    if(customer!=null)
+                    {
+                        if(customer.CustomerState=="جديد")
+                        {
+                            customer.CustomerState = "لم يرد";
+                            dbcontext.SaveChanges();
+                        }
+                    }
+
+                }
                 return View(dbcontext.Customers.Where(x => x.Id == customerId).FirstOrDefault());
             }
 
@@ -600,6 +635,7 @@ namespace AlwasataNew.Controllers
                 da.Fill(ds);
 
                 List<Customer> ListCustomer = new List<Customer>();
+
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     ListCustomer.Add(new Customer
@@ -614,6 +650,7 @@ namespace AlwasataNew.Controllers
                         Email = dr["Email"].ToString(),
                         FollowBy = dr["FollowBy"].ToString(),
                         EmployeeName = dr["EmployeeName"].ToString(),
+                        ClientSource = dr["ClientResource"].ToString(),
                         JobTitle = dr["JobTitle"].ToString(),
                         Phone = Convert.ToString(dr["Phone"]),
                         Type = dr["Type"].ToString(),
@@ -652,6 +689,7 @@ namespace AlwasataNew.Controllers
                         CustomerState = dr["CustomerState"].ToString(),
                         Address = dr["Address"].ToString(),
                         Email = dr["Email"].ToString(),
+                        ClientSource = dr["ClientResource"].ToString(),
                         FollowBy = dr["FollowBy"].ToString(),
                         EmployeeName = dr["EmployeeName"].ToString(),
                         JobTitle = dr["JobTitle"].ToString(),

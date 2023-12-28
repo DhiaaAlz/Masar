@@ -123,14 +123,23 @@
         </div>
         <div>
             <span> فرز العملاء بحسب الشركة</span>
-
             @{
                 using var dbContext2 = new ApplicationDbContext();
                 foreach (var item in dbContext2.Companies)
                 {
-                                    <button id="comp-@item.Id">@item.Name</button>
+                    <button id="comp-@item.Id">@item.Name</button>
                 }
             }
+        </div>
+        <div>
+            <span>فرز العملاء بحسب المصدر </span>
+            <button id="whatsapp">واتس اب</button>
+            <button id="telgram">تيلغرام</button>
+            <button id="facebook">فيسبوك</button>
+            <button id="instgram">انستغرام</button>
+            <button id="tektok">تيك توك</button>
+            <button id="youtube">يوتيوب</button>
+            <button id="data">داتا</button>
         </div>
     </div>
 

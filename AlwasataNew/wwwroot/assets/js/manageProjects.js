@@ -32,7 +32,7 @@ $(async () => {
                     var followBy = AllCustomer[j].followBy;
                     var now = moment();
                     var publishedDate = moment(new Date(AllProject[i].createdAt));
-                    if (AllCustomer[j].followBy != null) {
+                    if (AllCustomer[j].followBy == null) {
                         $("#ProjectTbody").append("<tr><td>" + AllProject[i].id + "</td><td>" + moment.duration(publishedDate.diff(now)).humanize(true) + "</td><td>" + AllProject[i].description + "</td><td>" + customerName + "</td><td>" + followBy + "</td><td style='color:darkcyan'> متابع </td><td><a class='btn btn-primary' href='../Customer/ShowProjectsDescription?projId=" + AllProject[i].id + "'>تفاصيل المشروع</a></td></tr>");
                     }
                 }

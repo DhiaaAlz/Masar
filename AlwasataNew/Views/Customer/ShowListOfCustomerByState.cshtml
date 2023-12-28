@@ -64,7 +64,7 @@
                                                     <td>
                                                         @if (customer.CustomerName == null)
                                                         {
-                                                            <span>اسم الموظف : @customer.EmployeeName</span>
+                                                            <span>@customer.CompanyName</span>
                                                         }
                                                         else
                                                         {
@@ -111,20 +111,19 @@
                                                             </a>
                                                         }
                                                     </td>
-                                          
+                                                        
                                                     <td>
                                                         @if (customer.FollowBy == null)
                                                         {
-                                                            <span style="color:darkred;font-weight:bold;">لا يوجد</span>
+                                                            <span style="color:darkred;font-weight:bold;">لا يوجد</span>    
                                                         }
                                                         else
                                                         {
-                                                            @customer.FollowBy
-                                                            ;
+                                                            @customer.FollowBy      
                                                         }
                                                     </td>
                                                     <td>
-                                                        @customer.CreatedBy
+                                                        @customer.CreatedBy     
                                                     </td>
                                                     <td> <a class="btn btn-outline-primary" asp-controller="Customer" asp-action="EditInformation" asp-route-Id="@customer.Id">تعديل المعلومات </a></td>
                                                 </tr>
@@ -132,8 +131,6 @@
                                         </tbody>
                                     </table>
                                 </div>
-                               
-
                             </div>
                         </div>
                     </div>

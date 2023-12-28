@@ -40,6 +40,14 @@
         top:2px;
         color:darkgreen;
     }
+
+    #callsBtn, #whatsAppBtn, #emailBtn{
+        display: flex;
+        justify-content:center;
+        align-items:center;
+        padding:3px;
+        gap:10px;
+    }
 </style>
   
 @{
@@ -49,12 +57,16 @@
 
 @using (var dbContext = new ApplicationDbContext())
 {
+
     userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
     customerName = dbContext.Customers.Where(x => x.Id == Model.Id).Select(x => x.CustomerName).FirstOrDefault();
+
     if (customerName == null)
     {
-        customerName ="شركة "+ dbContext.Customers.Where(x => x.Id == Model.Id).Select(x => x.CompanyName).FirstOrDefault();
+        customerName =" شركة "+ dbContext.Customers.Where(x => x.Id == Model.Id).Select(x => x.CompanyName).FirstOrDefault();
     }
+
 }
 
 <div class="container">
@@ -64,12 +76,17 @@
         <h3 style="text-align:center">اكتب تعليقاً لحالة هذا العميل</h3>
         <input type="hidden" value="@Model.Id" name="customerId"/>
         <input type="hidden" value="@userId" name="employeeId"/>
-        <textarea name="comment" style="padding: 10px;border-radius: 6px;">
+        <textarea name="comment" style="padding: 10px;border-radius: 6px;" id="comment">
 
         </textarea>
         <button class="btn btn-primary" type="submit">حسناً</button>
-     </form>
 
+        <button id="emailBtn" type="submit" class="btn btn-primary" style="background-color:#128C7E;margin-top:15px;"> <i class="fa-regular fa-envelope fa-2x"></i>تم التواصل عن طريق الايميل  </button>
+        <button id="whatsAppBtn" type="submit" class="btn btn-primary" style="background-color:#25D366"><i class="fa-brands fa-whatsapp fa-2x"></i>تم التواصل عن طريق الواتس اب</button>
+        <button id="callsBtn" type="submit" class="btn btn-primary" style="background-color:#34B7F1"> <i class="fa-solid fa-phone fa-2x"></i> تم التواصل عن طريق المكالمات</button>
+
+     </form>
+    
     <div class="allComments">
         <h3 style="color:darkred">جميع التعليقات السابقة</h3>
         <div class="container">
@@ -99,12 +116,12 @@
                                         }
                                     </span>
                                     <span class="createAt">
-                                        @item.CreatedAt
+                                        @item.CreatedAt 
                                     </span>
                                 </span>
                             }
                         }
-                       
+                        
                     }
                     
                 </div>
@@ -112,3 +129,18 @@
         </div>
     </div>
 </div>
+<script src="./lib/jquery/dist/jquery.min.js"></script>
+<script>
+    document.getElementById("emailBtn").addEventListener("click", function ()
+    {
+        document.getElementById("comment").value = 'تم التواصل عن طريق الايميل';
+    });
+
+    document.getElementById("callsBtn").addEventListener("click", function () {
+        document.getElementById("comment").value = 'تم التواصل عن طريق المكالمات';
+    });
+
+    document.getElementById("whatsAppBtn").addEventListener("click", function () {
+        document.getElementById("comment").value = 'تم التواصل عن طريق الواتس اب';
+    });
+</script>
