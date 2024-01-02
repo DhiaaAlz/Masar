@@ -650,7 +650,7 @@ namespace AlwasataNew.Controllers
                         Email = dr["Email"].ToString(),
                         FollowBy = dr["FollowBy"].ToString(),
                         EmployeeName = dr["EmployeeName"].ToString(),
-                        ClientSource = dr["ClientResource"].ToString(),
+                        ClientSource = dr["ClientSource"].ToString(),
                         JobTitle = dr["JobTitle"].ToString(),
                         Phone = Convert.ToString(dr["Phone"]),
                         Type = dr["Type"].ToString(),
