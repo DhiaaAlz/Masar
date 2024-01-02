@@ -32,6 +32,7 @@ $("#keyWord").keyup(() => {
                 + "<a class='btn btn-primary' href='../Customer/ShowProjects/" + data[i].id + "'>تفاصيل المشاريع </a> "
                 + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + data[i].id + "'>تعديل معلومات العميل</a> "
                 + "<a class='btn btn-outline-success' href='mailto: " + data[i].email + "'>مراسلة العميل</a>"
+                + "<a class='btn btn-outline-info' href='../Customer/CustomerStateComment?customerId=" + data[i].id + "'><i class='fa-regular fa-comment'></i> اترك تعليقاً</a>"
                 + "</td>"
                 + "</tr>");
         }

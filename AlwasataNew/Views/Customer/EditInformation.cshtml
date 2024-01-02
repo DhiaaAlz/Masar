@@ -1,4 +1,8 @@
 ﻿@using AlwasataNew.Data;
+@using AlwasataNew.Services.App
+@{
+    ICommon _app=new Common();
+}
 @model EditCustomerViewModel
 
 @{
@@ -162,6 +166,30 @@
             <span asp-validation-for="CustomerState" class="text-danger"></span>
         </div>
 
+        <div class="form-floating">
+            <select asp-for="ClientSource" class="form-control" autocomplete="CustomerState" aria-required="true" id="ClientSource">
+                @if(Model.ClientSource=="اختر")
+                {
+                    <option>اختر</option>                    
+                }
+                @foreach (var item in _app.GetCliecntSource())
+                {
+                    if(item != Model.ClientSource)
+                    {
+                        <option>@item</option>
+                    }
+                    else
+                    {
+                        <option selected>@item</option>
+                    }
+                }
+               
+                
+            </select>
+            <label asp-for="ClientSource"></label>
+            <span asp-validation-for="ClientSource" class="text-danger"></span>
+        </div>
+
         @if (User.IsInRole("Admin"))
         {
 
@@ -173,6 +201,7 @@
 
             <div class="form-floating">
                 <select asp-for="FollowBy" class="form-control" autocomplete="username" aria-required="true">
+                    <option>اختر</option>
                     @{
 
                         using (var dbContect = new ApplicationDbContext())

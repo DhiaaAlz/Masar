@@ -23,8 +23,16 @@ namespace AlwasataNew.Controllers
         }
 
         [HttpGet]
-        public IActionResult AddNew()
+        public IActionResult AddNew(string? viewbag)
         {
+            if(viewbag != null)
+            {
+                ViewBag.done = "تم اضافة عميل جديد";
+            }
+            else
+            {
+                ViewBag.done = null;
+            }
             return View();
         }
 
@@ -170,7 +178,8 @@ namespace AlwasataNew.Controllers
 
             }
 
-            return RedirectToAction("AddNew", "Customer");
+            ViewBag.done = "تم اضافة عميل جديد";
+            return RedirectToAction("AddNew","Customer",new{ viewbag="تم اضافة عميل جديد"});
         }
 
 
@@ -388,7 +397,7 @@ namespace AlwasataNew.Controllers
                     ProjectModel = project.Model,
                     FollowBy = customer.FollowBy,
                     ForCompany = customer.CompanyId
-
+                    ,ClientSource=customer.ClientSource,
                 };
 
                 return View(CustomerInformation);
@@ -446,6 +455,7 @@ namespace AlwasataNew.Controllers
                 customer.Address = model.Address;
                 customer.CustomerState = model.CustomerState;
                 customer.CompanyId = model.ForCompany;
+                customer.ClientSource= model.ClientSource;
                 //update project
                 project.Description = model.ProjectDescription;
                 project.DescriptionType = model.DescriptionProjectType;
@@ -501,78 +511,92 @@ namespace AlwasataNew.Controllers
         {
             using (var dbcontext = new ApplicationDbContext())
             {
-                var currentDate = DateTime.Now;
-                var employeeID = dbcontext.Users.Where(x => x.Id == Convert.ToString(employeeId)).Select(x => x.Id).FirstOrDefault();
-                var maxId = 0;
-                var maxIdResult = dbcontext.CustomerStateDescriptions;
-                if (maxIdResult.Count() == 0)
+                if(comment=="done" || comment== "noAnswer")
                 {
-                    maxId = 1;
+                    var customer = dbcontext.Customers.Where(x => x.Id == customerId).FirstOrDefault();
+                    if (comment == "done")
+                        customer.CustomerState = "متفاعل";
+                    else
+                        customer.CustomerState = "لم يرد";
+                    dbcontext.Customers.Update(customer);
+                    dbcontext.SaveChanges();
                 }
                 else
                 {
-                    maxId = (maxIdResult.Max(x => x.Id) + 1);
-                }
-
-
-
-                var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-                string constr = configuration.GetConnectionString("DefaultConnection");
-                SqlConnection con = new SqlConnection(constr);
-
-
-                string s1 = $"insert into CustomerStateDescriptions values(@maxId,@custId,@comment,@createAt,@empId)";
-                SqlCommand cmd = new SqlCommand(s1, con);
-
-                SqlParameter param1 = new SqlParameter();
-                param1.ParameterName = "@maxId";
-                param1.Value = maxId;
-                param1.SqlDbType = SqlDbType.Int;
-
-                SqlParameter param2 = new SqlParameter();
-                param2.ParameterName = "@custId";
-                param2.Value = Convert.ToInt32(customerId);
-                param2.SqlDbType = SqlDbType.Int;
-
-                SqlParameter param3 = new SqlParameter();
-                param3.ParameterName = "@comment";
-                param3.Value = comment;
-                param3.SqlDbType = SqlDbType.NVarChar;
-
-                SqlParameter param4 = new SqlParameter();
-                param4.ParameterName = "@createAt";
-                param4.Value = currentDate;
-                param4.SqlDbType = SqlDbType.DateTime2;
-
-                SqlParameter param5 = new SqlParameter();
-                param5.ParameterName = "@empId";
-                param5.Value = Convert.ToString(employeeId);
-                param5.SqlDbType = SqlDbType.NVarChar;
-
-                cmd.Parameters.Add(param1);
-                cmd.Parameters.Add(param2);
-                cmd.Parameters.Add(param3);
-                cmd.Parameters.Add(param4);
-                cmd.Parameters.Add(param5);
-
-                con.Open();
-                cmd.ExecuteNonQuery();
-                con.Close();
-
-                var result = dbcontext.CustomerStateDescriptions.Where(x=>x.CustomerId==customerId && (x.CommentText== "تم التواصل عن طريق المكالمات" || x.CommentText== "تم التواصل عن طريق الايميل" || x.CommentText== "تم التواصل عن طريق الواتس اب")).ToList();
-                if(result.Count>=3)
-                {
-                    var customer = dbcontext.Customers.Where(x => x.Id == customerId).FirstOrDefault();
-                    if(customer!=null)
+                    var currentDate = DateTime.Now;
+                    var employeeID = dbcontext.Users.Where(x => x.Id == Convert.ToString(employeeId)).Select(x => x.Id).FirstOrDefault();
+                    var maxId = 0;
+                    var maxIdResult = dbcontext.CustomerStateDescriptions;
+                    if (maxIdResult.Count() == 0)
                     {
-                        if(customer.CustomerState=="جديد")
-                        {
-                            customer.CustomerState = "لم يرد";
-                            dbcontext.SaveChanges();
-                        }
+                        maxId = 1;
+                    }
+                    else
+                    {
+                        maxId = (maxIdResult.Max(x => x.Id) + 1);
                     }
 
+
+
+                    var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+                    string constr = configuration.GetConnectionString("DefaultConnection");
+                    SqlConnection con = new SqlConnection(constr);
+
+
+                    string s1 = $"insert into CustomerStateDescriptions values(@maxId,@custId,@comment,@createAt,@empId)";
+                    SqlCommand cmd = new SqlCommand(s1, con);
+
+                    SqlParameter param1 = new SqlParameter();
+                    param1.ParameterName = "@maxId";
+                    param1.Value = maxId;
+                    param1.SqlDbType = SqlDbType.Int;
+
+                    SqlParameter param2 = new SqlParameter();
+                    param2.ParameterName = "@custId";
+                    param2.Value = Convert.ToInt32(customerId);
+                    param2.SqlDbType = SqlDbType.Int;
+
+                    SqlParameter param3 = new SqlParameter();
+                    param3.ParameterName = "@comment";
+                    param3.Value = comment;
+                    param3.SqlDbType = SqlDbType.NVarChar;
+
+                    SqlParameter param4 = new SqlParameter();
+                    param4.ParameterName = "@createAt";
+                    param4.Value = currentDate;
+                    param4.SqlDbType = SqlDbType.DateTime2;
+
+                    SqlParameter param5 = new SqlParameter();
+                    param5.ParameterName = "@empId";
+                    param5.Value = Convert.ToString(employeeId);
+                    param5.SqlDbType = SqlDbType.NVarChar;
+
+                    cmd.Parameters.Add(param1);
+                    cmd.Parameters.Add(param2);
+                    cmd.Parameters.Add(param3);
+                    cmd.Parameters.Add(param4);
+                    cmd.Parameters.Add(param5);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+
+                    var result = dbcontext.CustomerStateDescriptions.Where(x => x.CustomerId == customerId && (x.CommentText == "تم التواصل عن طريق المكالمات" || x.CommentText == "تم التواصل عن طريق الايميل" || x.CommentText == "تم التواصل عن طريق الواتس اب")).ToList();
+                    if (result.Count >= 3)
+                    {
+                        var customer = dbcontext.Customers.Where(x => x.Id == customerId).FirstOrDefault();
+                        if (customer != null)
+                        {
+                            if (customer.CustomerState == "جديد")
+                            {
+                                customer.CustomerState = "لم يرد";
+                                dbcontext.SaveChanges();
+                            }
+                        }
+
+                    }
                 }
+                
                 return View(dbcontext.Customers.Where(x => x.Id == customerId).FirstOrDefault());
             }
 
@@ -628,6 +652,7 @@ namespace AlwasataNew.Controllers
             if (User.IsInRole("Admin"))
             {
                 string s1 = $"select * from Customers where CustomerName like '%{text}%' or Phone like '%{text}%' or CompanyName like '%{text}%' or Email like '%{text}%'";
+
                 SqlCommand cmd = new SqlCommand(s1, con);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
 

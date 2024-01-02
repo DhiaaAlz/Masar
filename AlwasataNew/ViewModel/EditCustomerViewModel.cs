@@ -65,6 +65,8 @@ namespace AlwasataNew.ViewModel
 
         [Display(Name = "نمط المشروع")]
         public string? ProjectModel { get; set; }
+        [Display(Name = "مصدر العميل")]
+        public string? ClientSource { get; set; }
 
 
     }

@@ -1,15 +1,23 @@
 ﻿@using AlwasataNew.Data;
+@using AlwasataNew.Services.App
 @model AddCustomerViewModel
 
 @{
     ViewData["Title"] = "Add New Customer";
     using var DbContext = new ApplicationDbContext();
+    ICommon _app = new Common();
 }
 <link rel="stylesheet" href="~/assets/css/addNew.css"/>
 <form action="AddNew" method="post" class="fromInput" style="text-align:right" dir="rtl">
     <h2>اضافة عميل جديد</h2>
+    <div>
+        @if(ViewBag.done!="null")
+        {
+            <h3 id="viewBag" style="color:darkgreen;text-align:center">@ViewBag.done</h3>
+        }
+    </div>
     <hr />
-     @* <div asp-validation-summary="All" class="text-danger"></div>  *@
+     @*  <div asp-validation-summary="All" class="text-danger"></div>  *@
 
     <div class="replaceBetween">
         <span id="custInfoBtn" class="active">معلومات العميل</span>
@@ -195,6 +203,7 @@
     <div class="form-floating">
 
         <select asp-for="FollowByEmployee" class="form-control" autocomplete="description type" aria-required="true" id="FollowByEmployee">
+            <option>اختر</option>
            @foreach(var item in DbContext.Users)
             {
                 <option>@item.FirstName @item.LastName</option>
@@ -205,8 +214,14 @@
 
     </div>
     <div class="form-floating">
-        <input asp-for="ClientSource" class="form-control" autocomplete="مصدر العميل" aria-required="false" />
-        <label asp-for="ClientSource" style="text-align:right"></label>
+        <select asp-for="ClientSource" class="form-control" autocomplete="description type" aria-required="true" id="ClientSource">
+            <option>اختر</option>
+            @foreach(var item in _app.GetCliecntSource())
+            {
+                <option>@item</option>
+            }
+        </select>
+        <label asp-for="ClientSource"></label>
         <span asp-validation-for="ClientSource" class="text-danger"></span>
     </div>
     <button type="submit" class="btnForm btn btn-primary">اضافة</button>
@@ -216,7 +231,7 @@
     <partial name="_ValidationScriptsPartial" />
 }
 
-
+<script src="~/assets/libs/jquery/dist/jquery.min.js"></script>
 <script>
 
 
@@ -251,5 +266,9 @@
             $("#otherProjectModel input").val("");
         }
     });
-  
+
+
+    if ($("#viewBag").css("display") == "block") {
+        $("#viewBag").fadeOut(3000);
+    }
 </script>
