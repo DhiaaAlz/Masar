@@ -67,6 +67,7 @@ namespace AlwasataNew.Data
         public DbSet<Project> Projects { get; set; }
         public DbSet<Company> Companies { get; set; }
         public DbSet<CustomerStateDescription> CustomerStateDescriptions { get; set; }
+        public DbSet<CustomerStateDescriptionTbl>  customerStateDescriptionTbl { get; set; }
 
     }
 }
