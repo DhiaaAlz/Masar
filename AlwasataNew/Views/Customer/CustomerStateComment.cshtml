@@ -76,7 +76,7 @@
 
     if (customerName == null)
     {
-        customerName =" شركة "+ dbContext.Customers.Where(x => x.Id == Model.Id).Select(x => x.CompanyName).FirstOrDefault();
+        customerName =dbContext.Customers.Where(x => x.Id == Model.Id).Select(x => x.CompanyName).FirstOrDefault();
     }
 
     customer = dbContext.Customers.Where(x => x.Id == Model.Id).FirstOrDefault();
@@ -84,7 +84,21 @@
 
 <div class="container">
      <form method="post" class="fromInput">
-        <h4 style="margin-top:20px;text-align:center">اسم العميل : @customerName</h4>
+        @{
+            if(customer.Type=="فرد")
+            {
+                <h4 style="margin-top:20px;text-align:center">اسم العميل : <span style="color:darkgreen">@customerName</span></h4>
+                <h4 style="margin-top:20px;text-align:center">رقم العميل : <span style="color:darkgreen">@customer.Phone</span></h4>
+            }
+            else
+            {
+                <h4 style="margin-top:20px;text-align:center">اسم الشركة : <span style="color:darkgreen">@customer.CompanyName</span></h4>
+                <h4 style="margin-top:20px;text-align:center">اسم الموظف : <span style="color:darkgreen">@customer.EmployeeName</span></h4>
+                <h4 style="margin-top:20px;text-align:center">رقم الهاتف : <span style="color:darkgreen">@customer.Phone</span></h4>
+            }
+        }
+
+        
         <hr />
         @{
             var whatsLink = "https://wa.me/" + customer.Phone + "";
