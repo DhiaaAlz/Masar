@@ -26,162 +26,160 @@ $("#keyWord").keyup(() => {
 });
 
 
+
 $("#active").click(() => {
     $("#TableBody").empty();
-    let j = 0;
+
     for (let i = 0; i < AllCustomer.length; i++) {
         if (AllCustomer[i].customerState == "متفاعل") {
             $("#TableBody").append(
-                "<tr><td>" + (++j) + "</td><td>" + AllCustomer[i].customerName + "</td><td>" + new Date(AllCustomer[i].createdAt).toLocaleDateString() + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td><td><a href='mailto: " + AllCustomer[i].email + "' > " + AllCustomer[i].email + "</a></td> <td>" + AllCustomer[i].type + "</td>"
+                "<tr><td>" + AllCustomer[i].customerName + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td>"
                 + "<td>"
                 + "<a href='../Customer/CustomerStateComment?customerId=" + AllCustomer[i].id + "' class='customerSta'><span style='position: relative'> "
                 + AllCustomer[i].customerState
-                + "<span class='addComm'>اضف تعليقاً</span></span></a></td><td>" + AllCustomer[i].followBy + "</td><td>" + AllCustomer[i].createdBy + "</td>"
+                + "<span class='addComm'>اضف تعليقاً</span></span></a></td>"
+                + "<td>"
+                + "<a class='btn btn-primary' href='../Customer/ShowProjects/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
+                + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
+                + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
+                + "</td>"
                 + "</tr>");
-            
         }
 
     }
-    document.getElementById("customerCount").innerHTML = j;
+});
 
+$("#answer").click(() => {
+    $("#TableBody").empty();
+
+    for (let i = 0; i < AllCustomer.length; i++) {
+        if (AllCustomer[i].customerState == "رد") {
+            $("#TableBody").append(
+                "<tr><td>" + AllCustomer[i].customerName + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td>"
+                + "<td>"
+                + "<a href='../Customer/CustomerStateComment?customerId=" + AllCustomer[i].id + "' class='customerSta'><span style='position: relative'> "
+                + AllCustomer[i].customerState
+                + "<span class='addComm'>اضف تعليقاً</span></span></a></td>"
+                + "<td>"
+                + "<a class='btn btn-primary' href='../Customer/ShowProjects/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
+                + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
+                + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
+                + "</td>"
+                + "</tr>");
+        }
+
+    }
 });
 
 $("#notAnswer").click(() => {
     $("#TableBody").empty();
-    let j = 0;
+
     for (let i = 0; i < AllCustomer.length; i++) {
         if (AllCustomer[i].customerState == "لم يرد") {
             $("#TableBody").append(
-                "<tr><td>" + (++j) + "</td><td>" + AllCustomer[i].customerName + "</td><td>" + new Date(AllCustomer[i].createdAt).toLocaleDateString() + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td><td><a href='mailto: " + AllCustomer[i].email + "' > " + AllCustomer[i].email + "</a></td> <td>" + AllCustomer[i].type + "</td>"
+                "<tr><td>" + AllCustomer[i].customerName + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td>"
                 + "<td>"
                 + "<a href='../Customer/CustomerStateComment?customerId=" + AllCustomer[i].id + "' class='customerSta'><span style='position: relative'> "
                 + AllCustomer[i].customerState
-                + "<span class='addComm'>اضف تعليقاً</span></span></a></td><td>" + AllCustomer[i].followBy + "</td><td>" + AllCustomer[i].createdBy + "</td>"
-                + "</tr>");
-            
-        }
-
-    }
-    document.getElementById("customerCount").innerHTML = j;
-
-});
-
-
-$("#waiting").click(() => {
-    $("#TableBody").empty();
-    let j = 0;
-    for (let i = 0; i < AllCustomer.length; i++) {
-        if (AllCustomer[i].customerState == "منتظر") {
-            $("#TableBody").append(
-                "<tr><td>" + (++j) + "</td><td>" + AllCustomer[i].customerName + "</td><td>" + new Date(AllCustomer[i].createdAt).toLocaleDateString() + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td><td><a href='mailto: " + AllCustomer[i].email + "' > " + AllCustomer[i].email + "</a></td> <td>" + AllCustomer[i].type + "</td>"
+                + "<span class='addComm'>اضف تعليقاً</span></span></a></td>"
                 + "<td>"
-                + "<a href='../Customer/CustomerStateComment?customerId=" + AllCustomer[i].id + "' class='customerSta'><span style='position: relative'> "
-                + AllCustomer[i].customerState
-                + "<span class='addComm'>اضف تعليقاً</span></span></a></td><td>" + AllCustomer[i].followBy + "</td><td>" + AllCustomer[i].createdBy + "</td>"
+                + "<a class='btn btn-primary' href='../Customer/ShowProjects/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
+                + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
+                + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
+                + "</td>"
                 + "</tr>");
-            
         }
     }
-    document.getElementById("customerCount").innerHTML = j;
-
 });
+
+
 
 
 $("#unActive").click(() => {
     $("#TableBody").empty();
-    let j = 0;
+
     for (let i = 0; i < AllCustomer.length; i++) {
         if (AllCustomer[i].customerState == "غير متفاعل") {
             $("#TableBody").append(
-                "<tr><td>" + (++j) + "</td><td>" + AllCustomer[i].customerName + "</td><td>" + new Date(AllCustomer[i].createdAt).toLocaleDateString() + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td><td><a href='mailto: " + AllCustomer[i].email + "' > " + AllCustomer[i].email + "</a></td> <td>" + AllCustomer[i].type + "</td>"
+                "<tr><td>" + AllCustomer[i].customerName + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td>"
                 + "<td>"
                 + "<a href='../Customer/CustomerStateComment?customerId=" + AllCustomer[i].id + "' class='customerSta'><span style='position: relative'> "
                 + AllCustomer[i].customerState
-                + "<span class='addComm'>اضف تعليقاً</span></span></a></td><td>" + AllCustomer[i].followBy + "</td><td>" + AllCustomer[i].createdBy + "</td>"
+                + "<span class='addComm'>اضف تعليقاً</span></span></a></td>"
+                + "<td>"
+                + "<a class='btn btn-primary' href='../Customer/ShowProjects/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
+                + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
+                + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
+                + "</td>"
                 + "</tr>");
-            
         }
-    }
-    document.getElementById("customerCount").innerHTML = j;
 
+    }
 });
 
 
 $("#following").click(() => {
     $("#TableBody").empty();
-    let j = 0;
+
     for (let i = 0; i < AllCustomer.length; i++) {
         if (AllCustomer[i].customerState == "متابعة") {
             $("#TableBody").append(
-                "<tr><td>" + (++j) + "</td><td>" + AllCustomer[i].customerName + "</td><td>" + new Date(AllCustomer[i].createdAt).toLocaleDateString() + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td><td><a href='mailto: " + AllCustomer[i].email + "' > " + AllCustomer[i].email + "</a></td> <td>" + AllCustomer[i].type + "</td>"
+                "<tr><td>" + AllCustomer[i].customerName + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td>"
+                + "<td style='color:darkcyan;font-weight:bold'>" + AllCustomer[i].customerState + "</td>"
                 + "<td>"
-                + "<a href='../Customer/CustomerStateComment?customerId=" + AllCustomer[i].id + "' class='customerSta'><span style='position: relative'> "
-                + AllCustomer[i].customerState
-                + "<span class='addComm'>اضف تعليقاً</span></span></a></td><td>" + AllCustomer[i].followBy + "</td><td>" + AllCustomer[i].createdBy + "</td>"
+                + "<a class='btn btn-primary' href='../Customer/ShowProjects/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
+                + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
+                + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
+                + "</td>"
                 + "</tr>");
-            
         }
-    }
-    document.getElementById("customerCount").innerHTML = j;
 
+    }
 });
 
-$("#complete").click(() => {
+
+
+$("#ok").click(() => {
     $("#TableBody").empty();
-    let j = 0;
+
     for (let i = 0; i < AllCustomer.length; i++) {
-        if (AllCustomer[i].customerState == "مكتمل") {
+        if (AllCustomer[i].customerState == "تعميد") {
             $("#TableBody").append(
-                "<tr><td>" + (++j) + "</td><td>" + AllCustomer[i].customerName + "</td><td>" + new Date(AllCustomer[i].createdAt).toLocaleDateString() + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td><td><a href='mailto: " + AllCustomer[i].email + "' > " + AllCustomer[i].email + "</a></td> <td>" + AllCustomer[i].type + "</td>"
+                "<tr><td>" + AllCustomer[i].customerName + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td>"
                 + "<td>"
                 + "<a href='../Customer/CustomerStateComment?customerId=" + AllCustomer[i].id + "' class='customerSta'><span style='position: relative'> "
                 + AllCustomer[i].customerState
-                + "<span class='addComm'>اضف تعليقاً</span></span></a></td><td>" + AllCustomer[i].followBy + "</td><td>" + AllCustomer[i].createdBy + "</td>"
-                + "</tr>");
-            
-        }
-
-    }
-    document.getElementById("customerCount").innerHTML = j;
-
-});
-
-$("#interview").click(() => {
-    $("#TableBody").empty();
-    let j = 0;
-    for (let i = 0; i < AllCustomer.length; i++) {
-        if (AllCustomer[i].customerState == "مقابلة") {
-            $("#TableBody").append(
-                "<tr><td>" + (++j) + "</td><td>" + AllCustomer[i].customerName + "</td><td>" + new Date(AllCustomer[i].createdAt).toLocaleDateString() + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td><td><a href='mailto: " + AllCustomer[i].email + "' > " + AllCustomer[i].email + "</a></td> <td>" + AllCustomer[i].type + "</td>"
+                + "<span class='addComm'>اضف تعليقاً</span></span></a></td>"
                 + "<td>"
-                + "<a href='../Customer/CustomerStateComment?customerId=" + AllCustomer[i].id + "' class='customerSta'><span style='position: relative'> "
-                + AllCustomer[i].customerState
-                + "<span class='addComm'>اضف تعليقاً</span></span></a></td><td>" + AllCustomer[i].followBy + "</td><td>" + AllCustomer[i].createdBy + "</td>"
+                + "<a class='btn btn-primary' href='../Customer/ShowProjects/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
+                + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
+                + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
+                + "</td>"
                 + "</tr>");
-            
         }
 
     }
-    document.getElementById("customerCount").innerHTML = j;
-
 });
-
 
 $("#new").click(() => {
     $("#TableBody").empty();
-    let j = 0;
+
     for (let i = 0; i < AllCustomer.length; i++) {
         if (AllCustomer[i].customerState == "جديد") {
             $("#TableBody").append(
-                "<tr><td>" + (++j) + "</td><td>" + AllCustomer[i].customerName + "</td><td>" + new Date(AllCustomer[i].createdAt).toLocaleDateString() + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td><td><a href='mailto: " + AllCustomer[i].email + "' > " + AllCustomer[i].email + "</a></td> <td>" + AllCustomer[i].type + "</td>"
+                "<tr><td>" + AllCustomer[i].customerName + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td>"
                 + "<td>"
                 + "<a href='../Customer/CustomerStateComment?customerId=" + AllCustomer[i].id + "' class='customerSta'><span style='position: relative'> "
                 + AllCustomer[i].customerState
-                + "<span class='addComm'>اضف تعليقاً</span></span></a></td><td>" + AllCustomer[i].followBy + "</td><td>" + AllCustomer[i].createdBy + "</td>"
+                + "<span class='addComm'>اضف تعليقاً</span></span></a></td>"
+                + "<td>"
+                + "<a class='btn btn-primary' href='../Customer/ShowProjects/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
+                + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
+                + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
+                + "</td>"
                 + "</tr>");
-            
         }
-        document.getElementById("customerCount").innerHTML = j;
+
     }
 });
 

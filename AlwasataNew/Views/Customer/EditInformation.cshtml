@@ -7,6 +7,7 @@
 
 @{
     ViewData["Title"] = "Update User Prifle";
+    using var dbContext = new ApplicationDbContext();
 }
 <style>
     h5{
@@ -94,28 +95,27 @@
             <select asp-for="ForCompany" class="form-control" autocomplete="ForCompany" aria-required="true">
                 @{
 
-                    using (var dbContect = new ApplicationDbContext())
-                    {
-                        var companies = dbContect.Companies;
+
+                    var companies = dbContext.Companies;
                         foreach (var item in companies)
                         {
                             var companyName = item.Name;
-                            var companyNameFromTable = dbContect.Companies.Where(x => x.Id == Model.ForCompany).Select(x => x.Name).FirstOrDefault();
+                            var companyNameFromTable = dbContext.Companies.Where(x => x.Id == Model.ForCompany).Select(x => x.Name).FirstOrDefault();
                             if (companyName == companyNameFromTable)
-                                {
-                                        <option selected value="@item.Id">
-                                            @companyName
-                                        </option>
-                                }
-                                else
-                                {
-                                        <option value="@item.Id">
-                                            @companyName
-                                        </option>
-                                }
+                            {
+                                <option selected value="@item.Id">
+                                    @companyName
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@item.Id">
+                                    @companyName
+                                </option>
+                            }
                         }
                         
-                    }
+                    
                 }
             </select>
             <label asp-for="ForCompany"></label>
@@ -133,11 +133,14 @@
             <span asp-validation-for="ProjectType" class="text-danger"></span>
         </div>
 
-        <div class="form-floating">
-            <input asp-for="DescriptionProjectType" class="form-control" autocomplete="ProjectType" aria-required="false" maxlength="100" />
-            <label asp-for="DescriptionProjectType"></label>
-            <span asp-validation-for="DescriptionProjectType" class="text-danger"></span>
-        </div>
+        @if(Model.DescriptionProjectType!=null)
+        {
+            <div class="form-floating">
+                <input asp-for="DescriptionProjectType" class="form-control" autocomplete="ProjectType" aria-required="false" maxlength="100" />
+                <label asp-for="DescriptionProjectType"></label>
+                <span asp-validation-for="DescriptionProjectType" class="text-danger"></span>
+            </div>            
+        }
 
         <div class="form-floating">
             <input asp-for="ProjectLandArea" class="form-control" autocomplete="ProjectLandArea" aria-required="false" maxlength="100" />
@@ -153,45 +156,74 @@
 
         <div class="form-floating">
             <select asp-for="CustomerState" class="form-control" autocomplete="CustomerState" aria-required="true" id="WorkTypeSelect">
-                <option>جديد</option>
-                <option>متفاعل</option>
-                <option>غير متفاعل</option>
-                <option>لم يرد</option>
-                <option>متابعة</option>
-                <option>منتظر</option>
-                <option>مقابلة</option>
-                <option>مكتمل</option>
+                @foreach(var item in dbContext.customerStateDescriptionTbl)
+                {
+                    if(item.StateDescription != Model.CustomerState)
+                    {
+                        <option>@item.StateDescription</option>
+                    }
+                    else
+                    {
+                        <option selected>@item.StateDescription</option>
+                    }
+                }
             </select>
             <label asp-for="CustomerState"></label>
             <span asp-validation-for="CustomerState" class="text-danger"></span>
         </div>
 
-        <div class="form-floating">
-            <select asp-for="ClientSource" class="form-control" autocomplete="CustomerState" aria-required="true" id="ClientSource">
-                @if(Model.ClientSource=="اختر")
-                {
-                    <option>اختر</option>                    
-                }
-                @foreach (var item in _app.GetCliecntSource())
-                {
-                    if(item != Model.ClientSource)
-                    {
-                        <option>@item</option>
-                    }
-                    else
-                    {
-                        <option selected>@item</option>
-                    }
-                }
-               
-                
-            </select>
-            <label asp-for="ClientSource"></label>
-            <span asp-validation-for="ClientSource" class="text-danger"></span>
-        </div>
+        
 
         @if (User.IsInRole("Admin"))
         {
+            <div class="form-floating">
+            <select asp-for="CustomerComeFrom" class="form-control" autocomplete="description type" aria-required="true" id="CustomerComeFrom">
+                <option>اختر</option>
+                @foreach (var item in _app.GetCliecntSource())
+                {
+                    <option>@item</option>
+                }
+
+            </select>
+            <label asp-for="CustomerComeFrom"></label>
+            <span asp-validation-for="CustomerComeFrom" class="text-danger"></span>
+        </div>
+
+        @* موظفين *@
+        <div class="form-floating" id="employeeSelectList" style="display:none">
+            <select asp-for="ClientSourceEmployee" class="form-control" autocomplete="description type" aria-required="true" id="ClientSourceEmployee">
+                <option>اختر</option>
+                @foreach (var item in _app.GetCliecntSourceEmployee())
+                {
+                    var result = dbContext.Users.Where(x => x.Id == item).Select(x => new { x.FirstName, x.LastName }).FirstOrDefault();
+                    <option value="@item">@result.FirstName @result.LastName</option>
+                }
+            </select>
+            <label asp-for="ClientSourceEmployee"></label>
+            <span asp-validation-for="ClientSourceEmployee" class="text-danger"></span>
+        </div>
+
+        @* مسوقين *@
+        <div class="form-floating" id="markterSelectList" style="display:none">
+            <select asp-for="ClientSourceMarkter" class="form-control" autocomplete="description type" aria-required="true" id="ClientSourceMarkter">
+                <option>اختر</option>
+                @foreach (var item in _app.GetCliecntSourceMarketer())
+                {
+                    var result = dbContext.Users.Where(x => x.Id == item).Select(x => new { x.FirstName, x.LastName }).FirstOrDefault();
+                    <option value="@item">@result.FirstName @result.LastName</option>
+                }
+            </select>
+            <label asp-for="ClientSourceMarkter"></label>
+            <span asp-validation-for="ClientSourceMarkter" class="text-danger"></span>
+        </div>
+
+        @*اخر و داتا *@
+        <div class="form-floating" id="dataInput" style="display:none">
+            <input asp-for="ClientSourceDataAndOther" class="form-control" autocomplete="ClientSourceDataAndOther" aria-required="false" />
+            <label asp-for="ClientSourceDataAndOther"></label>
+            <span asp-validation-for="ClientSourceDataAndOther" class="text-danger"></span>
+        </div>
+
 
             <div class="form-floating">
                 <input asp-for="CreatedBy" class="form-control" autocomplete="CreatedBy" aria-required="false" maxlength="100" />
@@ -212,17 +244,17 @@
                                 var empName = item.FirstName + " " + item.LastName;
                                 if (item.UserName != "admin")
                                 {
-                                    if (empName == Model.FollowBy)
+                                    if (item.Id == Model.FollowBy)
                                     {
-                                            <option selected>
+                                            <option value="@item.Id" selected>
                                                 @empName
                                             </option>
                                     }
                                     else
                                     {
-                                            <option>
+                                        <option value="@item.Id">
                                                 @empName
-                                            </option>
+                                        </option>
                                     }
                                 }
                             }
@@ -247,6 +279,35 @@ else
         $("#messageDone").fadeOut(3000);
     }
     
+
+    document.getElementById("CustomerComeFrom").addEventListener("change", function () {
+
+        if (this.value == "داتا" || this.value == "اخر")
+        {
+            $("#dataInput").css("display", "block");
+            $("#markterSelectList").css("display", "none");
+            $("#employeeSelectList").css("display", "none");
+        }
+
+        else if (this.value == "موظفين") {
+            $("#dataInput").css("display", "none");
+            $("#markterSelectList").css("display", "none");
+            $("#employeeSelectList").css("display", "block");
+        }
+
+        else if(this.value =="مسوقين"){
+            $("#dataInput").css("display", "none");
+            $("#markterSelectList").css("display", "block");
+            $("#employeeSelectList").css("display", "none");
+        }
+
+        else{
+            $("#dataInput").css("display", "none");
+            $("#markterSelectList").css("display", "none");
+            $("#employeeSelectList").css("display", "none");
+        }
+    });
+
 </script>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

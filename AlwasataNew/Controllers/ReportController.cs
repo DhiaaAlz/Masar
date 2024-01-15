@@ -22,7 +22,7 @@ namespace AlwasataNew.Controllers
         public IActionResult CustomerReports()
         {
             using var dbContext = new ApplicationDbContext();
-            var customers = dbContext.Customers.ToList();
+            var customers = dbContext.Customers.AsNoTracking().ToList();
             return View(customers);
         }
 

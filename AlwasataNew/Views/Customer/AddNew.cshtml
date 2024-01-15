@@ -89,6 +89,7 @@
             <label asp-for="Phone"></label>
             <span asp-validation-for="Phone" class="text-danger"></span>
         </div>
+
         <div class="form-floating">
             <input asp-for="Email" class="form-control" autocomplete="username" aria-required="false" />
             <label asp-for="Email" style="text-align:right"></label>
@@ -167,17 +168,17 @@
         </div>
 
         <div class="form-floating">
-
             <input asp-for="LandAreaByM" class="form-control" autocomplete="land area by metters" aria-required="false" value="0"/>
             <label asp-for="LandAreaByM" style="text-align:right"></label>
             <span asp-validation-for="LandAreaByM" class="text-danger"></span>
-
         </div>
+
         <div class="form-floating">
             <input asp-for="Address" class="form-control" autocomplete="username" aria-required="false" />
             <label asp-for="Address" style="text-align:right"></label>
             <span asp-validation-for="Address" class="text-danger"></span>
         </div>
+
         <div class="form-floating">
             <select asp-for="ProjectModel" class="form-control" autocomplete="description type" aria-required="true" id="projectModelSelect">
                 <option>كلاسيكي</option>
@@ -191,6 +192,7 @@
             <label asp-for="ProjectModel"></label>
             <span asp-validation-for="ProjectModel" class="text-danger"></span>
         </div>
+
         <div class="form-floating" id="otherProjectModel" style="display:none">
 
             <input asp-for="OtherProjectModel" class="form-control" autocomplete="land area by metters" aria-required="false"  />
@@ -200,30 +202,75 @@
         </div>
     </div>
     <hr />
-    <div class="form-floating">
+    @if(User.IsInRole("Admin"))
+    {
+        <div class="form-floating">
 
-        <select asp-for="FollowByEmployee" class="form-control" autocomplete="description type" aria-required="true" id="FollowByEmployee">
-            <option>اختر</option>
-           @foreach(var item in DbContext.Users)
-            {
-                <option>@item.FirstName @item.LastName</option>
-            }
-        </select>
-        <label asp-for="FollowByEmployee"></label>
-        <span asp-validation-for="FollowByEmployee" class="text-danger"></span>
+            <select asp-for="FollowByEmployee" class="form-control" autocomplete="description type" aria-required="true" id="FollowByEmployee">
+                <option>اختر</option>
+                @foreach (var item in DbContext.Users)
+                {
+                    <option value="@item.Id">@item.FirstName @item.LastName</option>
+                }
+            </select>
+            <label asp-for="FollowByEmployee"></label>
+            <span asp-validation-for="FollowByEmployee" class="text-danger"></span>
 
-    </div>
+        </div>
+    }
+    else
+    {
+        <input asp-for="FollowByEmployee" value="اختر" type="hidden"/>
+    }
     <div class="form-floating">
-        <select asp-for="ClientSource" class="form-control" autocomplete="description type" aria-required="true" id="ClientSource">
+        <select asp-for="CustomerComeFrom" class="form-control" autocomplete="description type" aria-required="true" id="CustomerComeFrom">
             <option>اختر</option>
             @foreach(var item in _app.GetCliecntSource())
             {
                 <option>@item</option>
             }
+            
         </select>
-        <label asp-for="ClientSource"></label>
-        <span asp-validation-for="ClientSource" class="text-danger"></span>
+        <label asp-for="CustomerComeFrom"></label>
+        <span asp-validation-for="CustomerComeFrom" class="text-danger"></span>
     </div>
+
+    @* موظفين *@
+    <div class="form-floating" id="employeeSelectList" style="display:none">
+        <select asp-for="ClientSourceEmployee" class="form-control" autocomplete="description type" aria-required="true" id="ClientSourceEmployee">
+            <option>اختر</option>
+            @foreach (var item in _app.GetCliecntSourceEmployee())
+            {
+                var result = @DbContext.Users.Where(x => x.Id == item).Select(x => new { x.FirstName, x.LastName }).FirstOrDefault();
+                <option value="@item">@result.FirstName @result.LastName</option>
+            }
+        </select>
+        <label asp-for="ClientSourceEmployee"></label>
+        <span asp-validation-for="ClientSourceEmployee" class="text-danger"></span>
+    </div>
+
+    @* مسوقين *@
+    <div class="form-floating" id="markterSelectList" style="display:none">
+        <select asp-for="ClientSourceMarkter" class="form-control" autocomplete="description type" aria-required="true" id="ClientSourceMarkter">
+            <option>اختر</option>
+            @foreach (var item in _app.GetCliecntSourceMarketer())
+            {
+                var result = @DbContext.Users.Where(x => x.Id == item).Select(x => new { x.FirstName, x.LastName }).FirstOrDefault();
+                <option value="@item">@result.FirstName @result.LastName</option>
+            }
+        </select>
+        <label asp-for="ClientSourceMarkter"></label>
+        <span asp-validation-for="ClientSourceMarkter" class="text-danger"></span>
+    </div>
+
+    @*اخر و داتا *@
+    <div class="form-floating" id="dataInput" style="display:none">
+        <input asp-for="ClientSourceDataAndOther" class="form-control" autocomplete="ClientSourceDataAndOther" aria-required="false" />
+        <label asp-for="ClientSourceDataAndOther"></label>
+        <span asp-validation-for="ClientSourceDataAndOther" class="text-danger"></span>
+    </div>
+
+
     <button type="submit" class="btnForm btn btn-primary">اضافة</button>
 </form>
 
@@ -256,7 +303,6 @@
         }
     });
 
-
     document.getElementById("projectModelSelect").addEventListener("change", function () {
         if ($(this).val() == "اخرى") {
             $("#otherProjectModel").css("display", "block");
@@ -271,4 +317,33 @@
     if ($("#viewBag").css("display") == "block") {
         $("#viewBag").fadeOut(3000);
     }
+
+
+    document.getElementById("CustomerComeFrom").addEventListener("change", function () {
+
+        if (this.value == "داتا" || this.value == "اخر")
+        {
+            $("#dataInput").css("display", "block");
+            $("#markterSelectList").css("display", "none");
+            $("#employeeSelectList").css("display", "none");
+        }
+
+        else if (this.value == "موظفين") {
+            $("#dataInput").css("display", "none");
+            $("#markterSelectList").css("display", "none");
+            $("#employeeSelectList").css("display", "block");
+        }
+
+        else if(this.value =="مسوقين"){
+            $("#dataInput").css("display", "none");
+            $("#markterSelectList").css("display", "block");
+            $("#employeeSelectList").css("display", "none");
+        }
+
+        else{
+            $("#dataInput").css("display", "none");
+            $("#markterSelectList").css("display", "none");
+            $("#employeeSelectList").css("display", "none");
+        }
+    });
 </script>

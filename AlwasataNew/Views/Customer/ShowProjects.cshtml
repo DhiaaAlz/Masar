@@ -40,14 +40,29 @@
                             <div class="projectDesc">@project.Description</div>
                             <div class="EmpFollow"> الموظف المتابع لهذا المشروع :
                                 <span class="FollowEmp">
-                                    @if (@dbContect.Customers.Where(x => x.Id == Model.Select(x => x.CustomerId).FirstOrDefault()).Select(x => x.FollowBy).SingleOrDefault() == null)
-                                    {
-                                        <span>لا يوجد</span>
+                                    @{
+                                        var result = dbContect.Customers.Where(x => x.Id == Model.Select(cId => cId.CustomerId).FirstOrDefault()).Select(x => x.FollowBy).FirstOrDefault();
+
+
+                                        if (result == null)
+                                        {
+                                            <span>لا يوجد</span>
+                                        }
+                                        else
+                                        {
+                                            var empName = dbContect.Users.Where(x => x.Id == result).Select(n => new { n.FirstName, n.LastName }).FirstOrDefault();
+                                            if(empName == null)
+                                            {
+                                                <span>لا يوجد</span>
+                                            }
+                                            else
+                                            {
+                                                <span>@empName.FirstName @empName.LastName</span>
+
+                                            }
+                                        }
                                     }
-                                    else
-                                    {
-                                        @dbContect.Customers.Where(x => x.Id == Model.Select(x => x.CustomerId).FirstOrDefault()).Select(x => x.FollowBy).SingleOrDefault()
-                                    }
+                                    
                                 </span>
                                 </div>
                             <div class="projectDesc">وصف المشروع : <span style="color:darkgreen;font-weight:bold">@project.Description</span></div>

@@ -1,4 +1,5 @@
-﻿@model List<Customer>
+﻿@using AlwasataNew.Data
+@model List<Customer>
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -58,7 +59,7 @@
                                                     <td>
 
                                                         <span>@{
-                                                                i = i + 1;
+                                                            i = i + 1;
                                                             }@i</span>
                                                     </td>
                                                     <td>
@@ -115,11 +116,13 @@
                                                     <td>
                                                         @if (customer.FollowBy == null)
                                                         {
-                                                            <span style="color:darkred;font-weight:bold;">لا يوجد</span>    
+                                                            <span style="color:darkred;font-weight:bold;">لا يوجد</span>
                                                         }
                                                         else
                                                         {
-                                                            @customer.FollowBy      
+                                                            using var dbContext = new ApplicationDbContext();
+                                                            var result = dbContext.Users.Where(x => x.Id == customer.FollowBy).Select(n => new { n.FirstName, n.LastName }).FirstOrDefault();
+                                                            @result.FirstName <span> </span> @result.LastName
                                                         }
                                                     </td>
                                                     <td>

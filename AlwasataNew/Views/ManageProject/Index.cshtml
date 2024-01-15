@@ -1,5 +1,5 @@
 ﻿@using AlwasataNew.Data;
-@model IEnumerable<Project>
+@model IEnumerable<ShowProjectsByStateViewModel>
 
 <style>
     .ProjectsDiv{
@@ -10,10 +10,7 @@
         cursor:pointer;
     }
 
-    .row{
-        display:flex;
-        justify-content:center;
-    }
+    
 
     .UnFollow{
         border: 1px solid darkred;
@@ -61,48 +58,52 @@
 
 @{
     var dbContext = new ApplicationDbContext();
-    int CompleteProjects = 0;
-    int ProccessProjects = 0;
+    int projectsDone = 0;
     int UnFollowProjects = 0;
+
+    projectsDone = dbContext.Projects.Where(x => x.IsDone == true).Count();
+    var ProccessProjects = dbContext.Customers.Where(x => x.FollowBy != null).ToList();
+    int ProjectProccessCount = 0;
+    foreach(var item in ProccessProjects)
+    {
+        if(dbContext.Projects.Where(x=>x.CustomerId==item.Id && x.IsDone!=true).FirstOrDefault()!=null)
+        {
+            ProjectProccessCount++;
+        }
+    }
+
+    UnFollowProjects = dbContext.Customers.Where(x => x.FollowBy == null).Count();
+
 }
  
 
-@foreach(var item in Model)
-{
-    var IsProjectFollow = dbContext.Customers.Where(x => x.Id == item.CustomerId).FirstOrDefault().FollowBy;
-    if(item.IsDone == true)
-    {
-        CompleteProjects++;
-    }
-    else if (IsProjectFollow == null)
-    {
-        UnFollowProjects++;
-    }
-    else
-    {
-        ProccessProjects++;
-    }
-}
-
 
 <div class="container">
-    <div class="row">
+    <div class="row" style="justify-content:center">
+
         <div class="col-md-3 col-sm-12 ProjectsDiv Done" id="Done">
+            <a asp-action="Index" asp-route-ProjectState="مكتمل" style="display:inline">
             <i class="fa-solid fa-check fa-3x" style="color: #218343;margin-bottom:20px;"></i>
             <h4>المشاريع المكتملة</h4>
-            <span class="NumberProjects">@CompleteProjects</span>
+            <span class="NumberProjects">@projectsDone</span>
+            </a>
         </div>
-        
         <div class="col-md-3 col-sm-12 ProjectsDiv Proccess" id="Proccess">
-            <i class="fa-solid fa-spinner fa-3x" style="color: #30c3c5;margin-bottom:20px;"></i>
-            <h4>العملاء المتابعين</h4>
-            <span class="NumberProjects">@ProccessProjects</span>
+            <a asp-action="Index" asp-route-ProjectState="متابع" style="display:inline">
+                <i class="fa-solid fa-spinner fa-3x" style="color: #30c3c5;margin-bottom:20px;"></i>
+                <h4>العملاء المتابعين</h4>
+                <span class="NumberProjects">@ProjectProccessCount</span>
+            </a>
         </div>
+
         <div class="col-md-3 col-sm-12 ProjectsDiv UnFollow" id="UnFollow">
+            <a asp-action="Index" asp-route-ProjectState="غير متابع" style="display:inline">
             <i class="fa-solid fa-exclamation fa-3x" style="color: darkred;margin-bottom:20px"></i>
             <h4>العملاء الغير متابعين</h4>
             <span class="NumberProjects">@UnFollowProjects</span>
+            </a>
         </div>
+
     </div>
     <div class="row ProjectsTable">
         <div class="col-md-12">
@@ -115,18 +116,61 @@
                             <th>وصف المشروع</th>
                             <th>اسم العميل</th>
                             <th class="thChange">متابع من قبل</th>
-                            <th>حالة المشروع</th>
+                            <th>حالة العميل</th>
+                            <th>مصدر العميل</th>
                             <th>العمليات</th>
                         </tr>
                     </thead>
                     <tbody id="ProjectTbody">
+                        
+                        @if(Model.Count()>0)
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.CustomerId</td>
+                                    <td>@item.ProjectCreatedDate</td>
+                                    <td>@item.ProjectDescription</td>
+                                    <td>@item.CustomerName</td>
+                                    <td>@item.FollowBy</td>
+                                    <td>@item.ProjectState</td>
+                                    <td>
+                                        @{
+                                            if (item.CustomerComeFrom == "Internet" || item.CustomerComeFrom=="داتا" || item.CustomerComeFrom == "اخر")
+                                            {
+                                                <span>@item.ClientSource</span>
+                                            }
+                                            else
+                                            {
+                                                var empName = dbContext.Users.Where(x => x.Id == item.ClientSource).Select(n => new { n.FirstName, n.LastName }).FirstOrDefault();
+                                                @if(empName ==null)
+                                                {
+                                                    <span>لا يوجد</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>@empName.FirstName @empName.LastName</span>
+                                                }
+                                            }
+                                        }
+                                    </td>
+
+                                    <td><a class="btn btn-primary" asp-controller="Customer" asp-action="ShowProjectsDescription" asp-route-projId="@item.ProjectId">تفاصيل المشروع</a></td>
+                                </tr>
+                            }
+                            
+                        }
+                        
                     </tbody>
                 </table>
+               
             </div>
-            
+            @if (Model.Count() == 0)
+            {
+                <div style="text-align:center;font-weight:bold;color:darkred">لا يوجد معلومات لعرضها</div>
+            }
         </div>
     </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/assets/js/manageProjects.js"></script>

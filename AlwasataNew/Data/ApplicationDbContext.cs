@@ -60,6 +60,9 @@ namespace AlwasataNew.Data
 
             //customer state descripption table configuration
             builder.Entity<CustomerStateDescription>().Property(x=>x.Id).ValueGeneratedNever();
+
+            //customer state tble
+            builder.Entity<CustomerStateTbl>().HasKey(x => new { x.CustomerId, x.StateId });
             
         }
 
@@ -68,6 +71,7 @@ namespace AlwasataNew.Data
         public DbSet<Company> Companies { get; set; }
         public DbSet<CustomerStateDescription> CustomerStateDescriptions { get; set; }
         public DbSet<CustomerStateDescriptionTbl>  customerStateDescriptionTbl { get; set; }
+        public DbSet<CustomerStateTbl>  customerStateTbl { get; set; }
 
     }
 }

@@ -1,9 +1,9 @@
-﻿@model IEnumerable<Customer>
+﻿@using AlwasataNew.Data
+@model IEnumerable<Customer>
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@{
-}
+
 <link rel="stylesheet" href="~/css/site.css" />
 <style>
 
@@ -31,7 +31,7 @@
                     <div class="col-md-12">
                         <div class="card">
                             <h3 style="margin-top:20px;">عدد العملاء : <span style="font-weight:bold;color:darkred;margin:10px;" id="customerCount">@Model.Count()</span></h3>
-                           <div class="sortButtons">
+                           @* <div class="sortButtons">
                                <button class="btn btn-primary" id="btnBetween">اظهار العملاء بين تاريخين</button>
                                <button class="btn btn-primary" id="btnYear">اظهار العملاء في هذه السنة</button>
                                <button class="btn btn-primary" id="btnMonth">اظهار العملاء في هذا الشهر</button>
@@ -44,11 +44,11 @@
                                     <span>تاريخ النهاية : </span><input type="date" id="endD" style="padding:3px;border-radius:9px;border:1px solid;outline:none" />
                                 </div>
                                 <div>
-                                    <button class="btn btn-primary" id="btnOk">
+                                    <a class="btn btn-primary" id="btnOk" asp-action="CustomerReports" asp-route-sDate="">
                                         حسناً
-                                    </button>
+                                    </a>
                                 </div>
-                           </div>
+                           </div> *@
                            <div class="tableDiv">
                                 <div class="FilterCustomers" dir="rtl">
                                     <div>
@@ -84,18 +84,18 @@
                                                             <span>@{i = i + 1;}@i</span>
                                                     </td>
                                                     <td>
-                                                        @if (customer.CustomerName == null)
+                                                       @*  @if (customer.CustomerName == null)
                                                         {
                                                             <span>اسم الموظف : @customer.EmployeeName</span>
                                                         }
                                                         else
                                                         {
                                                             <span>@customer.CustomerName</span>
-                                                        }
+                                                        } *@
+                                                        <span>@customer.CustomerName == null ? "لا يوجد" : @customer.CustomerName</span>
                                                     </td>
                                                     <td>
-                                                        <span>
-                                                            @Convert.ToDateTime(customer.CreatedAt).ToShortDateString()</span>
+                                                        <span>@Convert.ToDateTime(customer.CreatedAt).ToShortDateString()</span>
                                                     </td>
                                                     <td>
                                                         @if (customer.CompanyName == null)
@@ -132,39 +132,40 @@
                                                             </a>
                                                         }
                                                     </td>
-                                                    @*<td>@string.Join(" , ",customer.ProjectsId.ToList())</td> *@
-                                                     <td>
-                                                @if(customer.FollowBy == null)
-                                                {
-                                                <span style="color:darkred;font-weight:bold;">لا يوجد</span>
-                                                }
-                                                else
-                                                {
-                                                @customer.FollowBy;
-                                                }
+                                                            @*<td>@string.Join(" , ",customer.ProjectsId.ToList())</td> *@
+                                                    <td>
+                                                        @if(customer.FollowBy == null)
+                                                        {
+                                                            <span style="color:darkred;font-weight:bold;">لا يوجد</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            using var dbContext = new ApplicationDbContext();
+                                                            var empName = dbContext.Users.Where(x => x.Id == customer.FollowBy).Select(n => new { n.FirstName, n.LastName }).FirstOrDefault();
+                                                            <span>@empName.FirstName @empName.LastName</span>
+                                                        }
+                                                
                                                 </td>
-                                                <td>
-                                                    @customer.CreatedBy
-                                                </td>
-                                              
+                                                    <td>
+                                                        @customer.CreatedBy
+                                                    </td>
                                                 </tr>
                                             }
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="SortCustomers" dir="rtl">
+                               @*  <div class="SortCustomers" dir="rtl">
                                     <div>
                                         <span> فرز العملاء بحسب الحالة</span>
-                                        <button id="active">متفاعل</button>
-                                        <button id="notAnswer">لم يرد</button>
-                                        <button id="waiting">منتظر</button>
                                         <button id="new">جديد</button>
+                                        <button id="notAnswer">لم يرد</button>
+                                        <button id="answer">رد</button>
+                                        <button id="active">متفاعل</button>
                                         <button id="unActive">غير متفاعل</button>
                                         <button id="following">متابعة</button>
-                                        <button id="complete">مكتمل</button>
-                                        <button id="interview">مقابلة</button>
+                                        <button id="ok">تعميد</button>
                                     </div>
-                                </div>
+                                </div> *@
 
                            </div>
                         </div>
@@ -176,5 +177,5 @@
     </div>
 </div>
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script> 
 <script src="~/assets/js/customerReport.js"></script>

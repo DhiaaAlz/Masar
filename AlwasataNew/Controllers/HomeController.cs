@@ -23,27 +23,22 @@ namespace AlwasataNew.Controllers
         {
             
 
-            using (var DbContext = new ApplicationDbContext())
+            using (var dbContext = new ApplicationDbContext())
             {
 
                 if (User.IsInRole("Admin"))
                 {
-
-                    var allUser = DbContext.Users.ToList();
-
-                    return View(allUser);
+                    var users = new List<ApplicationUser>();
+                    var markterPrivalageId = dbContext.Roles.Where(x=>x.Name== "Marketer").Select(x=>x.Id).FirstOrDefault();
+                    var usersMarktersId= dbContext.UserRoles.Where(x=>x.RoleId==markterPrivalageId).Select(x=>x.UserId).ToList();
+                    return View(usersMarktersId);
                 }
                 else
                 {
                     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-                    var result = DbContext.Users.Where(x => x.Id == userId).ToList();
-
-                    //string EmployeeName = result.FName + " " + result.LName;
-
-                    //var user = DbContext.Users.Where(x => x.FirstName == result.FName && x.LastName == result.LName).ToList();
-                    
-                    return View(result);
+                    List<string> users=new List<string>();
+                    users.Add(userId);
+                    return View(users);
                 }
 
             }

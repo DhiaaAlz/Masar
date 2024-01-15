@@ -36,12 +36,7 @@ namespace AlwasataNew.Controllers
             return View();
         }
 
-        [HttpGet]
-        public IActionResult ShowListOfCustomerByState(string state, string empName)
-        {
-            var result = dbContext.Customers.Where(x => x.FollowBy == empName && x.CustomerState == state).ToList();
-            return View(result);
-        }
+       
 
 
         [HttpPost]
@@ -116,6 +111,25 @@ namespace AlwasataNew.Controllers
                     {
                         maxCustomerId++;
                     }
+
+                    var clientSource = "";
+
+                    if(model.CustomerComeFrom=="داتا" || model.CustomerComeFrom=="اخر")
+                    {
+                        clientSource = model.ClientSourceDataAndOther;
+                    }
+                    else if (model.CustomerComeFrom == "مسوقين")
+                    {
+                        clientSource = model.ClientSourceMarkter;
+                    }
+                    else if(model.CustomerComeFrom=="موظفين")
+                    {
+                        clientSource = model.ClientSourceEmployee;
+                    }
+                    else
+                    {
+                        clientSource = "لايوجد";
+                    }
                     var customer = new Customer
                     {
                         Id = maxCustomerId,
@@ -129,7 +143,8 @@ namespace AlwasataNew.Controllers
                         CompanyName = model.CompnayName,
                         EmployeeName = model.EmployeeName,
                         FollowBy=model.FollowByEmployee,
-                        ClientSource=model.ClientSource,
+                        CustomerComeFrom=model.CustomerComeFrom,
+                        ClientSource=clientSource,
                         JobTitle = model.JobTitle,
                         CustomerState = "جديد",
                         CompanySite = model.CompanySite,
@@ -183,6 +198,23 @@ namespace AlwasataNew.Controllers
         }
 
 
+
+        [HttpGet]
+        public IActionResult ShowListOfCustomerByState(string state, string empId)
+        {
+            var result = new List<Customer>();
+            if (state == "جديد")
+            {
+                result = dbContext.Customers.Where(x => x.FollowBy == empId && (x.CustomerState == state || x.CustomerState == "رد" || x.CustomerState == "لم يرد" || x.CustomerState == "متفاعل" || x.CustomerState == "غير متفاعل")).ToList();
+            }
+            else
+            {
+                result = dbContext.Customers.Where(x => x.FollowBy == empId && x.CustomerState == state).ToList();
+            }
+            return View(result);
+        }
+
+
         [HttpGet]
         public async Task<IActionResult> ManageCustomer()
         {
@@ -203,6 +235,8 @@ namespace AlwasataNew.Controllers
                         EmployeeName = customer.EmployeeName,
                         FollowBy = customer.FollowBy,
                         CustomerState = customer.CustomerState,
+                        CustomerComeFrom=customer.CustomerComeFrom
+                        ,ClientSource=customer.ClientSource,
                         ProjectsId = DbContext.Projects.Where(x => x.CustomerId == customer.Id).Select(x => x.Id).ToList(),
                     }).AsNoTracking().ToListAsync();
 
@@ -213,9 +247,9 @@ namespace AlwasataNew.Controllers
                 {
                     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                    var result = dbContext.Users.Where(x => x.Id == userId).Select(x => new { FName = x.FirstName, LName = x.LastName }).FirstOrDefault();
+                    
 
-                    string EmployeeName = result.FName + " " + result.LName;
+                    
 
 
                     var Customer = await DbContext.Customers.Select(customer => new CustomerViewModel
@@ -229,8 +263,11 @@ namespace AlwasataNew.Controllers
                         EmployeeName = customer.EmployeeName,
                         FollowBy = customer.FollowBy,
                         CustomerState = customer.CustomerState,
+                        CustomerComeFrom = customer.CustomerComeFrom
+                        ,
+                        ClientSource = customer.ClientSource,
                         ProjectsId = DbContext.Projects.Where(x => x.CustomerId == customer.Id).Select(x => x.Id).ToList(),
-                    }).Where(x => x.FollowBy == EmployeeName).ToListAsync();
+                    }).Where(x => x.FollowBy == userId).ToListAsync();
 
 
                     return View(Customer);
@@ -269,14 +306,11 @@ namespace AlwasataNew.Controllers
 
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                var resultt = dbContext.Users.Where(x => x.Id == userId).Select(x => new { FName = x.FirstName, LName = x.LastName }).FirstOrDefault();
-
-                string EmployeeName = resultt.FName + " " + resultt.LName;
-
+                
 
                 using (var dbContext = new ApplicationDbContext())
                 {
-                    var custId = dbContext.Customers.Where(x => x.FollowBy == EmployeeName).Select(x => x.Id).ToList();
+                    var custId = dbContext.Customers.Where(x => x.FollowBy == userId).Select(x => x.Id).ToList();
                     var CustomerProjects = dbContext.Projects
                         .Select(project => new ShowProjectsViewModel
                         {
@@ -334,13 +368,10 @@ namespace AlwasataNew.Controllers
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                var resultt = dbContext.Users.Where(x => x.Id == userId).Select(x => new { FName = x.FirstName, LName = x.LastName }).FirstOrDefault();
-
-                string EmployeeName = resultt.FName + " " + resultt.LName;
 
                 using (var dbContext = new ApplicationDbContext())
                 {
-                    var custId = dbContext.Customers.Where(x => x.FollowBy == EmployeeName).Select(x => x.Id).ToList();
+                    var custId = dbContext.Customers.Where(x => x.FollowBy == userId).Select(x => x.Id).ToList();
 
                     int IfThisProjToEmp = 0;
                     foreach (var item in custId)
@@ -396,8 +427,7 @@ namespace AlwasataNew.Controllers
                     ProjectLandArea = project.LandAreaByM,
                     ProjectModel = project.Model,
                     FollowBy = customer.FollowBy,
-                    ForCompany = customer.CompanyId
-                    ,ClientSource=customer.ClientSource,
+                    ForCompany = customer.CompanyId,
                 };
 
                 return View(CustomerInformation);
@@ -441,6 +471,24 @@ namespace AlwasataNew.Controllers
                     ModelState.AddModelError("Phone", "هذا رقم الهاتف مستخدم من قبل عميل اخر!");
                     return View(model);
                 }
+                var clientSource = "";
+
+                if (model.CustomerComeFrom == "داتا" || model.CustomerComeFrom == "اخر")
+                {
+                    clientSource = model.ClientSourceDataAndOther;
+                }
+                else if (model.CustomerComeFrom == "مسوقين")
+                {
+                    clientSource = model.ClientSourceMarkter;
+                }
+                else if (model.CustomerComeFrom == "موظفين")
+                {
+                    clientSource = model.ClientSourceEmployee;
+                }
+                else
+                {
+                    clientSource = "لايوجد";
+                }
 
                 customer.CustomerName = model.CustomerName;
                 customer.Phone = model.Phone;
@@ -455,7 +503,13 @@ namespace AlwasataNew.Controllers
                 customer.Address = model.Address;
                 customer.CustomerState = model.CustomerState;
                 customer.CompanyId = model.ForCompany;
-                customer.ClientSource= model.ClientSource;
+
+                if(model.CustomerComeFrom != null)
+                {
+                    customer.CustomerComeFrom = model.CustomerComeFrom;
+                    customer.ClientSource = clientSource;
+                }
+
                 //update project
                 project.Description = model.ProjectDescription;
                 project.DescriptionType = model.DescriptionProjectType;
@@ -633,11 +687,9 @@ namespace AlwasataNew.Controllers
                 {
                     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                    var resultt = dbContext.Users.Where(x => x.Id == userId).Select(x => new { FName = x.FirstName, LName = x.LastName }).FirstOrDefault();
+                  
 
-                    string EmployeeName = resultt.FName + " " + resultt.LName;
-
-                    var allCustomer = dbContext.Customers.Where(x => x.FollowBy == EmployeeName).OrderBy(x => x.CreatedAt).AsNoTracking().ToList();
+                    var allCustomer = dbContext.Customers.Where(x => x.FollowBy == userId).OrderBy(x => x.CreatedAt).AsNoTracking().ToList();
                     return allCustomer;
                 }
 

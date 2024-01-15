@@ -40,6 +40,7 @@
                 <th>اسم الشركة</th>
                 <th>رقم الهاتف</th>
                 <th>حالة العميل</th>
+                <th>مصدر العميل</th>
                 <th>العمليات</th>
             </tr>
         </thead>
@@ -98,7 +99,26 @@
                         }
                     </td>
                  
-
+                    <td>
+                        @{
+                            if (customer.CustomerComeFrom == "Internet" || customer.CustomerComeFrom == "داتا" || customer.CustomerComeFrom == "اخر")
+                            {
+                                <span>@customer.ClientSource</span>
+                            }
+                            else
+                            {
+                                var empName = dbContext.Users.Where(x => x.Id == customer.ClientSource).Select(n => new { n.FirstName, n.LastName }).FirstOrDefault();
+                                @if(empName ==null)
+                                {
+                                    <span>لا يوجد</span>
+                                }
+                                else
+                                {
+                                    <span>@empName.FirstName @empName.LastName</span>
+                                }
+                            }
+                        }
+                    </td>
                     <td>
                         <a class="btn btn-primary" asp-controller="Customer" asp-action="ShowProjects" asp-route-Id="@customer.Id">تفاصيل المشاريع</a>
                         <a class="btn btn-outline-primary" asp-controller="Customer" asp-action="EditInformation" asp-route-Id="@customer.Id">تعديل معلومات العميل</a>
@@ -114,14 +134,13 @@
     <div class="SortCustomers" dir="rtl">
         <div>
             <span> فرز العملاء بحسب الحالة</span>
-            <button id="active">متفاعل</button>
-            <button id="notAnswer">لم يرد</button>
-            <button id="waiting">منتظر</button>
             <button id="new">جديد</button>
+            <button id="notAnswer">لم يرد</button>
+            <button id="answer">رد</button>
+            <button id="active">متفاعل</button>
             <button id="unActive">غير متفاعل</button>
             <button id="following">متابعة</button>
-            <button id="complete">مكتمل</button>
-            <button id="interview">مقابلة</button>
+            <button id="ok">تعميد</button>
         </div>
         <div>
             <span> فرز العملاء بحسب الشركة</span>
@@ -135,13 +154,11 @@
         </div>
         <div>
             <span>فرز العملاء بحسب المصدر </span>
-            <button id="whatsapp">واتس اب</button>
-            <button id="telgram">تيلغرام</button>
-            <button id="facebook">فيسبوك</button>
-            <button id="instgram">انستغرام</button>
-            <button id="tektok">تيك توك</button>
-            <button id="youtube">يوتيوب</button>
             <button id="data">داتا</button>
+            <button id="marketers">مسوقين</button>
+            <button id="employees">موظفين</button>
+            <button id="Internet">انترنت</button>
+            <button id="other">اخر</button>
         </div>
     </div>
 

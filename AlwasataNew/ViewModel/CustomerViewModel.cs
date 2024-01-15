@@ -12,6 +12,8 @@
         public string FollowBy { get; set; }
         public string CustomerState { get; set; }
         public DateTime CreatedAt { get; set; }
+        public string CustomerComeFrom { get; set; }
+        public string ClientSource { get; set; }
         public IEnumerable<int> ProjectsId { set; get; }
 
     }

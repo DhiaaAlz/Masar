@@ -22,9 +22,9 @@
     }
 </style>
 
-@if(Model != null)
+@if (Model != null)
 {
-    
+
     var dbContect = new ApplicationDbContext();
     var CustomerInformation = dbContect.Customers.Where(x => x.Id == Model.CustomerId).FirstOrDefault();
 
@@ -37,11 +37,11 @@
                     <div class="row" dir="rtl">
                         @{
                             var CustomerName = "";
-                            if(CustomerInformation.CustomerName == null)
+                            if (CustomerInformation.CustomerName == null)
                             {
                                 CustomerName = CustomerInformation.CompanyName;
                                 <div class="col-md-12">
-                                  صاحب المشروع الشركة  : <span>@CustomerName</span>
+                                    صاحب المشروع الشركة  : <span>@CustomerName</span>
                                 </div>
                                 <div class="col-md-12">
                                     اسم الموظف : <span>@CustomerInformation.EmployeeName</span>
@@ -68,13 +68,13 @@
                                 <div class="col-md-12">
                                     رقم صاحب المشروع : <span>@CustomerInformation.Phone</span>
                                 </div>
-                               
+
                             }
                         }
                         <div class="col-md-12">
                             ملاحظات عن العميل :@{
-                                    if(@CustomerInformation.CustomerDescription != null)
-                                    {
+                                if (@CustomerInformation.CustomerDescription != null)
+                                {
                                     <span>@CustomerInformation.CustomerDescription</span>
                                 }
                                 else
@@ -86,7 +86,7 @@
                         </div>
                         <div class="col-md-12">
                             الايميل : <span><a href="mailto: @CustomerInformation.Email">@CustomerInformation.Email</a></span>
-                            
+
                         </div>
                         <div class="col-md-12">
                             وصف المشروع : <span>@Model.Description</span>
@@ -98,12 +98,12 @@
                             وصف نوع المشروع : <span>@Model.DescriptionType</span>
                         </div>
                         <div class="col-md-12">
-                           مساحة المشروع بالمتر : <span>@Model.LandAreaByM</span>
+                            مساحة المشروع بالمتر : <span>@Model.LandAreaByM</span>
                         </div>
                         <div class="col-md-12">
                             موديل المشروع : <span>@Model.Model</span>
                         </div>
-                      
+
                         <div class="col-md-12">
                             رقم المشروع : <span>@Model.Id</span>
                         </div>
@@ -128,7 +128,22 @@
                         </div>
                         <div class="col-md-12">
                             مصدر العميل :
-                            @(CustomerInformation.ClientSource == null ? "لا يوجد" : CustomerInformation.ClientSource)
+                            @{
+                                if (CustomerInformation.CustomerComeFrom == "داتا" || CustomerInformation.CustomerComeFrom == "اخر")
+                                                {
+                                    <span>@CustomerInformation.ClientSource &#8594; @CustomerInformation.CustomerComeFrom</span>
+                                }
+                                else if(CustomerInformation.CustomerComeFrom == "Internet")
+                                {
+                                    <span>@CustomerInformation.CustomerComeFrom &#8594; @CustomerInformation.ClientSource</span>
+
+                                }
+                                else
+                                {
+                                    var empName = @dbContect.Users.Where(x => x.Id == CustomerInformation.ClientSource).Select(n => new { n.FirstName, n.LastName }).FirstOrDefault();
+                                    <span>@empName.FirstName @empName.LastName &#8594; @CustomerInformation.CustomerComeFrom</span>
+                                }
+                            }
                         </div>
                         <div class="col-md-12">
                             الموظف الذي قام بأضافة العميل :
@@ -145,7 +160,19 @@
                             else
                             {
                                 <div class="col-md-12">
-                                    الموظف المتابع لهذا المشروع : <span>@CustomerInformation.FollowBy</span>
+                                    الموظف المتابع لهذا المشروع : 
+                                    @{
+                                        var empName = dbContect.Users.Where(x => x.Id == CustomerInformation.FollowBy).Select(n => new { n.FirstName, n.LastName }).FirstOrDefault();
+                                        if (empName == null)
+                                        {
+                                            <span>لا يوجد</span>
+                                        }
+                                        else
+                                        {
+                                            <span>@empName.FirstName @empName.LastName</span>
+
+                                        }
+                                    }
                                 </div>
                             }
 

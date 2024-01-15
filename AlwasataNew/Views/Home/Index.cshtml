@@ -2,9 +2,8 @@
     ViewData["Title"] = "Home Page";
 }
 
-@inject UserManager<ApplicationUser> UserManager
 @using AlwasataNew.Data;
-@model IEnumerable<ApplicationUser>
+@model List<string>
 <link rel="stylesheet" href="~/css/site.css" />
 <style>
    a{
@@ -43,26 +42,23 @@
         }
         @foreach (var item in Model)
             {
-            var userId = dbContext.Users.Where(x => x.Id == item.Id).Select(x=>x.Id).FirstOrDefault();
-            var roleName = dbContext.Roles.Where(x => x.Id == (dbContext.UserRoles.Where(x => x.UserId == userId).Select(x => x.RoleId).FirstOrDefault())).Select(x => x.Name).FirstOrDefault();
-            if (roleName != "Admin")
-                {
-                    <div class="col-md-6">
+                var user = dbContext.Users.Where(x => x.Id == item).FirstOrDefault();
+                <div class="col-md-6">
                         <div class="EmpDivInformation" dir="rtl">
                             <div class="empImg">
-                                @if (item.ProfilePicture != null)
+                                @if (user.ProfilePicture != null)
                                 {
-                                    <img class="rounded-circle avatar" alt="ProfilePicture" src="data:image/*;base64,@(Convert.ToBase64String(item.ProfilePicture))" />
+                                    <img class="rounded-circle avatar" alt="ProfilePicture" src="data:image/*;base64,@(Convert.ToBase64String(user.ProfilePicture))" />
                                 }
                                 else
                                 {
                                     <img class="rounded-circle avatar" alt="ProfilePicture" src="~/assets/images/defaultPictureForProfile.jpg" />
                                 }
                             </div>
-                            <span style="margin:15px auto;display:block;font-size:18px;font-weight:bold"> @item.FirstName @item.LastName</span>
+                    <span style="margin:15px auto;display:block;font-size:18px;font-weight:bold"> @user.FirstName @user.LastName</span>
                             <span class="empRole">
                                 @{
-                                    var result = @dbContext.Roles.Where(x => x.Id == dbContext.UserRoles.Where(x => x.UserId == item.Id).Select(x => x.RoleId).FirstOrDefault()).Select(x => x.Name).FirstOrDefault();
+                                    var result = @dbContext.Roles.Where(x => x.Id == dbContext.UserRoles.Where(x => x.UserId == user.Id).Select(x => x.RoleId).FirstOrDefault()).Select(x => x.Name).FirstOrDefault();
                                     if (result == "Marketer")
                                     {
                                         <span>مسوّق</span>
@@ -75,28 +71,30 @@
                             </span>
                             <div class="customerInfo">
                                 <div style="margin:15px;font-size:18px">
-                                @{
-                                    string empName = item.FirstName + " " + item.LastName;
-                                    var items = @dbContext.Customers.Where(x => x.FollowBy == empName).ToList();
-                                }
-                                    عدد العملاء : @dbContext.Customers.Where(x=>x.FollowBy==empName).Count()
+                                    @{
+                                    string empId= user.Id;
+                                    
+                                    }
+                                    عدد العملاء : @dbContext.Customers.Where(x => x.FollowBy == empId).Count()
                                     <i class="fa-solid fa-users fa-2x" style="margin-right:5px;color:#688bef"></i>
                                     <div class="custState">
                                         <div class="row" style="display:flex;justify-content:center">
-                                            <div class="divState col-sm-6 col-md-3">
-                                                <span>منتظر</span>
-                                                <i class="fa-solid fa-bars-progress" style="color:#1c52bb"></i>
-                                                <a asp-action="ShowListOfCustomerByState" asp-controller="Customer" asp-route-state="منتظر" asp-route-empName="@empName">
-                                                <div class="StateCount">@dbContext.Customers.Where(x=>x.FollowBy==empName && x.CustomerState=="منتظر").Count()</div>
-                                                </a>
-                                            </div>
-                                            <div class="divState col-sm-6 col-md-3">
-                                                <span>متفاعل</span>
-                                                <i class="fa-solid fa-battery-full" style="color:green"></i>
-                                                <a asp-action="ShowListOfCustomerByState" asp-controller="Customer" asp-route-state="متفاعل" asp-route-empName="@empName">
-                                                <div class="StateCount">@dbContext.Customers.Where(x=>x.FollowBy==empName && x.CustomerState=="متفاعل").Count()</div>
-                                                </a>
-                                            </div>
+
+
+                                        @* <div class="divState col-sm-6 col-md-3">
+                                            <span>منتظر</span>
+                                            <i class="fa-solid fa-bars-progress" style="color:#1c52bb"></i>
+                                            <a asp-action="ShowListOfCustomerByState" asp-controller="Customer" asp-route-state="منتظر" asp-route-empName="@empName">
+                                            <div class="StateCount">@dbContext.Customers.Where(x=>x.FollowBy==empName && x.CustomerState=="منتظر").Count()</div>
+                                            </a>
+                                        </div>
+                                        <div class="divState col-sm-6 col-md-3">
+                                            <span>متفاعل</span>
+                                            <i class="fa-solid fa-battery-full" style="color:green"></i>
+                                            <a asp-action="ShowListOfCustomerByState" asp-controller="Customer" asp-route-state="متفاعل" asp-route-empName="@empName">
+                                            <div class="StateCount">@dbContext.Customers.Where(x=>x.FollowBy==empName && x.CustomerState=="متفاعل").Count()</div>
+                                            </a>
+                                        </div>
 
                                         <div class="divState col-sm-6 col-md-3">
                                             <span>لم يرد</span>
@@ -104,34 +102,44 @@
                                             <a asp-action="ShowListOfCustomerByState" asp-controller="Customer" asp-route-state="لم يرد" asp-route-empName="@empName">
                                             <div class="StateCount">@dbContext.Customers.Where(x=>x.FollowBy==empName && x.CustomerState=="لم يرد").Count()</div>
                                             </a>
-                                        </div>
+                                        </div> *@
 
-                                        <div class="divState col-sm-6 col-md-3">
+                                        <div class="divState col-md-3">
                                             <span>جديد</span>
                                             <i class="fa-solid fa-square-arrow-up-right" style="color:darkgoldenrod"></i>
-                                            <a asp-action="ShowListOfCustomerByState" asp-controller="Customer" asp-route-state="جديد" asp-route-empName="@empName">
-                                            <div class="StateCount">@dbContext.Customers.Where(x=>x.FollowBy==empName && x.CustomerState=="جديد").Count()</div>
+                                        <a asp-action="ShowListOfCustomerByState" asp-controller="Customer" asp-route-state="جديد" asp-route-empId="@empId">
+                                            <div class="StateCount">@dbContext.Customers.Where(x => x.FollowBy == empId && (x.CustomerState == "جديد" || x.CustomerState == "رد" || x.CustomerState == "لم يرد" || x.CustomerState == "متفاعل" || x.CustomerState == "غير متفاعل")).Count()</div>
                                             </a>
+                                            
                                         </div>
 
-                                        <div class="divState col-sm-6 col-md-3">
+                                    
+                                        <div class="divState col-md-3">
                                             <span>متابعة</span>
                                             <i class="fa-solid fa-timeline" style="color:#1c52bb"></i>
-                                            <a asp-action="ShowListOfCustomerByState" asp-controller="Customer" asp-route-state="متابعة" asp-route-empName="@empName">
-                                            <div class="StateCount">@dbContext.Customers.Where(x=>x.FollowBy==empName && x.CustomerState=="متابعة").Count()</div>
+                                        <a asp-action="ShowListOfCustomerByState" asp-controller="Customer" asp-route-state="متابعة" asp-route-empId="@empId">
+                                            <div class="StateCount">@dbContext.Customers.Where(x => x.FollowBy == empId && x.CustomerState == "متابعة").Count()</div>
                                             </a>
                                         </div>
 
-                                        <div class="divState col-sm-6 col-md-3">
+
+                                        <div class="divState col-md-3">
+                                            <span>تعميد</span>
+                                            <i class="fa-regular fa-circle-check" style="color:green"></i>
+                                        <a asp-action="ShowListOfCustomerByState" asp-controller="Customer" asp-route-state="تعميد" asp-route-empId="@empId">
+                                            <div class="StateCount">@dbContext.Customers.Where(x => x.FollowBy == empId && x.CustomerState == "تعميد").Count()</div>
+                                            </a>
+                                        </div>
+                                        
+                                        @* <div class="divState col-sm-6 col-md-3">
                                             <span>غير متفاعل</span>
                                             <i class="fa-solid fa-heart-crack" style="color:#d70000"></i>
                                             <a asp-action="ShowListOfCustomerByState" asp-controller="Customer" asp-route-state="غير متفاعل" asp-route-empName="@empName">
                                             <div class="StateCount">@dbContext.Customers.Where(x=>x.FollowBy==empName && x.CustomerState=="غير متفاعل").Count()</div>
                                             </a>
-                                        </div>
+                                        </div> *@
 
-
-                                        <div class="divState col-sm-6 col-md-3">
+                                       @*  <div class="divState col-sm-6 col-md-3">
                                             <span>مكتمل</span>
                                             <i class="fa-regular fa-circle-check" style="color:green"></i>
                                             <a asp-action="ShowListOfCustomerByState" asp-controller="Customer" asp-route-state="مكتمل" asp-route-empName="@empName">
@@ -139,18 +147,18 @@
                                             </a>
                                         </div>
 
-
                                         <div class="divState col-sm-6 col-md-3">
                                             <span>مقابلة</span>
                                             <i class="fa-solid fa-handshake-simple" style="color:gray"></i>
                                             <a asp-action="ShowListOfCustomerByState" asp-controller="Customer" asp-route-state="مقابلة" asp-route-empName="@empName">
                                             <div class="StateCount">@dbContext.Customers.Where(x=>x.FollowBy==empName && x.CustomerState=="مقابلة").Count()</div>
                                             </a>
-                                        </div>
+                                        </div> *@
                                         
                                         </div>
                                     </div>
                                 </div>
+
                                 @if (User.IsInRole("Admin"))
                                 {
                                     <div class="ManageUser">
@@ -159,6 +167,7 @@
                                         </a>
                                     </div>
                                 }
+
                                 else
                                 {
                                     <div class="ManageUser">
@@ -170,7 +179,7 @@
                             </div>
                         </div>
                     </div>
-                }
+                
         }
 
     </div>
