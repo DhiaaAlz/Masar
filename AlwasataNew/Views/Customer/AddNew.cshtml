@@ -263,6 +263,21 @@
         <span asp-validation-for="ClientSourceMarkter" class="text-danger"></span>
     </div>
 
+
+    @* حملات تسويقية *@
+    <div class="form-floating" id="marketingCampaigns" style="display:none">
+        <select asp-for="MarktingCampaigns" class="form-control" autocomplete="description type" aria-required="true" id="MarktingCampaigns">
+            <option>اختر</option>
+            @foreach (var item in _app.GetMarketingCampaigns())
+            {
+                <option>@item</option>
+            }
+        </select>
+        <label asp-for="ClientSourceMarkter"></label>
+        <span asp-validation-for="ClientSourceMarkter" class="text-danger"></span>
+    </div>
+
+
     @*اخر و داتا *@
     <div class="form-floating" id="dataInput" style="display:none">
         <input asp-for="ClientSourceDataAndOther" class="form-control" autocomplete="ClientSourceDataAndOther" aria-required="false" />
@@ -326,24 +341,35 @@
             $("#dataInput").css("display", "block");
             $("#markterSelectList").css("display", "none");
             $("#employeeSelectList").css("display", "none");
+            $("#marketingCampaigns").css("display", "none");
         }
 
         else if (this.value == "موظفين") {
             $("#dataInput").css("display", "none");
             $("#markterSelectList").css("display", "none");
             $("#employeeSelectList").css("display", "block");
+            $("#marketingCampaigns").css("display", "none");
         }
 
         else if(this.value =="مسوقين"){
             $("#dataInput").css("display", "none");
             $("#markterSelectList").css("display", "block");
             $("#employeeSelectList").css("display", "none");
+            $("#marketingCampaigns").css("display", "none");
+        }
+
+        else if (this.value == "حملات التسويق") {
+            $("#dataInput").css("display", "none");
+            $("#markterSelectList").css("display", "none");
+            $("#employeeSelectList").css("display", "none");
+            $("#marketingCampaigns").css("display", "block");
         }
 
         else{
             $("#dataInput").css("display", "none");
             $("#markterSelectList").css("display", "none");
             $("#employeeSelectList").css("display", "none");
+            $("#marketingCampaigns").css("display", "none");
         }
     });
 </script>

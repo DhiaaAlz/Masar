@@ -126,6 +126,10 @@ namespace AlwasataNew.Controllers
                     {
                         clientSource = model.ClientSourceEmployee;
                     }
+                    else if (model.CustomerComeFrom == "حملات التسويق")
+                    {
+                        clientSource = model.MarktingCampaigns;
+                    }
                     else
                     {
                         clientSource = "لايوجد";

@@ -18,7 +18,23 @@ namespace AlwasataNew.Services.App
                 "داتا",
                 "موظفين",
                 "مسوقين",
+                "حملات التسويق",
                 "اخر",
+            };
+        }
+
+        public List<string> GetMarketingCampaigns()
+        {
+            return new List<string>()
+            {
+                "انستغرام",
+                "تويتر",
+                "فيسبوك",
+                "سناب شات",
+                "واتس اب",
+                "يوتيوب",
+                "تيك توك",
+                "لينكد ان",
             };
         }
 

@@ -5,5 +5,6 @@
         public List<string> GetCliecntSource();
         public List<string> GetCliecntSourceEmployee();
         public List<string> GetCliecntSourceMarketer();
+        public List<string> GetMarketingCampaigns();
     }
 }
