@@ -17,7 +17,7 @@ namespace AlwasataNew.Models
         public string? Type { get; set; }
         public string? CreatedBy { get; set; }
         public string? FollowBy { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public string CreatedAt { get; set; }
         public string? CustomerState { get; set; }
         public string? Password { get; set; }
         public int? CompanyId { get; set; }

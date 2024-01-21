@@ -130,6 +130,10 @@ namespace AlwasataNew.Controllers
                     {
                         clientSource = "لايوجد";
                     }
+                    if(model.FollowByEmployee == "اختر")
+                    {
+                        model.FollowByEmployee = null;
+                    }
                     var customer = new Customer
                     {
                         Id = maxCustomerId,
@@ -139,7 +143,7 @@ namespace AlwasataNew.Controllers
                         CustomerDescription = model.CustomerDescription,
                         Type = model.Type,
                         CreatedBy = EmployeeName,
-                        CreatedAt = DateTime.Now,
+                        CreatedAt = DateTime.Now.ToString(),
                         CompanyName = model.CompnayName,
                         EmployeeName = model.EmployeeName,
                         FollowBy=model.FollowByEmployee,
@@ -721,7 +725,7 @@ namespace AlwasataNew.Controllers
                         CustomerName = dr["CustomerName"].ToString(),
                         CompanyName = dr["CompanyName"].ToString(),
                         CompanySite = dr["CompanySite"].ToString(),
-                        CreatedAt = Convert.ToDateTime(dr["CreatedAt"]),
+                        CreatedAt = Convert.ToString(dr["CreatedAt"]),
                         CustomerState = dr["CustomerState"].ToString(),
                         Address = dr["Address"].ToString(),
                         Email = dr["Email"].ToString(),
@@ -762,7 +766,7 @@ namespace AlwasataNew.Controllers
                         CustomerName = dr["CustomerName"].ToString(),
                         CompanyName = dr["CompanyName"].ToString(),
                         CompanySite = dr["CompanySite"].ToString(),
-                        CreatedAt = Convert.ToDateTime(dr["CreatedAt"]),
+                        CreatedAt = Convert.ToString(dr["CreatedAt"]),
                         CustomerState = dr["CustomerState"].ToString(),
                         Address = dr["Address"].ToString(),
                         Email = dr["Email"].ToString(),

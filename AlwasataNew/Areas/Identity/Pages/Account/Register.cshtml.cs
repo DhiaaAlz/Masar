@@ -193,7 +193,7 @@ namespace AlwasataNew.Areas.Identity.Pages.Account
                     Password = Input.Password,
                     Type="فرد",
                     CustomerState="جديد",
-                    CreatedAt = DateTime.Now,
+                    CreatedAt = DateTime.Now.ToString(),
                     CreatedBy="admin"
                 };
 

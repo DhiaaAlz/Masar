@@ -92,7 +92,7 @@
                                                         {
                                                             <span>@customer.CustomerName</span>
                                                         } *@
-                                                        <span>@customer.CustomerName == null ? "لا يوجد" : @customer.CustomerName</span>
+                                                        <span>@(customer.CustomerName == null ? "لا يوجد" : @customer.CustomerName)</span>
                                                     </td>
                                                     <td>
                                                         <span>@Convert.ToDateTime(customer.CreatedAt).ToShortDateString()</span>

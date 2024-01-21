@@ -1,6 +1,7 @@
 ﻿using AlwasataNew.Data;
 using AlwasataNew.Models;
 using AlwasataNew.ViewModel;
+using Humanizer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,13 +25,13 @@ namespace AlwasataNew.Controllers
 
             if(ProjectState == null)
             {
-                var customers = _context.Customers.Where(x => x.FollowBy == null);
+                var customers = _context.Customers.Where(x => x.FollowBy == null).ToList().OrderByDescending(x=>x.CreatedAt);
                 foreach (var customer in customers)
                 {
                     var project = _context.Projects.Where(x => x.CustomerId == customer.Id).AsNoTracking().FirstOrDefault();
                     ShowProjectsByStateViewModel item = new ShowProjectsByStateViewModel();
                     item.CustomerId = customer.Id;
-                    item.ProjectCreatedDate = project.CreatedAt.ToString();
+                    item.ProjectCreatedDate = project.CreatedAt.Humanize();
                     item.ProjectDescription = project.Description;
                     item.CustomerName = customer.CustomerName;
                     var empName = _context.Users.Where(x => x.Id == customer.FollowBy).AsNoTracking().Select(n => new { n.FirstName, n.LastName }).FirstOrDefault();
@@ -52,13 +53,13 @@ namespace AlwasataNew.Controllers
             }
             else if(ProjectState=="متابع")
             {
-                var customers = _context.Customers.Where(x => x.FollowBy != null);
+                var customers = _context.Customers.Where(x => x.FollowBy != null).ToList().OrderByDescending(x=>x.CreatedAt);
                 foreach (var customer in customers)
                 {
                     var project = _context.Projects.Where(x => x.CustomerId == customer.Id).AsNoTracking().FirstOrDefault();
                     ShowProjectsByStateViewModel item = new ShowProjectsByStateViewModel();
                     item.CustomerId = customer.Id;
-                    item.ProjectCreatedDate = project.CreatedAt.ToString();
+                    item.ProjectCreatedDate = project.CreatedAt.Humanize();
                     item.ProjectDescription = project.Description;
                     item.CustomerName = customer.CustomerName;
                     var empName = _context.Users.Where(x => x.Id == customer.FollowBy).AsNoTracking().Select(n => new { n.FirstName, n.LastName }).FirstOrDefault();
@@ -73,17 +74,17 @@ namespace AlwasataNew.Controllers
             }
             else if(ProjectState=="غير متابع")
             {
-                var customers = _context.Customers.Where(x => x.FollowBy == null);
+                var customers = _context.Customers.Where(x => x.FollowBy == null).ToList().OrderByDescending(x=>x.CreatedAt);
                 foreach (var customer in customers)
                 {
                     var project = _context.Projects.Where(x => x.CustomerId == customer.Id).AsNoTracking().FirstOrDefault();
                     ShowProjectsByStateViewModel item = new ShowProjectsByStateViewModel();
                     item.CustomerId = customer.Id;
-                    item.ProjectCreatedDate = project.CreatedAt.ToString();
+                    item.ProjectCreatedDate = project.CreatedAt.Humanize();
                     item.ProjectDescription = project.Description;
                     item.CustomerName = customer.CustomerName;
                     var empName = _context.Users.Where(x => x.Id == customer.FollowBy).AsNoTracking().Select(n => new { n.FirstName, n.LastName }).FirstOrDefault();
-                    item.FollowBy = empName.FirstName + " " + empName.LastName;
+                    item.FollowBy = "لا يوجد";
                     item.ProjectState = customer.CustomerState;
                     item.ProjectId = project.Id;
                     item.CustomerComeFrom = customer.CustomerComeFrom;
@@ -94,14 +95,14 @@ namespace AlwasataNew.Controllers
             }
             else
             {
-                var projectsList = _context.Projects.Where(x => x.IsDone == true).ToList();
+                var projectsList = _context.Projects.Where(x => x.IsDone == true).ToList().OrderByDescending(x=>x.CreatedAt);
                 foreach (var project in projectsList)
                 {
                     var customer = _context.Customers.Where(x => x.Id == project.CustomerId).AsNoTracking().FirstOrDefault();
                     
                     ShowProjectsByStateViewModel item = new ShowProjectsByStateViewModel();
                     item.CustomerId = customer.Id;
-                    item.ProjectCreatedDate = project.CreatedAt.ToString();
+                    item.ProjectCreatedDate = project.CreatedAt.Humanize();
                     item.ProjectDescription = project.Description;
                     item.CustomerName = customer.CustomerName;
                     var empName = _context.Users.Where(x => x.Id == customer.FollowBy).AsNoTracking().Select(n => new { n.FirstName, n.LastName }).FirstOrDefault();
