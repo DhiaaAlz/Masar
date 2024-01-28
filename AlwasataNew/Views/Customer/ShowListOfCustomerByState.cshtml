@@ -89,30 +89,30 @@
                                                     </td>
                                                     <td>@customer.Phone</td>
                                                     <td>
-                                                        <a href="mailto: @customer.Email">@customer.Email</a>
+                                                            <a href="mailto: @customer.Email">@customer.Email</a>
                                                     </td>
                                                     <td>@customer.Type</td>
                                                     <td>
                                                         @if (customer.CustomerState == "متفاعل")
                                                         {
                                                             <a asp-controller="Customer" asp-action="CustomerStateComment" asp-route-customerId="@customer.Id" class="customerSta">
-                                                                <span style="position:relative;color:darkgreen;font-weight:bold">@customer.CustomerState <span class="addComm">اضف تعليقاً</span></span>
+                                                                <span style="position:relative;color:darkgreen;font-weight:bold">جديد <span class="addComm">اضف تعليقاً</span></span>
                                                             </a>
                                                         }
                                                         else if (customer.CustomerState == "جديد")
                                                         {
                                                             <a asp-controller="Customer" asp-action="CustomerStateComment" asp-route-customerId="@customer.Id" class="customerSta">
-                                                                <span style="position:relative;color:darkcyan;font-weight:bold">@customer.CustomerState <span class="addComm">اضف تعليقاً</span></span>
+                                                                <span style="position:relative;color:black;font-weight:bold">@customer.CustomerState <span class="addComm">اضف تعليقاً</span></span>
                                                             </a>
                                                         }
                                                         else
                                                         {
                                                             <a asp-controller="Customer" asp-action="CustomerStateComment" asp-route-customerId="@customer.Id" class="customerSta">
-                                                                <span style="position:relative;color:darkred;font-weight:bold">@customer.CustomerState<span class="addComm">اضف تعليقاً</span></span>
+                                                                <span style="position:relative;color:red;font-weight:bold">جديد<span class="addComm">اضف تعليقاً</span></span>
                                                             </a>
                                                         }
                                                     </td>
-                                                        
+                                                         
                                                     <td>
                                                         @if (customer.FollowBy == null)
                                                         {

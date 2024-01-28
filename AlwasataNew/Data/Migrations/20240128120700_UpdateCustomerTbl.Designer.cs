@@ -4,6 +4,7 @@ using AlwasataNew.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AlwasataNew.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240128120700_UpdateCustomerTbl")]
+    partial class UpdateCustomerTbl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -197,25 +200,6 @@ namespace AlwasataNew.Data.Migrations
                     b.HasIndex("CompanyId");
 
                     b.ToTable("Customers");
-                });
-
-            modelBuilder.Entity("AlwasataNew.Models.CustomerCommentstbl", b =>
-                {
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StateId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TypeOfCommunicationId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CustomerId", "Id");
-
-                    b.ToTable("CustomerCommentstbls");
                 });
 
             modelBuilder.Entity("AlwasataNew.Models.CustomerStateDescription", b =>

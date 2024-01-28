@@ -50,7 +50,9 @@ namespace AlwasataNew.Data
             .WithOne(e => e.Customer)
             .HasForeignKey(e => e.CustomerId)
             .IsRequired(false);
+
             builder.Entity<Customer>().Property(x => x.CreatedAt).HasDefaultValueSql("getdate()");
+
             //Project configuration
             builder.Entity<Project>().Property(x => x.Id).ValueGeneratedNever();
             builder.Entity<Project>().Property(x => x.CreatedAt).HasDefaultValueSql("getdate()");
@@ -63,7 +65,10 @@ namespace AlwasataNew.Data
 
             //customer state tble
             builder.Entity<CustomerStateTbl>().HasKey(x => new { x.CustomerId, x.StateId });
-            
+
+            //customer commentstbl
+            builder.Entity<CustomerCommentstbl>().HasKey(x => new { x.CustomerId,x.Id});
+
         }
 
         public DbSet<Customer> Customers { get; set; }
@@ -72,6 +77,7 @@ namespace AlwasataNew.Data
         public DbSet<CustomerStateDescription> CustomerStateDescriptions { get; set; }
         public DbSet<CustomerStateDescriptionTbl>  customerStateDescriptionTbl { get; set; }
         public DbSet<CustomerStateTbl>  customerStateTbl { get; set; }
+        public DbSet<CustomerCommentstbl> CustomerCommentstbls { get; set; }
 
     }
 }

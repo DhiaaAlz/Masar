@@ -213,7 +213,7 @@ namespace AlwasataNew.Controllers
             var result = new List<Customer>();
             if (state == "جديد")
             {
-                result = dbContext.Customers.Where(x => x.FollowBy == empId && (x.CustomerState == state || x.CustomerState == "رد" || x.CustomerState == "لم يرد" || x.CustomerState == "متفاعل" || x.CustomerState == "غير متفاعل")).ToList();
+                result = dbContext.Customers.Where(x => x.FollowBy == empId && (x.CustomerState == state || x.CustomerState == "متفاعل" || x.CustomerState == "غير متفاعل")).ToList();
             }
             else
             {

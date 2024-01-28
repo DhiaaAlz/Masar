@@ -6,17 +6,16 @@
 *@
 
 <style>
-    .allComments
-    {
-        display:flex;
-        justify-content:center;
-        flex-direction:column;
-        align-items:center;
-        margin-top:40px;
+    .allComments {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 40px;
     }
-    .comment
-    {
-        position:relative;
+
+    .comment {
+        position: relative;
         display: flex;
         justify-content: center;
         padding: 30px;
@@ -24,32 +23,32 @@
         border: 1px solid;
         border-radius: 5px;
         margin: 10px;
-        font-weight:bold;
-    }
-    .createAt
-    {
-        position:absolute;
-        right:5px;
-        bottom:1px;
-        color:darkcyan;
-    }
-    .empName
-    {
-        position:absolute;
-        left:10px;
-        top:2px;
-        color:darkgreen;
+        font-weight: bold;
     }
 
-    #callsBtn, #whatsAppBtn, #emailBtn{
+    .createAt {
+        position: absolute;
+        right: 5px;
+        bottom: 1px;
+        color: darkcyan;
+    }
+
+    .empName {
+        position: absolute;
+        left: 10px;
+        top: 2px;
+        color: darkgreen;
+    }
+
+    #callsBtn, #whatsAppBtn, #emailBtn {
         display: flex;
-        justify-content:center;
-        align-items:center;
-        padding:3px;
-        gap:10px;
+        justify-content: center;
+        align-items: center;
+        padding: 3px;
+        gap: 10px;
     }
 
-    .comBtn{
+    .comBtn {
         padding: 10px;
         border: 1px solid;
         border-radius: 50%;
@@ -59,12 +58,49 @@
         justify-content: center;
         align-items: center;
     }
+
+    button.transparent-success, button.transparent-danger {
+        background: transparent;
+        font-weight: 500;
+    }
+
+    button.transparent-success {
+        color: green;
+    }
+
+    button.transparent-danger {
+        color: red;
+    }
+
+    span.status {
+        font-size: 12px !important;
+        font-weight: 500;
+    }
+
+        span.status.s-danger {
+            color: red;
+        }
+
+        span.status.s-success {
+            color: green;
+        }
+
+    .alert-box {
+        background: #000;
+        padding: 15px;
+        border-radius: 30px;
+        display: none;
+    }
+
+    #content-n::placeholder {
+        color: #FFF !important;
+    }
 </style>
-  
+
 @{
     var userId = "";
     var customerName = "";
-    var customer=new Customer();
+    var customer = new Customer();
 }
 
 @using (var dbContext = new ApplicationDbContext())
@@ -76,57 +112,113 @@
 
     if (customerName == null)
     {
-        customerName =dbContext.Customers.Where(x => x.Id == Model.Id).Select(x => x.CompanyName).FirstOrDefault();
+        customerName = dbContext.Customers.Where(x => x.Id == Model.Id).Select(x => x.CompanyName).FirstOrDefault();
     }
 
     customer = dbContext.Customers.Where(x => x.Id == Model.Id).FirstOrDefault();
 }
 
 <div class="container">
-     <form method="post" class="fromInput">
+    <form method="post" class="fromInput">
         @{
-            if(customer.Type=="فرد")
+            if (customer.Type == "فرد")
             {
                 <h4 style="margin-top:20px;text-align:center">اسم العميل : <span style="color:darkgreen">@customerName</span></h4>
-                <h4 style="margin-top:20px;text-align:center">رقم العميل : <span style="color:darkgreen">@customer.Phone</span></h4>
+                //<h4 style="margin-top:20px;text-align:center">رقم العميل : <span style="color:darkgreen">@customer.Phone</span></h4>
             }
             else
             {
                 <h4 style="margin-top:20px;text-align:center">اسم الشركة : <span style="color:darkgreen">@customer.CompanyName</span></h4>
                 <h4 style="margin-top:20px;text-align:center">اسم الموظف : <span style="color:darkgreen">@customer.EmployeeName</span></h4>
-                <h4 style="margin-top:20px;text-align:center">رقم الهاتف : <span style="color:darkgreen">@customer.Phone</span></h4>
+                //<h4 style="margin-top:20px;text-align:center">رقم الهاتف : <span style="color:darkgreen">@customer.Phone</span></h4>
             }
         }
 
-        
+
         <hr />
         @{
             var whatsLink = "https://wa.me/" + customer.Phone + "";
-            var mailLink = "mailto:"+customer.Email+"";
-            var phoneLink = "tel:"+customer.Phone+"";
+            var mailLink = "mailto:" + customer.Email + "";
+            var phoneLink = "tel:" + customer.Phone + "";
         }
-        <div style="display:flex;justify-content:center;align-items:center;gap:10px;">
-            <a href="@whatsLink" style="color:green" class="comBtn"><i class="fa-brands fa-whatsapp fa-2x"></i></a>
-            <a href="@mailLink" style="padding:10px" class="comBtn"><i class="fa-regular fa-envelope fa-2x"></i></a>
-            <a href="@phoneLink" style="color:cadetblue" class="comBtn"><i class="fa-solid fa-phone fa-2x"></i></a>
+
+        <div style="display:flex;justify-content:center;align-items:center;gap:20px;flex-direction: column;width: 100%!important;" class="mb-5 mt-5">
+            <div style="display:flex;justify-content:center;align-items:center;gap:10px;" class=""><span class="status s-danger">لم يرد 1 مرة بتاريخ (01/25/2024 - 10:28)</span><button type="submit" class="btn btn-success transparent-success" style="font-size:13px" id="done">تم الرد <i class="fa-solid fa-check"></i></button> <button type="submit" class="btn btn-danger transparent-danger" style="font-size:13px" id="noAnswer">لم يرد  <i class="fa-regular fa-circle-xmark" disabled></i></button><a href="@phoneLink" style="color:cadetblue" class="comBtn"><i class="fa-solid fa-phone"></i></a>  <span style="color:darkgreen">@customer.Phone</span></div>
+            <div style="display:flex;justify-content:center;align-items:center;gap:10px;" class=""><span class="status s-success">تم الرد بتاريخ (01/25/2024 - 10:28)</span><button type="submit" class="btn btn-success transparent-success" style="font-size:13px" id="done">تم الرد <i class="fa-solid fa-check"></i></button> <button type="submit" class="btn btn-danger transparent-danger" style="font-size:13px" id="noAnswer">لم يرد  <i class="fa-regular fa-circle-xmark" disabled></i></button><a href="@whatsLink" style="color:green" class="comBtn"><i class="fa-brands fa-whatsapp"></i></a>  <span style="color:darkgreen">@customer.Phone</span></div>
+            <div style="display:flex;justify-content:center;align-items:center;gap:10px;" class=""><span class="status s-danger">لم يرد 3 مرة بتاريخ (01/30/2024 - 10:28)</span><button type="submit" class="btn btn-success transparent-success" style="font-size:13px" id="done">تم الرد <i class="fa-solid fa-check"></i></button> <button type="submit" class="btn btn-danger transparent-danger" style="font-size:13px" id="noAnswer">لم يرد  <i class="fa-regular fa-circle-xmark" disabled></i></button><a href="@mailLink" style="padding:10px" class="comBtn"><i class="fa-regular fa-envelope"></i></a>   <span style="color:darkgreen">@customer.Email</span></div>
         </div>
 
         <h3 style="text-align:center">اكتب تعليقاً لحالة هذا العميل</h3>
         <input type="hidden" value="@Model.Id" name="customerId" />
         <input type="hidden" value="@userId" name="employeeId" />
-        <textarea name="comment" style="padding: 10px;border-radius: 6px;" id="comment">
+        <textarea name="comment" style="padding: 10px;border-radius: 6px;direction:rtl!important;" id="comment">
 
         </textarea>
-        <button class="btn btn-primary" type="submit">حسناً</button>
-        <button id="emailBtn" type="submit" class="btn btn-primary" style="background-color:#128C7E;margin-top:15px;"><i class="fa-regular fa-envelope fa-2x"></i>تم التواصل عن طريق الايميل  </button>
+
+        @*<button class="btn btn-primary" type="submit">حسناً</button>  *@
+
+
+
+        @*      <button id="emailBtn" type="submit" class="btn btn-primary" style="background-color:#128C7E;margin-top:15px;"><i class="fa-regular fa-envelope fa-2x"></i>تم التواصل عن طريق الايميل  </button>
         <button id="whatsAppBtn" type="submit" class="btn btn-primary" style="background-color:#25D366"><i class="fa-brands fa-whatsapp fa-2x"></i>تم التواصل عن طريق الواتس اب</button>
-        <button id="callsBtn" type="submit" class="btn btn-primary" style="background-color:#075E54"> <i class="fa-solid fa-phone fa-2x"></i>تم التواصل عن طريق المكالمات</button>
+        <button id="callsBtn" type="submit" class="btn btn-primary" style="background-color:#075E54"> <i class="fa-solid fa-phone fa-2x"></i>تم التواصل عن طريق المكالمات</button>*@
+
         <div style="display:flex;justify-content:center;align-items:center;gap:20px;margin-top:15px;">
-            <button type="submit" class="btn btn-success" style="font-size:20px" id="done">تم الرد <i class="fa-solid fa-check"></i></button>
-            <button type="submit" class="btn btn-danger" style="font-size:20px" id="noAnswer">لم يرد <i class="fa-regular fa-circle-xmark"></i></button>
+            <button type="submit" class="btn btn-success" style="font-size:20px" id="done">متابعة <i class="fa-solid fa-check"></i></button>
+            <button type="submit" class="btn btn-danger" style="font-size:20px" id="noAnswer">تم ارسال البيانات للعميل  <i class="fa-regular fa-circle-xmark" disabled></i></button>
+
+            <a class="btn" style="font-size:20px;background: #efb429d9;border-color: #efb429d9;" onclick="toggleAlert()"> تذكير  <i class="fa-regular fa-circle-xmark"></i> </a>
         </div>
-     </form>
-    
+
+    </form>
+
+    <form>
+
+
+
+
+        <script>
+
+            function toggleAlert() {
+                var alertBox = document.getElementById("alert-box");
+                if (alertBox.style.display === "none") {
+                    alertBox.style.display = "block";
+                } else {
+                    alertBox.style.display = "none";
+                }
+            }
+
+        </script>
+
+        <div class="alert-box" id="alert-box">
+
+            <h4 class="text-center" style="color:#FFF;">تذكير</h4>
+
+            <div class="row">
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <input type="date" value="" name="" class="form-control" style="direction: rtl;color: #FFF;" />
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <input type="text" value="" name="" id="content-n" placeholder="المحتوى؟" class="form-control" style="direction: rtl;color: #FFF;" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-primary mt-2" style="width: 100%;" type="submit">حسناً</button>
+                </div>
+            </div>
+
+
+        </div>
+
+    </form>
     <div class="allComments">
         <h3 style="color:darkred">جميع التعليقات السابقة</h3>
         <div class="container">
@@ -137,7 +229,7 @@
 
                         var result = dbContextt.CustomerStateDescriptions.Where(x => x.CustomerId == Model.Id).ToList();
 
-                        if(result.Count() == 0)
+                        if (result.Count() == 0)
                         {
                             <span class="comment">
                                 <span style="color:darkred;text-align:center">لا يوجد تعليقات <i class="fa-solid fa-comment-slash"></i></span>
@@ -148,22 +240,22 @@
                             @foreach (var item in result)
                             {
                                 <span class="comment">
-                                    @item.CommentText 
+                                    @item.CommentText
                                     <span class="empName">
                                         @{
                                             var empName = dbContextt.Users.Where(x => x.Id == item.EmployeeId).Select(x => new { firstName = x.FirstName, lastName = x.LastName }).FirstOrDefault();
-                                            @empName.firstName <span> </span> @empName.lastName 
+                                            @empName.firstName <span> </span> @empName.lastName
                                         }
                                     </span>
                                     <span class="createAt">
-                                        @item.CreatedAt 
+                                        @item.CreatedAt
                                     </span>
                                 </span>
                             }
                         }
-                        
+
                     }
-                    
+
                 </div>
             </div>
         </div>
@@ -172,8 +264,9 @@
 <script src="./lib/jquery/dist/jquery.min.js"></script>
 <script>
 
-    document.getElementById("emailBtn").addEventListener("click", function ()
-    {
+
+
+    document.getElementById("emailBtn").addEventListener("click", function () {
         document.getElementById("comment").value = 'تم التواصل عن طريق الايميل';
     });
 
@@ -184,11 +277,11 @@
     document.getElementById("whatsAppBtn").addEventListener("click", function () {
         document.getElementById("comment").value = 'تم التواصل عن طريق الواتس اب';
     });
-    
+
     document.getElementById("done").addEventListener("click", function () {
         document.getElementById("comment").value = 'done';
     });
-    
+
     document.getElementById("noAnswer").addEventListener("click", function () {
         document.getElementById("comment").value = 'noAnswer';
     });
