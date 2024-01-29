@@ -13,7 +13,12 @@ namespace AlwasataNew.Controllers
     public class CustomerController : Controller
     {
 
-        ApplicationDbContext dbContext = new ApplicationDbContext();
+        private readonly ApplicationDbContext _context;
+
+        public CustomerController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
 
         private readonly UserManager<ApplicationUser> _userManager;
 
@@ -36,8 +41,6 @@ namespace AlwasataNew.Controllers
             return View();
         }
 
-       
-
 
         [HttpPost]
         public IActionResult AddNew(AddCustomerViewModel model)
@@ -48,25 +51,24 @@ namespace AlwasataNew.Controllers
             }
 
 
-            using (var DbContext = new ApplicationDbContext())
-            {
+           
 
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                var resultt = dbContext.Users.Where(x => x.Id == userId).Select(x => new { FName = x.FirstName, LName = x.LastName }).FirstOrDefault();
+                var resultt = _context.Users.Where(x => x.Id == userId).Select(x => new { FName = x.FirstName, LName = x.LastName }).FirstOrDefault();
 
                 string EmployeeName = resultt.FName + " " + resultt.LName;
 
-                var CustomerResult = DbContext.Customers.Where(x => x.Phone == model.Phone).FirstOrDefault();
+                var CustomerResult = _context.Customers.Where(x => x.Phone == model.Phone).FirstOrDefault();
 
                 if (CustomerResult != null)
                 {
                     var maxProjectId = 0;
-                    var result = DbContext.Projects.Count();
+                    var result = _context.Projects.Count();
 
                     if (result != 0)
                     {
-                        maxProjectId = DbContext.Projects.Max(x => x.Id) + 1;
+                        maxProjectId = _context.Projects.Max(x => x.Id) + 1;
                     }
                     else
                     {
@@ -93,19 +95,19 @@ namespace AlwasataNew.Controllers
                         IsDone = false,
 
                     };
-                    DbContext.Projects.Add(project);
-                    DbContext.SaveChanges();
+                    _context.Projects.Add(project);
+                    _context.SaveChanges();
                 }
 
                 else
                 {
                     
                     var maxCustomerId = 0;
-                    var result = DbContext.Customers.Count();
+                    var result = _context.Customers.Count();
 
                     if (result != 0)
                     {
-                        maxCustomerId = DbContext.Customers.Max(x => x.Id) + 1;
+                        maxCustomerId = _context.Customers.Max(x => x.Id) + 1;
                     }
                     else
                     {
@@ -160,16 +162,16 @@ namespace AlwasataNew.Controllers
                         CompanyId = model.ForCompany
                     };
 
-                    DbContext.Customers.Add(customer);
-                    DbContext.SaveChanges();
+                    _context.Customers.Add(customer);
+                    _context.SaveChanges();
 
                     var maxProjectId = 0;
 
-                    var resultProject = DbContext.Projects.Count();
+                    var resultProject = _context.Projects.Count();
 
                     if (resultProject != 0)
                     {
-                        maxProjectId = DbContext.Projects.Max(x => x.Id) + 1;
+                        maxProjectId = _context.Projects.Max(x => x.Id) + 1;
                     }
                     else
                     {
@@ -195,9 +197,9 @@ namespace AlwasataNew.Controllers
                     p1.CustomerId = maxCustomerId;
                     p1.IsDone = false;
 
-                    DbContext.Projects.Add(p1);
-                    DbContext.SaveChanges();
-                }
+                    _context.Projects.Add(p1);
+                    _context.SaveChanges();
+                
 
             }
 
@@ -206,18 +208,17 @@ namespace AlwasataNew.Controllers
         }
 
 
-
         [HttpGet]
         public IActionResult ShowListOfCustomerByState(string state, string empId)
         {
             var result = new List<Customer>();
             if (state == "جديد")
             {
-                result = dbContext.Customers.Where(x => x.FollowBy == empId && (x.CustomerState == state || x.CustomerState == "متفاعل" || x.CustomerState == "غير متفاعل")).ToList();
+                result = _context.Customers.Where(x => x.FollowBy == empId && (x.CustomerState == state || x.CustomerState == "متفاعل" || x.CustomerState == "غير متفاعل")).ToList();
             }
             else
             {
-                result = dbContext.Customers.Where(x => x.FollowBy == empId && x.CustomerState == state).ToList();
+                result = _context.Customers.Where(x => x.FollowBy == empId && x.CustomerState == state).ToList();
             }
             return View(result);
         }
@@ -226,13 +227,12 @@ namespace AlwasataNew.Controllers
         [HttpGet]
         public async Task<IActionResult> ManageCustomer()
         {
-            using (var DbContext = new ApplicationDbContext())
-            {
+            
 
                 if (User.IsInRole("Admin"))
                 {
 
-                    var Customer = await DbContext.Customers.Select(customer => new CustomerViewModel
+                    var Customer = await _context.Customers.Select(customer => new CustomerViewModel
                     {
                         Id = customer.Id,
                         Name = customer.CustomerName,
@@ -245,7 +245,7 @@ namespace AlwasataNew.Controllers
                         CustomerState = customer.CustomerState,
                         CustomerComeFrom=customer.CustomerComeFrom
                         ,ClientSource=customer.ClientSource,
-                        ProjectsId = DbContext.Projects.Where(x => x.CustomerId == customer.Id).Select(x => x.Id).ToList(),
+                        ProjectsId = _context.Projects.Where(x => x.CustomerId == customer.Id).Select(x => x.Id).ToList(),
                     }).AsNoTracking().ToListAsync();
 
 
@@ -260,7 +260,7 @@ namespace AlwasataNew.Controllers
                     
 
 
-                    var Customer = await DbContext.Customers.Select(customer => new CustomerViewModel
+                    var Customer = await _context.Customers.Select(customer => new CustomerViewModel
                     {
                         Id = customer.Id,
                         Name = customer.CustomerName,
@@ -274,14 +274,14 @@ namespace AlwasataNew.Controllers
                         CustomerComeFrom = customer.CustomerComeFrom
                         ,
                         ClientSource = customer.ClientSource,
-                        ProjectsId = DbContext.Projects.Where(x => x.CustomerId == customer.Id).Select(x => x.Id).ToList(),
+                        ProjectsId = _context.Projects.Where(x => x.CustomerId == customer.Id).Select(x => x.Id).ToList(),
                     }).Where(x => x.FollowBy == userId).ToListAsync();
 
 
                     return View(Customer);
                 }
 
-            }
+            
 
         }
 
@@ -291,72 +291,63 @@ namespace AlwasataNew.Controllers
         {
             if (User.IsInRole("Admin"))
             {
-                using (var dbContext = new ApplicationDbContext())
-                {
-                    var CustomerProjects = dbContext.Projects
-                        .Select(project => new ShowProjectsViewModel
-                        {
-                            Id = project.Id,
-                            Description = project.Description,
-                            Type = project.Type,
-                            DescriptionType = project.DescriptionType,
-                            LandAreaByM = project.LandAreaByM,
-                            Model = project.Model,
-                            CustomerId = project.CustomerId
-                        })
-                        .Where(x => x.CustomerId == Id).AsNoTracking().ToList();
-                    return View(CustomerProjects);
-                }
+                
+                var CustomerProjects = _context.Projects
+                    .Select(project => new ShowProjectsViewModel
+                    {
+                        Id = project.Id,
+                        Description = project.Description,
+                        Type = project.Type,
+                        DescriptionType = project.DescriptionType,
+                        LandAreaByM = project.LandAreaByM,
+                        Model = project.Model,
+                        CustomerId = project.CustomerId
+                    })
+                    .Where(x => x.CustomerId == Id).AsNoTracking().ToList();
+                return View(CustomerProjects);
+                
 
             }
             else
             {
 
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var custId = _context.Customers.Where(x => x.FollowBy == userId).Select(x => x.Id).ToList();
+                var CustomerProjects = _context.Projects
+                    .Select(project => new ShowProjectsViewModel
+                    {
+                        Id = project.Id,
+                        Description = project.Description,
+                        Type = project.Type,
+                        DescriptionType = project.DescriptionType,
+                        LandAreaByM = project.LandAreaByM,
+                        Model = project.Model,
+                        CustomerId = project.CustomerId
+                    })
+                    .Where(x => x.CustomerId == Id).ToList();
 
-                
+                int checkIfThisProjectForThisEmp = 0;
 
-                using (var dbContext = new ApplicationDbContext())
+                foreach (int item in custId)
                 {
-                    var custId = dbContext.Customers.Where(x => x.FollowBy == userId).Select(x => x.Id).ToList();
-                    var CustomerProjects = dbContext.Projects
-                        .Select(project => new ShowProjectsViewModel
-                        {
-                            Id = project.Id,
-                            Description = project.Description,
-                            Type = project.Type,
-                            DescriptionType = project.DescriptionType,
-                            LandAreaByM = project.LandAreaByM,
-                            Model = project.Model,
-                            CustomerId = project.CustomerId
-                        })
-                        .Where(x => x.CustomerId == Id).ToList();
-
-                    int checkIfThisProjectForThisEmp = 0;
-
-                    foreach (int item in custId)
+                    var result = CustomerProjects.FirstOrDefault(x => x.CustomerId == item);
+                    if (result != null)
                     {
-                        var result = CustomerProjects.FirstOrDefault(x => x.CustomerId == item);
-                        if (result != null)
-                        {
-                            checkIfThisProjectForThisEmp++;
-                        }
-                    }
-                    if (checkIfThisProjectForThisEmp != 0)
-                    {
-                        return View(CustomerProjects);
-                    }
-                    else
-                    {
-                        return View(CustomerProjects = new List<ShowProjectsViewModel>());
+                        checkIfThisProjectForThisEmp++;
                     }
                 }
+                if (checkIfThisProjectForThisEmp != 0)
+                {
+                    return View(CustomerProjects);
+                }
+                else
+                {
+                    return View(CustomerProjects = new List<ShowProjectsViewModel>());
+                }
+                
             }
 
         }
-
-
-
 
 
         [HttpGet]
@@ -365,40 +356,38 @@ namespace AlwasataNew.Controllers
 
             if (User.IsInRole("Admin"))
             {
-                using (var dbContext = new ApplicationDbContext())
-                {
+               
 
-                    var result = dbContext.Projects.Where(x => x.Id == projId).AsNoTracking().FirstOrDefault();
-                    return View(result);
-                }
+                var result = _context.Projects.Where(x => x.Id == projId).AsNoTracking().FirstOrDefault();
+                return View(result);
+                
             }
             else
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
 
-                using (var dbContext = new ApplicationDbContext())
+                
+                var custId = _context.Customers.Where(x => x.FollowBy == userId).Select(x => x.Id).ToList();
+
+                int IfThisProjToEmp = 0;
+                foreach (var item in custId)
                 {
-                    var custId = dbContext.Customers.Where(x => x.FollowBy == userId).Select(x => x.Id).ToList();
-
-                    int IfThisProjToEmp = 0;
-                    foreach (var item in custId)
+                    if (item == _context.Projects.Where(x => x.Id == projId).Select(x => x.CustomerId).FirstOrDefault())
                     {
-                        if (item == dbContext.Projects.Where(x => x.Id == projId).Select(x => x.CustomerId).FirstOrDefault())
-                        {
-                            IfThisProjToEmp++;
-                        }
+                        IfThisProjToEmp++;
                     }
-                    if (IfThisProjToEmp > 0)
-                    {
-                        return View(dbContext.Projects.Where(x => x.Id == projId).FirstOrDefault());
-                    }
-                    else
-                    {
-                        return View();
-                    }
-
                 }
+                if (IfThisProjToEmp > 0)
+                {
+                    return View(_context.Projects.Where(x => x.Id == projId).FirstOrDefault());
+                }
+                else
+                {
+                    return View();
+                }
+
+                
             }
 
         }
@@ -406,10 +395,9 @@ namespace AlwasataNew.Controllers
         [HttpGet]
         public IActionResult EditInformation(int Id)
         {
-            using (var dbContext = new ApplicationDbContext())
-            {
-                var customer = dbContext.Customers.AsNoTracking().FirstOrDefault(x => x.Id == Id);
-                var project = dbContext.Projects.AsNoTracking().FirstOrDefault(x => x.CustomerId == Id);
+            
+                var customer = _context.Customers.AsNoTracking().FirstOrDefault(x => x.Id == Id);
+                var project = _context.Projects.AsNoTracking().FirstOrDefault(x => x.CustomerId == Id);
                 if (customer == null || project == null)
                 {
                     return View(new EditCustomerViewModel());
@@ -439,7 +427,7 @@ namespace AlwasataNew.Controllers
                 };
 
                 return View(CustomerInformation);
-            }
+            
 
         }
 
@@ -449,18 +437,17 @@ namespace AlwasataNew.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            using (var dbContext = new ApplicationDbContext())
-            {
-                var customer = dbContext.Customers.Where(x => x.Id == model.Id).FirstOrDefault();
+            
+                var customer = _context.Customers.Where(x => x.Id == model.Id).FirstOrDefault();
                 var prjId = model.ProjectId;
-                var project = dbContext.Projects.Where(x => x.Id == model.ProjectId).FirstOrDefault();
+                var project = _context.Projects.Where(x => x.Id == model.ProjectId).FirstOrDefault();
                 if (customer == null || project == null)
                     NotFound();
 
 
                 if (model.Email != null)
                 {
-                    var CustomerWithSameEmail = dbContext.Customers.FirstOrDefault(x => x.Email == model.Email);
+                    var CustomerWithSameEmail = _context.Customers.FirstOrDefault(x => x.Email == model.Email);
 
 
                     if (CustomerWithSameEmail != null && CustomerWithSameEmail.Id != model.Id)
@@ -472,7 +459,7 @@ namespace AlwasataNew.Controllers
 
 
 
-                var CustomerWithSamePhone = dbContext.Customers.FirstOrDefault(x => x.Phone == model.Phone);
+                var CustomerWithSamePhone = _context.Customers.FirstOrDefault(x => x.Phone == model.Phone);
 
                 if (CustomerWithSamePhone != null && CustomerWithSamePhone.Id != model.Id)
                 {
@@ -502,7 +489,7 @@ namespace AlwasataNew.Controllers
                 customer.Phone = model.Phone;
                 customer.Email = model.Email;
                 customer.Type = model.Type;
-                customer.CompanyId = dbContext.Companies.Where(x => x.Id == model.ForCompany).Select(x => x.Id).FirstOrDefault();
+                customer.CompanyId = _context.Companies.Where(x => x.Id == model.ForCompany).Select(x => x.Id).FirstOrDefault();
                 
 
                 customer.CompanyName = model.CompanyName;
@@ -540,9 +527,9 @@ namespace AlwasataNew.Controllers
                     {
                         customer.FollowBy = model.FollowBy;
                     }
-                    dbContext.Projects.Update(project);
-                    dbContext.Customers.Update(customer);
-                    dbContext.SaveChanges();
+                    _context.Projects.Update(project);
+                    _context.Customers.Update(customer);
+                    _context.SaveChanges();
                     return RedirectToAction("Index", "ManageProject");
                 }
                 else
@@ -551,157 +538,83 @@ namespace AlwasataNew.Controllers
                     {
                         customer.FollowBy = model.FollowBy;
                     }
-                    dbContext.Projects.Update(project);
-                    dbContext.Customers.Update(customer);
-                    dbContext.SaveChanges();
+                    _context.Projects.Update(project);
+                    _context.Customers.Update(customer);
+                    _context.SaveChanges();
                     return View(model);
                 }
                 
-            }
+            
         }
 
         [HttpGet]
         public IActionResult CustomerStateComment(int customerId)
         {
-            using var dbContext = new ApplicationDbContext();
-            var result = dbContext.Customers.Where(x => x.Id == customerId).FirstOrDefault();
+            var result = _context.Customers.Where(x => x.Id == customerId).FirstOrDefault();
             return View(result);
         }
 
         [HttpPost]
-        public IActionResult CustomerStateComment(int customerId, string employeeId, string comment)
+        public IActionResult CustomerStateComment(int customerId, string employeeId, int stateId,int commeunecationTypeId)
         {
-            using (var dbcontext = new ApplicationDbContext())
+            var newRecord = new CustomerCommentstbl();
+            var maxOperationId = _context.CustomerCommentstbls.Where(x => x.CustomerId == customerId && x.StateId == stateId && x.TypeOfCommunicationId == commeunecationTypeId).Count();
+            if(maxOperationId != 0)
             {
-                if(comment=="done" || comment== "noAnswer")
-                {
-                    var customer = dbcontext.Customers.Where(x => x.Id == customerId).FirstOrDefault();
-                    if (comment == "done")
-                        customer.CustomerState = "متفاعل";
-                    else
-                        customer.CustomerState = "لم يرد";
-                    dbcontext.Customers.Update(customer);
-                    dbcontext.SaveChanges();
-                }
-                else
-                {
-                    var currentDate = DateTime.Now;
-                    var employeeID = dbcontext.Users.Where(x => x.Id == Convert.ToString(employeeId)).Select(x => x.Id).FirstOrDefault();
-                    var maxId = 0;
-                    var maxIdResult = dbcontext.CustomerStateDescriptions;
-                    if (maxIdResult.Count() == 0)
-                    {
-                        maxId = 1;
-                    }
-                    else
-                    {
-                        maxId = (maxIdResult.Max(x => x.Id) + 1);
-                    }
-
-
-
-                    var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-                    string constr = configuration.GetConnectionString("DefaultConnection");
-                    SqlConnection con = new SqlConnection(constr);
-
-
-                    string s1 = $"insert into CustomerStateDescriptions values(@maxId,@custId,@comment,@createAt,@empId)";
-                    SqlCommand cmd = new SqlCommand(s1, con);
-
-                    SqlParameter param1 = new SqlParameter();
-                    param1.ParameterName = "@maxId";
-                    param1.Value = maxId;
-                    param1.SqlDbType = SqlDbType.Int;
-
-                    SqlParameter param2 = new SqlParameter();
-                    param2.ParameterName = "@custId";
-                    param2.Value = Convert.ToInt32(customerId);
-                    param2.SqlDbType = SqlDbType.Int;
-
-                    SqlParameter param3 = new SqlParameter();
-                    param3.ParameterName = "@comment";
-                    param3.Value = comment;
-                    param3.SqlDbType = SqlDbType.NVarChar;
-
-                    SqlParameter param4 = new SqlParameter();
-                    param4.ParameterName = "@createAt";
-                    param4.Value = currentDate;
-                    param4.SqlDbType = SqlDbType.DateTime2;
-
-                    SqlParameter param5 = new SqlParameter();
-                    param5.ParameterName = "@empId";
-                    param5.Value = Convert.ToString(employeeId);
-                    param5.SqlDbType = SqlDbType.NVarChar;
-
-                    cmd.Parameters.Add(param1);
-                    cmd.Parameters.Add(param2);
-                    cmd.Parameters.Add(param3);
-                    cmd.Parameters.Add(param4);
-                    cmd.Parameters.Add(param5);
-
-                    con.Open();
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-
-                    var result = dbcontext.CustomerStateDescriptions.Where(x => x.CustomerId == customerId && (x.CommentText == "تم التواصل عن طريق المكالمات" || x.CommentText == "تم التواصل عن طريق الايميل" || x.CommentText == "تم التواصل عن طريق الواتس اب")).ToList();
-                    if (result.Count >= 3)
-                    {
-                        var customer = dbcontext.Customers.Where(x => x.Id == customerId).FirstOrDefault();
-                        if (customer != null)
-                        {
-                            if (customer.CustomerState == "جديد")
-                            {
-                                customer.CustomerState = "لم يرد";
-                                dbcontext.SaveChanges();
-                            }
-                        }
-
-                    }
-                }
-                
-                return View(dbcontext.Customers.Where(x => x.Id == customerId).FirstOrDefault());
+                newRecord.Id=maxOperationId+1;
             }
+            else
+            {
+                newRecord.Id = 1;
+            }
+            newRecord.CustomerId = customerId;
+            newRecord.EmployeeId=employeeId;
+            newRecord.StateId = stateId;
+            newRecord.TypeOfCommunicationId=commeunecationTypeId;
+            newRecord.date = DateTime.Now.ToString();
+
+            _context.CustomerCommentstbls.Add(newRecord);
+            _context.SaveChanges();
+            var customer = _context.Customers.Where(x => x.Id == customerId).FirstOrDefault();
+            return View(customer);
 
         }
 
         public List<Project> GetAllProjects()
         {
-            using (var dbContext = new ApplicationDbContext())
-            {
-                var allProjects = dbContext.Projects.OrderBy(x => x.Id).AsNoTracking().ToList();
-                return allProjects;
-            }
+            
+            var allProjects = _context.Projects.OrderBy(x => x.Id).AsNoTracking().ToList();
+            return allProjects;
+            
         }
 
         public List<CustomerStateDescription> GetAllCustomerStateDescription()
         {
-            using (var dbContext = new ApplicationDbContext())
-            {
-                var allCustomerStateDescription = dbContext.CustomerStateDescriptions.OrderBy(x => x.Id).AsNoTracking().ToList();
-                return allCustomerStateDescription;
-            }
+            
+            var allCustomerStateDescription = _context.CustomerStateDescriptions.OrderBy(x => x.Id).AsNoTracking().ToList();
+            return allCustomerStateDescription;
+            
         }
 
         public List<Customer> GetAllCustomer()
         {
-            using (var dbContext = new ApplicationDbContext())
+            
+            if (User.IsInRole("Admin"))
             {
-                if (User.IsInRole("Admin"))
-                {
-                    var allCustomer = dbContext.Customers.OrderBy(x => x.CreatedAt).AsNoTracking().ToList();
-                    return allCustomer;
-                }
-                else
-                {
-                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var allCustomer = _context.Customers.OrderBy(x => x.CreatedAt).AsNoTracking().ToList();
+                return allCustomer;
+            }
+            else
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
                   
 
-                    var allCustomer = dbContext.Customers.Where(x => x.FollowBy == userId).OrderBy(x => x.CreatedAt).AsNoTracking().ToList();
-                    return allCustomer;
-                }
-
+                var allCustomer = _context.Customers.Where(x => x.FollowBy == userId).OrderBy(x => x.CreatedAt).AsNoTracking().ToList();
+                return allCustomer;
             }
+
+            
         }
 
         public JsonResult GetAllCustomerWithKeyWord(string text)
@@ -749,7 +662,7 @@ namespace AlwasataNew.Controllers
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                var result = dbContext.Users.Where(x => x.Id == userId).Select(x => new { FName = x.FirstName, LName = x.LastName }).FirstOrDefault();
+                var result = _context.Users.Where(x => x.Id == userId).Select(x => new { FName = x.FirstName, LName = x.LastName }).FirstOrDefault();
 
                 string EmployeeName = result.FName + " " + result.LName;
 

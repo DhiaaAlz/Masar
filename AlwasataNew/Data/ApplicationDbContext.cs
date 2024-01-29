@@ -67,7 +67,7 @@ namespace AlwasataNew.Data
             builder.Entity<CustomerStateTbl>().HasKey(x => new { x.CustomerId, x.StateId });
 
             //customer commentstbl
-            builder.Entity<CustomerCommentstbl>().HasKey(x => new { x.CustomerId,x.Id});
+            builder.Entity<CustomerCommentstbl>().HasKey(x => new { x.CustomerId,x.Id,x.StateId,x.TypeOfCommunicationId});
 
         }
 
