@@ -69,6 +69,8 @@ namespace AlwasataNew.Data
             //customer commentstbl
             builder.Entity<CustomerCommentstbl>().HasKey(x => new { x.CustomerId,x.Id,x.StateId,x.TypeOfCommunicationId});
 
+            //Remind Customer
+            
         }
 
         public DbSet<Customer> Customers { get; set; }
@@ -78,6 +80,7 @@ namespace AlwasataNew.Data
         public DbSet<CustomerStateDescriptionTbl>  customerStateDescriptionTbl { get; set; }
         public DbSet<CustomerStateTbl>  customerStateTbl { get; set; }
         public DbSet<CustomerCommentstbl> CustomerCommentstbls { get; set; }
+        public DbSet<RemindCustomer> RemindCustomers { get; set; }
 
     }
 }

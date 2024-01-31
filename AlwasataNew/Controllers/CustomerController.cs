@@ -437,10 +437,11 @@ namespace AlwasataNew.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            
+                
                 var customer = _context.Customers.Where(x => x.Id == model.Id).FirstOrDefault();
                 var prjId = model.ProjectId;
                 var project = _context.Projects.Where(x => x.Id == model.ProjectId).FirstOrDefault();
+
                 if (customer == null || project == null)
                     NotFound();
 
@@ -547,10 +548,56 @@ namespace AlwasataNew.Controllers
             
         }
 
+
+        [HttpPost]
+        public IActionResult DateWasSent(int customerId)
+        {
+            var customer = _context.Customers.Where(x=>x.Id==customerId).FirstOrDefault();
+            customer.CustomerState = "تم ارسال البيانات";
+            _context.Customers.Update(customer);
+            _context.SaveChanges();
+
+            return RedirectToAction("CustomerStateComment", new { customerId});
+        }
+            [HttpPost]
+        public IActionResult RememberComment(DateTime date,string content,int customerId,string EmployeeId)
+        {
+            var newRecord = new RemindCustomer();
+            var IfFound = _context.RemindCustomers.Where(x => x.CustomerId == customerId).FirstOrDefault();
+            string messageDone = "";
+            if(IfFound!=null)
+            {
+                string message = "يوجد تذكير لهذا العميل من قبل !";
+                return RedirectToAction("ErrorPage", new { message });
+            }
+            else
+            {
+                newRecord.Content = content;
+                newRecord.CustomerId = customerId;
+                newRecord.EmployeeId = EmployeeId;
+                newRecord.Date = date.ToString();
+                _context.RemindCustomers.Add(newRecord);
+                _context.SaveChanges();
+                messageDone = "تم اضافة تذكير خاص بهذا العميل";
+            }
+
+            return RedirectToAction("CustomerStateComment", new {customerId ,messageDone});
+        }
+
+
+        public IActionResult ErrorPage(string message)
+        {
+            ViewBag.message = message;
+            return View();
+        }
         [HttpGet]
-        public IActionResult CustomerStateComment(int customerId)
+        public IActionResult CustomerStateComment(int customerId,string? messageDone)
         {
             var result = _context.Customers.Where(x => x.Id == customerId).FirstOrDefault();
+            if(messageDone!="")
+            {
+                ViewBag.RemindDone = messageDone;
+            }
             return View(result);
         }
 
@@ -572,9 +619,27 @@ namespace AlwasataNew.Controllers
             newRecord.StateId = stateId;
             newRecord.TypeOfCommunicationId=commeunecationTypeId;
             newRecord.date = DateTime.Now.ToString();
-
             _context.CustomerCommentstbls.Add(newRecord);
             _context.SaveChanges();
+
+            if(newRecord.StateId == 1)
+            {
+               var result = _context.CustomerCommentstbls.Where(x=>x.CustomerId==newRecord.CustomerId && x.TypeOfCommunicationId==newRecord.TypeOfCommunicationId&x.StateId==0).ToList();
+                _context.CustomerCommentstbls.RemoveRange(result);
+                _context.SaveChanges();
+            }
+
+            if(newRecord.StateId == 0 && newRecord.TypeOfCommunicationId==1)
+            {
+                var getCountPhoneNoAnswer = _context.CustomerCommentstbls.Where(x => x.CustomerId == newRecord.CustomerId && x.TypeOfCommunicationId == 1 && x.StateId == 0).Count();
+                if(getCountPhoneNoAnswer == 3)
+                {
+                    var customerResult = _context.Customers.Where(x=>x.Id==newRecord.CustomerId).FirstOrDefault();
+                    customerResult.CustomerState = "لم يرد";
+                    _context.Customers.Update(customerResult);
+                    _context.SaveChanges();
+                }
+            }
             var customer = _context.Customers.Where(x => x.Id == customerId).FirstOrDefault();
             return View(customer);
 
@@ -582,18 +647,14 @@ namespace AlwasataNew.Controllers
 
         public List<Project> GetAllProjects()
         {
-            
             var allProjects = _context.Projects.OrderBy(x => x.Id).AsNoTracking().ToList();
             return allProjects;
-            
         }
 
         public List<CustomerStateDescription> GetAllCustomerStateDescription()
         {
-            
             var allCustomerStateDescription = _context.CustomerStateDescriptions.OrderBy(x => x.Id).AsNoTracking().ToList();
             return allCustomerStateDescription;
-            
         }
 
         public List<Customer> GetAllCustomer()
@@ -607,9 +668,6 @@ namespace AlwasataNew.Controllers
             else
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-                  
-
                 var allCustomer = _context.Customers.Where(x => x.FollowBy == userId).OrderBy(x => x.CreatedAt).AsNoTracking().ToList();
                 return allCustomer;
             }

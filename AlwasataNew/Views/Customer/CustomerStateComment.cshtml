@@ -7,6 +7,7 @@
 *@
 
 <style>
+
     .allComments {
         display: flex;
         justify-content: center;
@@ -87,14 +88,14 @@
     }
 
     .alert-box {
-        background: #000;
+        background: #FFF;
         padding: 15px;
         border-radius: 30px;
         display: none;
     }
 
     #content-n::placeholder {
-        color: #FFF !important;
+        color: black !important;
     }
 </style>
 
@@ -103,13 +104,13 @@
     var customer = _context.Customers.Where(x=>x.Id==Model.Id).FirstOrDefault();
     var customerCommentsTbl = _context.CustomerCommentstbls.Where(x => x.CustomerId == customer.Id).ToList();
 
-    var PhoneDoneCount = customerCommentsTbl.Where(x => x.StateId == 1 & x.TypeOfCommunicationId == 1).Count();
-    var WhatsDoneCount = customerCommentsTbl.Where(x => x.StateId == 1 & x.TypeOfCommunicationId == 2).Count();
-    var MailDoneCount = customerCommentsTbl.Where(x => x.StateId == 1 & x.TypeOfCommunicationId == 3).Count();
+    var PhoneDoneCount = customerCommentsTbl.Where(x => x.StateId == 1 & x.TypeOfCommunicationId == 1).ToList();
+    var WhatsDoneCount = customerCommentsTbl.Where(x => x.StateId == 1 & x.TypeOfCommunicationId == 2).ToList();
+    var MailDoneCount = customerCommentsTbl.Where(x => x.StateId == 1 & x.TypeOfCommunicationId == 3).ToList();
 
-    var PhoneNotAnswerCount = customerCommentsTbl.Where(x => x.StateId == 0 & x.TypeOfCommunicationId == 1).Count();
-    var WhatsNotAnswerCount = customerCommentsTbl.Where(x => x.StateId == 0 & x.TypeOfCommunicationId == 2).Count();
-    var MailNotAnswerCount = customerCommentsTbl.Where(x => x.StateId == 0 & x.TypeOfCommunicationId == 3).Count();
+    var PhoneNotAnswerCount = customerCommentsTbl.Where(x => x.StateId == 0 & x.TypeOfCommunicationId == 1).ToList();
+    var WhatsNotAnswerCount = customerCommentsTbl.Where(x => x.StateId == 0 & x.TypeOfCommunicationId == 2).ToList();
+    var MailNotAnswerCount = customerCommentsTbl.Where(x => x.StateId == 0 & x.TypeOfCommunicationId == 3).ToList();
 
 }
 
@@ -120,18 +121,26 @@
         @{
             if (customer.Type == "فرد")
             {
-                <h4 style="margin-top:20px;text-align:center">اسم العميل : <span style="color:darkgreen">@customer.CustomerName</span></h4>
+                    <h4 style="margin-top:20px;text-align:center">اسم العميل : <span style="color:darkgreen">@customer.CustomerName</span></h4>
                 //<h4 style="margin-top:20px;text-align:center">رقم العميل : <span style="color:darkgreen">@customer.Phone</span></h4>
             }
             else
             {
-                <h4 style="margin-top:20px;text-align:center">اسم الشركة : <span style="color:darkgreen">@customer.CompanyName</span></h4>
-                <h4 style="margin-top:20px;text-align:center">اسم الموظف : <span style="color:darkgreen">@customer.EmployeeName</span></h4>
+                    <h4 style="margin-top:20px;text-align:center">اسم الشركة : <span style="color:darkgreen">@customer.CompanyName</span></h4>
+                    <h4 style="margin-top:20px;text-align:center">اسم الموظف : <span style="color:darkgreen">@customer.EmployeeName</span></h4>
             }
         }
 
 
         <hr />
+        <div class="row">
+            @if (ViewBag.RemindDone!=null)
+            {
+                <div class="col-md-12" id="RemindDone" style="display:block">
+                    <h3 style="color:darkgreen;text-align:center;border:1px solid green;padding:10px;border-radius:10px;">@ViewBag.RemindDone</h3>
+                </div>
+            }
+        </div>
         @{
             var whatsLink = "https://wa.me/" + customer.Phone + "";
             var mailLink = "mailto:" + customer.Email + "";
@@ -139,9 +148,165 @@
         }
 
         <div style="display:flex;justify-content:center;align-items:center;gap:20px;flex-direction: column;width: 100%!important;" class="mb-5 mt-5">
-            <div style="display:flex;justify-content:center;align-items:center;gap:10px;" class=""><span class="status s-danger">لم يرد 1 مرة بتاريخ (01/25/2024 - 10:28)</span><button type="submit" class="btn btn-success transparent-success" style="font-size:13px" id="donePhone">تم الرد <i class="fa-solid fa-check"></i></button> <button type="submit" class="btn btn-danger transparent-danger" style="font-size:13px" id="noAnswerPhone">لم يرد  <i class="fa-regular fa-circle-xmark" disabled></i></button><a href="@phoneLink" style="color:cadetblue" class="comBtn"><i class="fa-solid fa-phone"></i></a>  <span style="color:darkgreen">@customer.Phone</span></div>
-            <div style="display:flex;justify-content:center;align-items:center;gap:10px;" class=""><span class="status s-success">تم الرد بتاريخ (01/25/2024 - 10:28)</span><button type="submit" class="btn btn-success transparent-success" style="font-size:13px" id="doneWhats">تم الرد <i class="fa-solid fa-check"></i></button> <button type="submit" class="btn btn-danger transparent-danger" style="font-size:13px" id="noAnswerWhats">لم يرد  <i class="fa-regular fa-circle-xmark" disabled></i></button><a href="@whatsLink" style="color:green" class="comBtn"><i class="fa-brands fa-whatsapp"></i></a>  <span style="color:darkgreen">@customer.Phone</span></div>
-            <div style="display:flex;justify-content:center;align-items:center;gap:10px;" class=""><span class="status s-danger">لم يرد 3 مرة بتاريخ (01/30/2024 - 10:28)</span><button type="submit" class="btn btn-success transparent-success" style="font-size:13px" id="doneMail">تم الرد <i class="fa-solid fa-check"></i></button> <button type="submit" class="btn btn-danger transparent-danger" style="font-size:13px" id="noAnswerMail">لم يرد  <i class="fa-regular fa-circle-xmark" disabled></i></button><a href="@mailLink" style="padding:10px" class="comBtn"><i class="fa-regular fa-envelope"></i></a>   <span style="color:darkgreen">@customer.Email</span></div>
+
+            <div style="display:flex;justify-content:center;align-items:center;gap:10px;position:relative" class="">
+                @if(PhoneNotAnswerCount.Count > 0)
+                {
+
+                    <span class="status s-danger" style="position:absolute;top:-25px">لم يرد @PhoneNotAnswerCount.Count مرة بتاريخ (@PhoneNotAnswerCount.Select(x => x.date).LastOrDefault())</span>
+                    if (PhoneNotAnswerCount.Count>=3)
+                    {
+                        <button type="submit" class="btn btn-danger transparent-danger" style="font-size:13px" id="noAnswerPhone" disabled>لم يرد  <i class="fa-regular fa-circle-xmark" disabled></i></button>
+                    }
+                    else
+                    {
+                        if(PhoneDoneCount.Count==0)
+                        {
+                            <button type="submit" class="btn btn-danger transparent-danger" style="font-size:13px" id="noAnswerPhone">لم يرد  <i class="fa-regular fa-circle-xmark" disabled></i></button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-danger transparent-danger" style="font-size:13px;display:none" id="noAnswerPhone" disabled>لم يرد  <i class="fa-regular fa-circle-xmark" disabled></i></button>
+                        }
+                    }
+                }
+                else
+                {
+                    if (PhoneDoneCount.Count == 0)
+                    {
+                        <button type="submit" class="btn btn-danger transparent-danger" style="font-size:13px" id="noAnswerPhone">لم يرد  <i class="fa-regular fa-circle-xmark" disabled></i></button>
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-danger transparent-danger" style="font-size:13px;display:none" id="noAnswerPhone" disabled>لم يرد  <i class="fa-regular fa-circle-xmark" disabled></i></button>
+
+                    }
+
+                }
+
+                @if (PhoneDoneCount.Count != 0)
+                {
+                    <span class="status s-success" style="position:absolute;top:-25px">تم الرد بتاريخ (@PhoneDoneCount.Select(x => x.date).LastOrDefault())</span>
+                    <button type="submit" class="btn btn-success transparent-success" style="font-size:13px" id="donePhone" disabled>تم الرد <i class="fa-solid fa-check"></i></button>
+                }
+                else
+                {
+                    if (PhoneNotAnswerCount.Count >= 3)
+                    {
+                        <button type="submit" class="btn btn-success transparent-success" style="font-size:13px" id="donePhone" disabled>تم الرد <i class="fa-solid fa-check"></i></button>
+
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-success transparent-success" style="font-size:13px" id="donePhone">تم الرد <i class="fa-solid fa-check"></i></button>
+
+                    }
+                }
+
+                <a href="@phoneLink" style="color:cadetblue" class="comBtn"><i class="fa-solid fa-phone"></i></a>  <span style="color:darkgreen">@customer.Phone</span>
+            </div>
+
+            <div style="display:flex;justify-content:center;align-items:center;gap:10px;position:relative" class="">
+                @if (WhatsNotAnswerCount.Count > 0)
+                {
+                    <span class="status s-danger" style="position:absolute;top:-25px">لم يرد @WhatsNotAnswerCount.Count مرة بتاريخ (@WhatsNotAnswerCount.Select(x => x.date).LastOrDefault())</span>
+                    if (WhatsNotAnswerCount.Count >= 3)
+                    {
+                        <button type="submit" class="btn btn-danger transparent-danger" style="font-size:13px" id="noAnswerWhats" disabled>لم يرد  <i class="fa-regular fa-circle-xmark" disabled></i></button>
+                    }
+                    else
+                    {
+                        if (WhatsDoneCount.Count == 0)
+                        {
+                            <button type="submit" class="btn btn-danger transparent-danger" style="font-size:13px" id="noAnswerWhats">لم يرد  <i class="fa-regular fa-circle-xmark" disabled></i></button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-danger transparent-danger" style="font-size:13px;display:none" id="noAnswerWhats" disabled>لم يرد  <i class="fa-regular fa-circle-xmark" disabled></i></button>
+
+                        }
+                    }
+                }
+                else
+                {
+                    if (WhatsDoneCount.Count == 0)
+                    {
+                        <button type="submit" class="btn btn-danger transparent-danger" style="font-size:13px" id="noAnswerWhats">لم يرد  <i class="fa-regular fa-circle-xmark" disabled></i></button>
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-danger transparent-danger" style="font-size:13px;display:none" id="noAnswerWhats" disabled>لم يرد  <i class="fa-regular fa-circle-xmark" disabled></i></button>
+
+                    }
+
+                }
+
+                @if (WhatsDoneCount.Count != 0)
+                {
+                    <span class="status s-success" style="position:absolute;top:-25px">تم الرد بتاريخ (@WhatsDoneCount.Select(x => x.date).LastOrDefault())</span>
+                    <button type="submit" class="btn btn-success transparent-success" style="font-size:13px" id="doneWhats" disabled>تم الرد <i class="fa-solid fa-check"></i></button>
+                }
+                else
+                {
+                    if (WhatsNotAnswerCount.Count >= 3)
+                    {
+                        <button type="submit" class="btn btn-success transparent-success" style="font-size:13px" id="doneWhats" disabled>تم الرد <i class="fa-solid fa-check"></i></button>
+
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-success transparent-success" style="font-size:13px" id="doneWhats">تم الرد <i class="fa-solid fa-check"></i></button>
+
+                    }
+                }
+                <a href="@whatsLink" style="color:green" class="comBtn"><i class="fa-brands fa-whatsapp"></i></a>  <span style="color:darkgreen">@customer.Phone</span>
+            </div>
+            <div style="display:flex;justify-content:center;align-items:center;gap:10px;position:relative" class="">
+                @if (MailNotAnswerCount.Count > 0)
+                {
+                    <span class="status s-danger" style="position:absolute;top:-25px">لم يرد @MailNotAnswerCount.Count مرة بتاريخ (@MailNotAnswerCount.Select(x => x.date).LastOrDefault())</span>
+                    if (MailNotAnswerCount.Count >= 3)
+                    {
+                        <button type="submit" class="btn btn-danger transparent-danger" style="font-size:13px" id="noAnswerMail" disabled>لم يرد  <i class="fa-regular fa-circle-xmark" disabled></i></button>
+                    }
+                    else
+                    {
+                        if (MailDoneCount.Count == 0)
+                        {
+                            <button type="submit" class="btn btn-danger transparent-danger" style="font-size:13px" id="noAnswerMail">لم يرد  <i class="fa-regular fa-circle-xmark" disabled></i></button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-danger transparent-danger" style="font-size:13px;display:none" id="noAnswerMail" disabled>لم يرد  <i class="fa-regular fa-circle-xmark" disabled></i></button>
+                        }
+                    }
+                }
+                else
+                {
+                    if (MailDoneCount.Count == 0)
+                    {
+                        <button type="submit" class="btn btn-danger transparent-danger" style="font-size:13px" id="noAnswerMail">لم يرد  <i class="fa-regular fa-circle-xmark" disabled></i></button>
+                    }
+                }
+
+                @if (MailDoneCount.Count != 0)
+                {
+                    <span class="status s-success" style="position:absolute;top:-25px">تم الرد بتاريخ (@MailDoneCount.Select(x => x.date).LastOrDefault())</span>
+                    <button type="submit" class="btn btn-success transparent-success" style="font-size:13px" id="doneMail" disabled>تم الرد <i class="fa-solid fa-check"></i></button>
+                }
+                else
+                {
+                    if (MailNotAnswerCount.Count >= 3)
+                    {
+                        <button type="submit" class="btn btn-success transparent-success" style="font-size:13px" id="doneMail" disabled>تم الرد <i class="fa-solid fa-check"></i></button>
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-success transparent-success" style="font-size:13px" id="doneMail">تم الرد <i class="fa-solid fa-check"></i></button>
+                    }
+                }
+                <a href="@mailLink" style="padding:10px" class="comBtn"><i class="fa-regular fa-envelope"></i></a>   <span style="color:darkgreen">@customer.Email</span>
+            </div>
         </div>
 
         <h3 style="text-align:center">اكتب تعليقاً لحالة هذا العميل</h3>
@@ -158,24 +323,28 @@
 
 
         <textarea name="comment" style="padding: 10px;border-radius: 6px;direction:rtl!important;" id="comment">
-
+            
         </textarea>
-
+        
         @*<button class="btn btn-primary" type="submit">حسناً</button>  *@
         @*<button id="emailBtn" type="submit" class="btn btn-primary" style="background-color:#128C7E;margin-top:15px;"><i class="fa-regular fa-envelope fa-2x"></i>تم التواصل عن طريق الايميل  </button>
         <button id="whatsAppBtn" type="submit" class="btn btn-primary" style="background-color:#25D366"><i class="fa-brands fa-whatsapp fa-2x"></i>تم التواصل عن طريق الواتس اب</button>
         <button id="callsBtn" type="submit" class="btn btn-primary" style="background-color:#075E54"> <i class="fa-solid fa-phone fa-2x"></i>تم التواصل عن طريق المكالمات</button>*@
-
+            
         <div style="display:flex;justify-content:center;align-items:center;gap:20px;margin-top:15px;">
             <button type="submit" class="btn btn-success" style="font-size:20px" id="done">متابعة <i class="fa-solid fa-check"></i></button>
-            <button type="submit" class="btn btn-danger" style="font-size:20px" id="noAnswer">تم ارسال البيانات للعميل  <i class="fa-regular fa-circle-xmark" disabled></i></button>
+            
 
             <a class="btn" style="font-size:20px;background: #efb429d9;border-color: #efb429d9;" onclick="toggleAlert()"> تذكير  <i class="fa-regular fa-circle-xmark"></i> </a>
         </div>
 
     </form>
+    <form asp-action="DateWasSent" style="text-align:center">
+        <input type="hidden" name="customerId" value="@customer.Id" />
+        <button type="submit" class="btn btn-danger" style="font-size:20px" id="noAnswer">تم ارسال البيانات للعميل  <i class="fa-regular fa-circle-xmark" disabled></i></button>
 
-    <form>
+    </form>
+    <form asp-action="RememberComment" method="post">
 
         <script>
 
@@ -193,30 +362,30 @@
 
         <div class="alert-box" id="alert-box">
 
-            <h4 class="text-center" style="color:#FFF;">تذكير</h4>
-
+            <h4 class="text-center" style="color:black;">تذكير</h4>
+                
             <div class="row">
 
                 <div class="col-6">
                     <div class="form-group">
-                        <input type="date" value="" name="" class="form-control" style="direction: rtl;color: #FFF;" />
+                        <input type="date" value="" name="date" class="form-control" style="direction: rtl;color: black;" />
                     </div>
                 </div>
-
+                <input type="hidden" value="@customer.Id" name="customerId" />
+                <input type="hidden" value="@userId" name="EmployeeId" />
                 <div class="col-6">
                     <div class="form-group">
-                        <input type="text" value="" name="" id="content-n" placeholder="المحتوى؟" class="form-control" style="direction: rtl;color: #FFF;" />
+                        <input type="text" value="" name="content" id="content-n" placeholder="المحتوى؟" class="form-control" style="direction: rtl;color: black;" />
                     </div>
                 </div>
-
             </div>
-
+               
             <div class="row">
                 <div class="col-12">
                     <button class="btn btn-primary mt-2" style="width: 100%;" type="submit">حسناً</button>
                 </div>
             </div>
-
+                
         </div>
 
     </form>
@@ -225,18 +394,18 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    @{                       
+                @{                       
                         <span class="comment">
                             <span style="color:darkred;text-align:center">لا يوجد تعليقات<i class="fa-solid fa-comment-slash"></i></span>
                         </span>
-                    }
+                }
 
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script src="./lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
 
     document.getElementById("donePhone").addEventListener("click", function () {
@@ -270,6 +439,9 @@
         document.getElementById("stateIdInput").value = '0';
     });
 
+    if ($("#RemindDone").css("display")=="block") {
+        $("#RemindDone").fadeOut(3000);
+    }
     // document.getElementById("callsBtn").addEventListener("click", function () {
     //     document.getElementById("comment").value = 'تم التواصل عن طريق المكالمات';
     // });
