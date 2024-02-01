@@ -1,9 +1,34 @@
 ﻿@using AlwasataNew.Data
 @model List<Customer>
+@inject ApplicationDbContext _context;
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    var count = Model.Count;
+    var AllCustomer = Model.Count;
+    var countOfCustomerNotAnswer = new List<Customer>();
+    var countOfCustomerSendData = new List<Customer>();
+    var allCustomerForTable = new List<Customer>();
+    if(count!=0)
+    {
+        if ((Model.Select(x => x.CustomerState).FirstOrDefault() == "جديد") || (Model.Select(x => x.CustomerState).FirstOrDefault() == "لم يرد") || (Model.Select(x => x.CustomerState).FirstOrDefault() == "تم ارسال البيانات"))
+        {
+            countOfCustomerNotAnswer = Model.Where(x => x.CustomerState == "لم يرد").ToList();
+            countOfCustomerSendData = Model.Where(x => x.CustomerState == "تم ارسال البيانات").ToList();
+            foreach(var item in Model)
+            {
+                if (item.CustomerState == "جديد")
+                {
+                    allCustomerForTable.Add(item);
+                }
+            }
+        }
+        else
+        {
+            allCustomerForTable = Model;
+        }
+    }
 }
 <style>
     .table {
@@ -11,11 +36,11 @@
         width: 100% !important;
     }
 
-        .table thead th {
-            position: sticky !important;
-            top: 0 !important;
-            background-color: #5d87ff;
-        }
+    .table thead th {
+        position: sticky !important;
+        top: 0 !important;
+        background-color: #5d87ff;
+    }
 </style>
 <div class="container-fluid">
     <div class="container-fluid">
@@ -26,7 +51,7 @@
 
                     <div class="col-md-12">
                         <div class="card">
-                            <h3 style="margin-top:20px;">عدد العملاء : <span style="font-weight:bold;color:darkred;margin:10px;" id="customerCount">@Model.Count()</span></h3>
+                            <h3 style="margin-top:20px;">عدد العملاء : <span style="font-weight:bold;color:darkred;margin:10px;" id="customerCount">@AllCustomer</span></h3>
                           
                             
                             <div class="tableDiv">
@@ -42,7 +67,6 @@
                                                 <th>رقم الهاتف</th>
                                                 <th>الايميل</th>
                                                 <th>نوع العميل</th>
-                                                <th>حالة العميل</th>
                                                 <th>الموظف المتابع له</th>
                                                 <th>تم انشائه بواسطة</th>
                                                 <th>العمليات</th>
@@ -52,7 +76,7 @@
                                             @{
                                                 int i = 0;
                                             }
-                                            @foreach (var customer in Model)
+                                            @foreach (var customer in allCustomerForTable)
                                             {
 
                                                 <tr>
@@ -92,26 +116,7 @@
                                                             <a href="mailto: @customer.Email">@customer.Email</a>
                                                     </td>
                                                     <td>@customer.Type</td>
-                                                    <td>
-                                                        @if (customer.CustomerState == "متفاعل")
-                                                        {
-                                                            <a asp-controller="Customer" asp-action="CustomerStateComment" asp-route-customerId="@customer.Id" class="customerSta">
-                                                                <span style="position:relative;color:darkgreen;font-weight:bold">جديد <span class="addComm">اضف تعليقاً</span></span>
-                                                            </a>
-                                                        }
-                                                        else if (customer.CustomerState == "جديد")
-                                                        {
-                                                            <a asp-controller="Customer" asp-action="CustomerStateComment" asp-route-customerId="@customer.Id" class="customerSta">
-                                                                <span style="position:relative;color:black;font-weight:bold">@customer.CustomerState <span class="addComm">اضف تعليقاً</span></span>
-                                                            </a>
-                                                        }
-                                                        else
-                                                        {
-                                                            <a asp-controller="Customer" asp-action="CustomerStateComment" asp-route-customerId="@customer.Id" class="customerSta">
-                                                                <span style="position:relative;color:red;font-weight:bold">جديد<span class="addComm">اضف تعليقاً</span></span>
-                                                            </a>
-                                                        }
-                                                    </td>
+                                                   
                                                          
                                                     <td>
                                                         @if (customer.FollowBy == null)
@@ -128,18 +133,123 @@
                                                     <td>
                                                         @customer.CreatedBy     
                                                     </td>
-                                                    <td> <a class="btn btn-outline-primary" asp-controller="Customer" asp-action="EditInformation" asp-route-Id="@customer.Id">تعديل المعلومات </a></td>
+                                                    <td>
+                                                        <a class="btn btn-outline-info" asp-controller="Customer" asp-action="CustomerStateComment" asp-route-customerId="@customer.Id"> <i class="fa-regular fa-comment"></i> اترك تعليقاً</a>
+                                                        <a class="btn btn-outline-primary" asp-controller="Customer" asp-action="EditInformation" asp-route-Id="@customer.Id">تعديل المعلومات </a></td>
                                                 </tr>
                                             }
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
+                            @if(count!=0)
+                            {
+                                if ((Model.Select(x => x.CustomerState).FirstOrDefault() == "جديد") || (Model.Select(x => x.CustomerState).FirstOrDefault() == "لم يرد") || (Model.Select(x => x.CustomerState).FirstOrDefault() == "تم ارسال البيانات"))
+                                {
+                                    <div style="padding:10px;border:1px solid burlywood;border-radius:10px">
+                                        <div style="margin-bottom:10px;">
+                                            <h4 style="text-align:center;padding:10px;margin:10px">حالات العميل التابعة لمرحلة جديد</h4>
+                                            <input type="hidden" id="employeeId" value="@Model.Select(x=>x.FollowBy).FirstOrDefault()" />
+                                            <a class="btn btn-outline-danger" style="width:150px" onclick="getCustomerByStateNotAnswer()">لم يرد<br /><span style="padding:10px;text-align:center">@countOfCustomerNotAnswer.Count</span></a>
+                                            <a class="btn btn-outline-success" style="width:150px" onclick="getCustomerByStateSendData()">تم ارسال البيانات<br /><span style="padding:10px;text-align:center;">@countOfCustomerSendData.Count</span></a>
+                                        </div>
+                                        <div class="tableDiv externalTbl">
+
+                                            <div class="table-responsive" style="max-height:525px;">
+                                                <table class="table table-striped text-center">
+                                                    <thead>
+                                                        <tr class="bg-primary text-white mt-4">
+
+                                                            <th>اسم العميل</th>
+                                                            <th>تم انشائه بتاريخ</th>
+                                                            <th>اسم الشركة</th>
+                                                            <th>رقم الهاتف</th>
+                                                            <th>الايميل</th>
+                                                            <th>نوع العميل</th>
+                                                            <th>العمليات</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="externalTableBody">
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                  </div>
+                                }
+                            }
+
+                           
+
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    function getCustomerByStateNotAnswer() {
+        var employeeId = $("#employeeId").val();
+        var state = "لم يرد";
+        $.get("getCustomerByState", { followBy: employeeId, state: state }, function (data) {
+
+            $("#externalTableBody").empty();
+
+            for (let i = 0; i < data.length; i++) {
+                $("#externalTableBody").append(
+                    "<tr><td>" + data[i].customerName + "</td><td>" + data[i].createdAt + "</td><td>" + data[i].companyName + "</td>"
+                    + "<td>"
+                    + data[i].phone
+                    +"</td>"
+                    + "<td>"
+                    + data[i].email
+                    + "</td>"
+                    + "<td>"
+                    + data[i].type
+                    + "</td>"
+                    + "<td>"
+                    + "<a class= 'btn btn-outline-info' href='../Customer/CustomerStateComment?customerId=" + data[i].id + "'> <i class='fa-regular fa-comment'></i> اترك تعليقاً</a>  <a class='btn btn-outline-primary' href='../Customer/EditInformation/" + data[i].id + "'> تعديل المعلومات </a>"
+
+
+                    + "</td>"
+                    + "</tr>");
+            }
+        });
+    }
+
+    function getCustomerByStateSendData() {
+        var employeeId = $("#employeeId").val();
+        var state = "تم ارسال البيانات";
+
+        $.get("getCustomerByState", { followBy: employeeId, state: state }, function (data) {
+
+            $("#externalTableBody").empty();
+
+            for (let i = 0; i < data.length; i++) {
+                $("#externalTableBody").append(
+                    "<tr><td>" + data[i].customerName + "</td><td>" + data[i].createdAt + "</td><td>" + data[i].companyName + "</td>"
+                    + "<td>"
+                    + data[i].phone
+                    +"</td>"
+                    + "<td>"
+                    +data[i].email
+                    + "</td>"
+                    + "<td>"
+                    + data[i].type
+                    + "</td>"
+                    + "<td>" 
+                    + "<a class= 'btn btn-outline-info' href='../Customer/CustomerStateComment?customerId=" + data[i].id + "'> <i class='fa-regular fa-comment'></i> اترك تعليقاً</a>  <a class='btn btn-outline-primary' href='../Customer/EditInformation/" + data[i].id + "'> تعديل المعلومات </a>"
+
+
+                    + "</td>"
+                    + "</tr>");
+            }
+        });
+    }
+
+
+ 
+
+
+</script>

@@ -322,23 +322,31 @@
         <input type="hidden" name="commeunecationTypeId" id="commeunecationTypeId" />
 
 
-        <textarea name="comment" style="padding: 10px;border-radius: 6px;direction:rtl!important;" id="comment">
-            
-        </textarea>
+        
         
         @*<button class="btn btn-primary" type="submit">حسناً</button>  *@
         @*<button id="emailBtn" type="submit" class="btn btn-primary" style="background-color:#128C7E;margin-top:15px;"><i class="fa-regular fa-envelope fa-2x"></i>تم التواصل عن طريق الايميل  </button>
         <button id="whatsAppBtn" type="submit" class="btn btn-primary" style="background-color:#25D366"><i class="fa-brands fa-whatsapp fa-2x"></i>تم التواصل عن طريق الواتس اب</button>
         <button id="callsBtn" type="submit" class="btn btn-primary" style="background-color:#075E54"> <i class="fa-solid fa-phone fa-2x"></i>تم التواصل عن طريق المكالمات</button>*@
             
-        <div style="display:flex;justify-content:center;align-items:center;gap:20px;margin-top:15px;">
-            <button type="submit" class="btn btn-success" style="font-size:20px" id="done">متابعة <i class="fa-solid fa-check"></i></button>
-            
-
-            <a class="btn" style="font-size:20px;background: #efb429d9;border-color: #efb429d9;" onclick="toggleAlert()"> تذكير  <i class="fa-regular fa-circle-xmark"></i> </a>
-        </div>
+        
 
     </form>
+        
+    <form asp-action="ChangeCustomerToFollowState" method="post" style="display:flex;justify-content:center;align-items:center;gap:20px;margin-top:15px;flex-direction:column">
+            <textarea name="comment" style="padding: 10px;border-radius: 6px;direction:rtl!important;width:380px" id="comment">
+
+            </textarea>
+            <input type="hidden" name="employeeId" value="@userId" />
+            <input type="hidden" name="customerId" value="@customer.Id" />
+            <button type="submit" class="btn btn-success" style="font-size:20px" id="done">متابعة <i class="fa-solid fa-check"></i></button>
+            <a class="btn" style="font-size:20px;background: #efb429d9;border-color: #efb429d9;margin-bottom:20px;" onclick="toggleAlert()"> تذكير  <i class="fa-regular fa-circle-xmark"></i> </a>
+
+    </form>
+        
+        
+        
+        
     <form asp-action="DateWasSent" style="text-align:center">
         <input type="hidden" name="customerId" value="@customer.Id" />
         <button type="submit" class="btn btn-danger" style="font-size:20px" id="noAnswer">تم ارسال البيانات للعميل  <i class="fa-regular fa-circle-xmark" disabled></i></button>

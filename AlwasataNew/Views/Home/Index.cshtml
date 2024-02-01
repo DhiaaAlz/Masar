@@ -107,8 +107,8 @@
                                         <div class="divState col-md-3">
                                             <span>جديد</span>
                                             <i class="fa-solid fa-square-arrow-up-right" style="color:darkgoldenrod"></i>
-                                        <a asp-action="ShowListOfCustomerByState" asp-controller="Customer" asp-route-state="جديد" asp-route-empId="@empId">
-                                            <div class="StateCount">@dbContext.Customers.Where(x => x.FollowBy == empId && (x.CustomerState == "جديد" || x.CustomerState == "رد" || x.CustomerState == "لم يرد" || x.CustomerState == "متفاعل" || x.CustomerState == "غير متفاعل")).Count()</div>
+                                            <a asp-action="ShowListOfCustomerByState" asp-controller="Customer" asp-route-state="جديد" asp-route-empId="@empId">
+                                            <div class="StateCount">@dbContext.Customers.Where(x => x.FollowBy == empId && (x.CustomerState == "جديد" || x.CustomerState == "رد" || x.CustomerState == "لم يرد" || x.CustomerState == "متفاعل" || x.CustomerState == "غير متفاعل" || x.CustomerState=="تم ارسال البيانات")).Count()</div>
                                             </a>
                                             
                                         </div>

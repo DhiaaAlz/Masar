@@ -30,7 +30,7 @@ namespace AlwasataNew.Controllers
         [HttpGet]
         public IActionResult AddNew(string? viewbag)
         {
-            if(viewbag != null)
+            if (viewbag != null)
             {
                 ViewBag.done = "تم اضافة عميل جديد";
             }
@@ -51,160 +51,160 @@ namespace AlwasataNew.Controllers
             }
 
 
-           
 
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                var resultt = _context.Users.Where(x => x.Id == userId).Select(x => new { FName = x.FirstName, LName = x.LastName }).FirstOrDefault();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                string EmployeeName = resultt.FName + " " + resultt.LName;
+            var resultt = _context.Users.Where(x => x.Id == userId).Select(x => new { FName = x.FirstName, LName = x.LastName }).FirstOrDefault();
 
-                var CustomerResult = _context.Customers.Where(x => x.Phone == model.Phone).FirstOrDefault();
+            string EmployeeName = resultt.FName + " " + resultt.LName;
 
-                if (CustomerResult != null)
+            var CustomerResult = _context.Customers.Where(x => x.Phone == model.Phone).FirstOrDefault();
+
+            if (CustomerResult != null)
+            {
+                var maxProjectId = 0;
+                var result = _context.Projects.Count();
+
+                if (result != 0)
                 {
-                    var maxProjectId = 0;
-                    var result = _context.Projects.Count();
-
-                    if (result != 0)
-                    {
-                        maxProjectId = _context.Projects.Max(x => x.Id) + 1;
-                    }
-                    else
-                    {
-                        maxProjectId++;
-                    }
-
-                    if (model.ProjectType != "مباني سكنية")
-                    {
-                        model.DescriptionType = "";
-                    }
-                    if (model.ProjectModel == "اخرى")
-                    {
-                        model.ProjectModel = model.OtherProjectModel;
-                    }
-                    var project = new Project
-                    {
-                        Id = maxProjectId,
-                        Description = model.Description,
-                        Type = model.ProjectType,
-                        DescriptionType = model.DescriptionType,
-                        LandAreaByM = model.LandAreaByM,
-                        Model = model.ProjectModel,
-                        CustomerId = CustomerResult.Id,
-                        IsDone = false,
-
-                    };
-                    _context.Projects.Add(project);
-                    _context.SaveChanges();
+                    maxProjectId = _context.Projects.Max(x => x.Id) + 1;
                 }
-
                 else
                 {
-                    
-                    var maxCustomerId = 0;
-                    var result = _context.Customers.Count();
+                    maxProjectId++;
+                }
 
-                    if (result != 0)
-                    {
-                        maxCustomerId = _context.Customers.Max(x => x.Id) + 1;
-                    }
-                    else
-                    {
-                        maxCustomerId++;
-                    }
+                if (model.ProjectType != "مباني سكنية")
+                {
+                    model.DescriptionType = "";
+                }
+                if (model.ProjectModel == "اخرى")
+                {
+                    model.ProjectModel = model.OtherProjectModel;
+                }
+                var project = new Project
+                {
+                    Id = maxProjectId,
+                    Description = model.Description,
+                    Type = model.ProjectType,
+                    DescriptionType = model.DescriptionType,
+                    LandAreaByM = model.LandAreaByM,
+                    Model = model.ProjectModel,
+                    CustomerId = CustomerResult.Id,
+                    IsDone = false,
 
-                    var clientSource = "";
+                };
+                _context.Projects.Add(project);
+                _context.SaveChanges();
+            }
 
-                    if(model.CustomerComeFrom=="داتا" || model.CustomerComeFrom=="اخر")
-                    {
-                        clientSource = model.ClientSourceDataAndOther;
-                    }
-                    else if (model.CustomerComeFrom == "مسوقين")
-                    {
-                        clientSource = model.ClientSourceMarkter;
-                    }
-                    else if(model.CustomerComeFrom=="موظفين")
-                    {
-                        clientSource = model.ClientSourceEmployee;
-                    }
-                    else if (model.CustomerComeFrom == "حملات التسويق")
-                    {
-                        clientSource = model.MarktingCampaigns;
-                    }
-                    else
-                    {
-                        clientSource = "لايوجد";
-                    }
-                    if(model.FollowByEmployee == "اختر")
-                    {
-                        model.FollowByEmployee = null;
-                    }
-                    var customer = new Customer
-                    {
-                        Id = maxCustomerId,
-                        CustomerName = model.CustomerName,
-                        Email = model.Email,
-                        Phone = model.Phone,
-                        CustomerDescription = model.CustomerDescription,
-                        Type = model.Type,
-                        CreatedBy = EmployeeName,
-                        CreatedAt = DateTime.Now.ToString(),
-                        CompanyName = model.CompnayName,
-                        EmployeeName = model.EmployeeName,
-                        FollowBy=model.FollowByEmployee,
-                        CustomerComeFrom=model.CustomerComeFrom,
-                        ClientSource=clientSource,
-                        JobTitle = model.JobTitle,
-                        CustomerState = "جديد",
-                        CompanySite = model.CompanySite,
-                        Address = model.Address,
-                        CompanyId = model.ForCompany
-                    };
+            else
+            {
 
-                    _context.Customers.Add(customer);
-                    _context.SaveChanges();
+                var maxCustomerId = 0;
+                var result = _context.Customers.Count();
 
-                    var maxProjectId = 0;
+                if (result != 0)
+                {
+                    maxCustomerId = _context.Customers.Max(x => x.Id) + 1;
+                }
+                else
+                {
+                    maxCustomerId++;
+                }
 
-                    var resultProject = _context.Projects.Count();
+                var clientSource = "";
 
-                    if (resultProject != 0)
-                    {
-                        maxProjectId = _context.Projects.Max(x => x.Id) + 1;
-                    }
-                    else
-                    {
-                        maxProjectId++;
-                    }
-                    if (model.ProjectType != "مباني سكنية")
-                    {
-                        model.DescriptionType = "";
-                    }
-                    if (model.ProjectModel == "اخرى")
-                    {
-                        model.ProjectModel = model.OtherProjectModel;
-                    }
+                if (model.CustomerComeFrom == "داتا" || model.CustomerComeFrom == "اخر")
+                {
+                    clientSource = model.ClientSourceDataAndOther;
+                }
+                else if (model.CustomerComeFrom == "مسوقين")
+                {
+                    clientSource = model.ClientSourceMarkter;
+                }
+                else if (model.CustomerComeFrom == "موظفين")
+                {
+                    clientSource = model.ClientSourceEmployee;
+                }
+                else if (model.CustomerComeFrom == "حملات التسويق")
+                {
+                    clientSource = model.MarktingCampaigns;
+                }
+                else
+                {
+                    clientSource = "لايوجد";
+                }
+                if (model.FollowByEmployee == "اختر")
+                {
+                    model.FollowByEmployee = null;
+                }
+                var customer = new Customer
+                {
+                    Id = maxCustomerId,
+                    CustomerName = model.CustomerName,
+                    Email = model.Email,
+                    Phone = model.Phone,
+                    CustomerDescription = model.CustomerDescription,
+                    Type = model.Type,
+                    CreatedBy = EmployeeName,
+                    CreatedAt = DateTime.Now.ToString(),
+                    CompanyName = model.CompnayName,
+                    EmployeeName = model.EmployeeName,
+                    FollowBy = model.FollowByEmployee,
+                    CustomerComeFrom = model.CustomerComeFrom,
+                    ClientSource = clientSource,
+                    JobTitle = model.JobTitle,
+                    CustomerState = "جديد",
+                    CompanySite = model.CompanySite,
+                    Address = model.Address,
+                    CompanyId = model.ForCompany
+                };
 
-                    var testModeel = model;
-                    Project p1 = new Project();
-                    p1.Id = maxProjectId;
-                    p1.Description = model.Description;
-                    p1.Type = model.ProjectType;
-                    p1.DescriptionType = model.DescriptionType;
-                    p1.LandAreaByM = model.LandAreaByM;
-                    p1.Model = model.ProjectModel;
-                    p1.CustomerId = maxCustomerId;
-                    p1.IsDone = false;
+                _context.Customers.Add(customer);
+                _context.SaveChanges();
 
-                    _context.Projects.Add(p1);
-                    _context.SaveChanges();
-                
+                var maxProjectId = 0;
+
+                var resultProject = _context.Projects.Count();
+
+                if (resultProject != 0)
+                {
+                    maxProjectId = _context.Projects.Max(x => x.Id) + 1;
+                }
+                else
+                {
+                    maxProjectId++;
+                }
+                if (model.ProjectType != "مباني سكنية")
+                {
+                    model.DescriptionType = "";
+                }
+                if (model.ProjectModel == "اخرى")
+                {
+                    model.ProjectModel = model.OtherProjectModel;
+                }
+
+                var testModeel = model;
+                Project p1 = new Project();
+                p1.Id = maxProjectId;
+                p1.Description = model.Description;
+                p1.Type = model.ProjectType;
+                p1.DescriptionType = model.DescriptionType;
+                p1.LandAreaByM = model.LandAreaByM;
+                p1.Model = model.ProjectModel;
+                p1.CustomerId = maxCustomerId;
+                p1.IsDone = false;
+
+                _context.Projects.Add(p1);
+                _context.SaveChanges();
+
 
             }
 
             ViewBag.done = "تم اضافة عميل جديد";
-            return RedirectToAction("AddNew","Customer",new{ viewbag="تم اضافة عميل جديد"});
+            return RedirectToAction("AddNew", "Customer", new { viewbag = "تم اضافة عميل جديد" });
         }
 
 
@@ -214,12 +214,16 @@ namespace AlwasataNew.Controllers
             var result = new List<Customer>();
             if (state == "جديد")
             {
-                result = _context.Customers.Where(x => x.FollowBy == empId && (x.CustomerState == state || x.CustomerState == "متفاعل" || x.CustomerState == "غير متفاعل")).ToList();
+                result = _context.Customers.Where(x => x.FollowBy == empId && (x.CustomerState == state || x.CustomerState == "لم يرد" || x.CustomerState == "تم ارسال البيانات")).ToList();
+
             }
             else
             {
                 result = _context.Customers.Where(x => x.FollowBy == empId && x.CustomerState == state).ToList();
+
             }
+
+
             return View(result);
         }
 
@@ -227,61 +231,62 @@ namespace AlwasataNew.Controllers
         [HttpGet]
         public async Task<IActionResult> ManageCustomer()
         {
-            
 
-                if (User.IsInRole("Admin"))
+
+            if (User.IsInRole("Admin"))
+            {
+
+                var Customer = await _context.Customers.Select(customer => new CustomerViewModel
                 {
-
-                    var Customer = await _context.Customers.Select(customer => new CustomerViewModel
-                    {
-                        Id = customer.Id,
-                        Name = customer.CustomerName,
-                        Phone = customer.Phone,
-                        Type = customer.Type,
-                        Email = customer.Email,
-                        CompanyName = customer.CompanyName,
-                        EmployeeName = customer.EmployeeName,
-                        FollowBy = customer.FollowBy,
-                        CustomerState = customer.CustomerState,
-                        CustomerComeFrom=customer.CustomerComeFrom
-                        ,ClientSource=customer.ClientSource,
-                        ProjectsId = _context.Projects.Where(x => x.CustomerId == customer.Id).Select(x => x.Id).ToList(),
-                    }).AsNoTracking().ToListAsync();
+                    Id = customer.Id,
+                    Name = customer.CustomerName,
+                    Phone = customer.Phone,
+                    Type = customer.Type,
+                    Email = customer.Email,
+                    CompanyName = customer.CompanyName,
+                    EmployeeName = customer.EmployeeName,
+                    FollowBy = customer.FollowBy,
+                    CustomerState = customer.CustomerState,
+                    CustomerComeFrom = customer.CustomerComeFrom
+                    ,
+                    ClientSource = customer.ClientSource,
+                    ProjectsId = _context.Projects.Where(x => x.CustomerId == customer.Id).Select(x => x.Id).ToList(),
+                }).AsNoTracking().ToListAsync();
 
 
-                    return View(Customer);
-                }
-                else
+                return View(Customer);
+            }
+            else
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+
+
+
+
+
+                var Customer = await _context.Customers.Select(customer => new CustomerViewModel
                 {
-                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-                    
-
-                    
-
-
-                    var Customer = await _context.Customers.Select(customer => new CustomerViewModel
-                    {
-                        Id = customer.Id,
-                        Name = customer.CustomerName,
-                        Phone = customer.Phone,
-                        Type = customer.Type,
-                        Email = customer.Email,
-                        CompanyName = customer.CompanyName,
-                        EmployeeName = customer.EmployeeName,
-                        FollowBy = customer.FollowBy,
-                        CustomerState = customer.CustomerState,
-                        CustomerComeFrom = customer.CustomerComeFrom
-                        ,
-                        ClientSource = customer.ClientSource,
-                        ProjectsId = _context.Projects.Where(x => x.CustomerId == customer.Id).Select(x => x.Id).ToList(),
-                    }).Where(x => x.FollowBy == userId).ToListAsync();
+                    Id = customer.Id,
+                    Name = customer.CustomerName,
+                    Phone = customer.Phone,
+                    Type = customer.Type,
+                    Email = customer.Email,
+                    CompanyName = customer.CompanyName,
+                    EmployeeName = customer.EmployeeName,
+                    FollowBy = customer.FollowBy,
+                    CustomerState = customer.CustomerState,
+                    CustomerComeFrom = customer.CustomerComeFrom
+                    ,
+                    ClientSource = customer.ClientSource,
+                    ProjectsId = _context.Projects.Where(x => x.CustomerId == customer.Id).Select(x => x.Id).ToList(),
+                }).Where(x => x.FollowBy == userId).ToListAsync();
 
 
-                    return View(Customer);
-                }
+                return View(Customer);
+            }
 
-            
+
 
         }
 
@@ -291,7 +296,7 @@ namespace AlwasataNew.Controllers
         {
             if (User.IsInRole("Admin"))
             {
-                
+
                 var CustomerProjects = _context.Projects
                     .Select(project => new ShowProjectsViewModel
                     {
@@ -305,7 +310,7 @@ namespace AlwasataNew.Controllers
                     })
                     .Where(x => x.CustomerId == Id).AsNoTracking().ToList();
                 return View(CustomerProjects);
-                
+
 
             }
             else
@@ -344,7 +349,7 @@ namespace AlwasataNew.Controllers
                 {
                     return View(CustomerProjects = new List<ShowProjectsViewModel>());
                 }
-                
+
             }
 
         }
@@ -356,18 +361,18 @@ namespace AlwasataNew.Controllers
 
             if (User.IsInRole("Admin"))
             {
-               
+
 
                 var result = _context.Projects.Where(x => x.Id == projId).AsNoTracking().FirstOrDefault();
                 return View(result);
-                
+
             }
             else
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
 
-                
+
                 var custId = _context.Customers.Where(x => x.FollowBy == userId).Select(x => x.Id).ToList();
 
                 int IfThisProjToEmp = 0;
@@ -387,7 +392,7 @@ namespace AlwasataNew.Controllers
                     return View();
                 }
 
-                
+
             }
 
         }
@@ -395,39 +400,39 @@ namespace AlwasataNew.Controllers
         [HttpGet]
         public IActionResult EditInformation(int Id)
         {
-            
-                var customer = _context.Customers.AsNoTracking().FirstOrDefault(x => x.Id == Id);
-                var project = _context.Projects.AsNoTracking().FirstOrDefault(x => x.CustomerId == Id);
-                if (customer == null || project == null)
-                {
-                    return View(new EditCustomerViewModel());
-                }
-                var CustomerInformation = new EditCustomerViewModel
-                {
-                    Id = customer.Id,
-                    CustomerName = customer.CustomerName,
-                    Email = customer.Email,
-                    Phone = customer.Phone,
-                    Type = customer.Type,
-                    CreatedBy = customer.CreatedBy,
-                    CompanyName = customer.CompanyName,
-                    EmployeeName = customer.EmployeeName,
-                    JobTitle = customer.JobTitle,
-                    CustomerState = customer.CustomerState,
-                    CompanySite = customer.CompanySite,
-                    Address = customer.Address,
-                    ProjectId = project.Id,
-                    ProjectDescription = project.Description,
-                    ProjectType = project.Type,
-                    DescriptionProjectType = project.DescriptionType,
-                    ProjectLandArea = project.LandAreaByM,
-                    ProjectModel = project.Model,
-                    FollowBy = customer.FollowBy,
-                    ForCompany = customer.CompanyId,
-                };
 
-                return View(CustomerInformation);
-            
+            var customer = _context.Customers.AsNoTracking().FirstOrDefault(x => x.Id == Id);
+            var project = _context.Projects.AsNoTracking().FirstOrDefault(x => x.CustomerId == Id);
+            if (customer == null || project == null)
+            {
+                return View(new EditCustomerViewModel());
+            }
+            var CustomerInformation = new EditCustomerViewModel
+            {
+                Id = customer.Id,
+                CustomerName = customer.CustomerName,
+                Email = customer.Email,
+                Phone = customer.Phone,
+                Type = customer.Type,
+                CreatedBy = customer.CreatedBy,
+                CompanyName = customer.CompanyName,
+                EmployeeName = customer.EmployeeName,
+                JobTitle = customer.JobTitle,
+                CustomerState = customer.CustomerState,
+                CompanySite = customer.CompanySite,
+                Address = customer.Address,
+                ProjectId = project.Id,
+                ProjectDescription = project.Description,
+                ProjectType = project.Type,
+                DescriptionProjectType = project.DescriptionType,
+                ProjectLandArea = project.LandAreaByM,
+                ProjectModel = project.Model,
+                FollowBy = customer.FollowBy,
+                ForCompany = customer.CompanyId,
+            };
+
+            return View(CustomerInformation);
+
 
         }
 
@@ -437,135 +442,163 @@ namespace AlwasataNew.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-                
-                var customer = _context.Customers.Where(x => x.Id == model.Id).FirstOrDefault();
-                var prjId = model.ProjectId;
-                var project = _context.Projects.Where(x => x.Id == model.ProjectId).FirstOrDefault();
 
-                if (customer == null || project == null)
-                    NotFound();
+            var customer = _context.Customers.Where(x => x.Id == model.Id).FirstOrDefault();
+            var prjId = model.ProjectId;
+            var project = _context.Projects.Where(x => x.Id == model.ProjectId).FirstOrDefault();
+
+            if (customer == null || project == null)
+                NotFound();
 
 
-                if (model.Email != null)
+            if (model.Email != null)
+            {
+                var CustomerWithSameEmail = _context.Customers.FirstOrDefault(x => x.Email == model.Email);
+
+
+                if (CustomerWithSameEmail != null && CustomerWithSameEmail.Id != model.Id)
                 {
-                    var CustomerWithSameEmail = _context.Customers.FirstOrDefault(x => x.Email == model.Email);
-
-
-                    if (CustomerWithSameEmail != null && CustomerWithSameEmail.Id != model.Id)
-                    {
-                        ModelState.AddModelError("Email", "هذا الايميل مستخدم من قبل عميل اخر !");
-                        return View(model);
-                    }
-                }
-
-
-
-                var CustomerWithSamePhone = _context.Customers.FirstOrDefault(x => x.Phone == model.Phone);
-
-                if (CustomerWithSamePhone != null && CustomerWithSamePhone.Id != model.Id)
-                {
-                    ModelState.AddModelError("Phone", "هذا رقم الهاتف مستخدم من قبل عميل اخر!");
+                    ModelState.AddModelError("Email", "هذا الايميل مستخدم من قبل عميل اخر !");
                     return View(model);
                 }
-                var clientSource = "";
+            }
 
-                if (model.CustomerComeFrom == "داتا" || model.CustomerComeFrom == "اخر")
+
+
+            var CustomerWithSamePhone = _context.Customers.FirstOrDefault(x => x.Phone == model.Phone);
+
+            if (CustomerWithSamePhone != null && CustomerWithSamePhone.Id != model.Id)
+            {
+                ModelState.AddModelError("Phone", "هذا رقم الهاتف مستخدم من قبل عميل اخر!");
+                return View(model);
+            }
+            var clientSource = "";
+
+            if (model.CustomerComeFrom == "داتا" || model.CustomerComeFrom == "اخر")
+            {
+                clientSource = model.ClientSourceDataAndOther;
+            }
+            else if (model.CustomerComeFrom == "مسوقين")
+            {
+                clientSource = model.ClientSourceMarkter;
+            }
+            else if (model.CustomerComeFrom == "موظفين")
+            {
+                clientSource = model.ClientSourceEmployee;
+            }
+            else
+            {
+                clientSource = "لايوجد";
+            }
+
+            customer.CustomerName = model.CustomerName;
+            customer.Phone = model.Phone;
+            customer.Email = model.Email;
+            customer.Type = model.Type;
+            customer.CompanyId = _context.Companies.Where(x => x.Id == model.ForCompany).Select(x => x.Id).FirstOrDefault();
+
+
+            customer.CompanyName = model.CompanyName;
+            customer.EmployeeName = model.EmployeeName;
+            customer.JobTitle = model.JobTitle;
+            customer.Address = model.Address;
+            customer.CustomerState = model.CustomerState;
+            customer.CompanyId = model.ForCompany;
+
+            if (model.CustomerComeFrom != null)
+            {
+                customer.CustomerComeFrom = model.CustomerComeFrom;
+                customer.ClientSource = clientSource;
+            }
+
+            //update project
+            project.Description = model.ProjectDescription;
+            project.DescriptionType = model.DescriptionProjectType;
+            project.LandAreaByM = model.ProjectLandArea;
+            project.Type = model.ProjectType;
+            project.Model = model.ProjectModel;
+
+            if (customer.CustomerState == "مكتمل")
+            {
+                project.IsDone = true;
+            }
+
+
+
+            ViewBag.done = "تم التعديل بنجاح";
+
+            if (customer.FollowBy != model.FollowBy && customer.FollowBy == null)
+            {
+                if (model.FollowBy != null)
                 {
-                    clientSource = model.ClientSourceDataAndOther;
+                    customer.FollowBy = model.FollowBy;
                 }
-                else if (model.CustomerComeFrom == "مسوقين")
+                _context.Projects.Update(project);
+                _context.Customers.Update(customer);
+                _context.SaveChanges();
+                return RedirectToAction("Index", "ManageProject");
+            }
+            else
+            {
+                if (model.FollowBy != null)
                 {
-                    clientSource = model.ClientSourceMarkter;
+                    customer.FollowBy = model.FollowBy;
                 }
-                else if (model.CustomerComeFrom == "موظفين")
-                {
-                    clientSource = model.ClientSourceEmployee;
-                }
-                else
-                {
-                    clientSource = "لايوجد";
-                }
+                _context.Projects.Update(project);
+                _context.Customers.Update(customer);
+                _context.SaveChanges();
+                return View(model);
+            }
 
-                customer.CustomerName = model.CustomerName;
-                customer.Phone = model.Phone;
-                customer.Email = model.Email;
-                customer.Type = model.Type;
-                customer.CompanyId = _context.Companies.Where(x => x.Id == model.ForCompany).Select(x => x.Id).FirstOrDefault();
-                
 
-                customer.CompanyName = model.CompanyName;
-                customer.EmployeeName = model.EmployeeName;
-                customer.JobTitle = model.JobTitle;
-                customer.Address = model.Address;
-                customer.CustomerState = model.CustomerState;
-                customer.CompanyId = model.ForCompany;
-
-                if(model.CustomerComeFrom != null)
-                {
-                    customer.CustomerComeFrom = model.CustomerComeFrom;
-                    customer.ClientSource = clientSource;
-                }
-
-                //update project
-                project.Description = model.ProjectDescription;
-                project.DescriptionType = model.DescriptionProjectType;
-                project.LandAreaByM = model.ProjectLandArea;
-                project.Type = model.ProjectType;
-                project.Model = model.ProjectModel;
-
-                if (customer.CustomerState == "مكتمل")
-                {
-                    project.IsDone = true;
-                }
-
-                
-
-                ViewBag.done = "تم التعديل بنجاح";
-
-                if(customer.FollowBy != model.FollowBy && customer.FollowBy==null)
-                {
-                    if (model.FollowBy != null)
-                    {
-                        customer.FollowBy = model.FollowBy;
-                    }
-                    _context.Projects.Update(project);
-                    _context.Customers.Update(customer);
-                    _context.SaveChanges();
-                    return RedirectToAction("Index", "ManageProject");
-                }
-                else
-                {
-                    if (model.FollowBy != null)
-                    {
-                        customer.FollowBy = model.FollowBy;
-                    }
-                    _context.Projects.Update(project);
-                    _context.Customers.Update(customer);
-                    _context.SaveChanges();
-                    return View(model);
-                }
-                
-            
         }
 
+        [HttpPost]
+        public IActionResult ChangeCustomerToFollowState(string employeeId, int customerId, string comment)
+        {
+            var count = _context.CustomerStateDescriptions.Count();
+            int maxId = 1;
+            if (count != 0)
+            {
+                maxId = _context.CustomerStateDescriptions.Max(x => x.Id) + 1;
+            }
+
+            var newRecord = new CustomerStateDescription();
+
+            newRecord.Id = maxId;
+            newRecord.EmployeeId = employeeId;
+            newRecord.CustomerId = customerId;
+            newRecord.CreatedAt = DateTime.Now;
+            newRecord.CommentText = comment;
+
+            _context.CustomerStateDescriptions.Add(newRecord);
+            _context.SaveChanges();
+
+            var customer = _context.Customers.Where(x => x.Id == customerId).FirstOrDefault();
+            customer.CustomerState = "متابعة";
+            _context.Customers.Update(customer);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "Home");
+        }
 
         [HttpPost]
         public IActionResult DateWasSent(int customerId)
         {
-            var customer = _context.Customers.Where(x=>x.Id==customerId).FirstOrDefault();
+            var customer = _context.Customers.Where(x => x.Id == customerId).FirstOrDefault();
             customer.CustomerState = "تم ارسال البيانات";
             _context.Customers.Update(customer);
             _context.SaveChanges();
 
-            return RedirectToAction("CustomerStateComment", new { customerId});
+            return RedirectToAction("CustomerStateComment", new { customerId });
         }
-            [HttpPost]
-        public IActionResult RememberComment(DateTime date,string content,int customerId,string EmployeeId)
+        [HttpPost]
+        public IActionResult RememberComment(DateTime date, string content, int customerId, string EmployeeId)
         {
             var newRecord = new RemindCustomer();
             var IfFound = _context.RemindCustomers.Where(x => x.CustomerId == customerId).FirstOrDefault();
             string messageDone = "";
-            if(IfFound!=null)
+            if (IfFound != null)
             {
                 string message = "يوجد تذكير لهذا العميل من قبل !";
                 return RedirectToAction("ErrorPage", new { message });
@@ -581,7 +614,7 @@ namespace AlwasataNew.Controllers
                 messageDone = "تم اضافة تذكير خاص بهذا العميل";
             }
 
-            return RedirectToAction("CustomerStateComment", new {customerId ,messageDone});
+            return RedirectToAction("CustomerStateComment", new { customerId, messageDone });
         }
 
 
@@ -591,10 +624,10 @@ namespace AlwasataNew.Controllers
             return View();
         }
         [HttpGet]
-        public IActionResult CustomerStateComment(int customerId,string? messageDone)
+        public IActionResult CustomerStateComment(int customerId, string? messageDone)
         {
             var result = _context.Customers.Where(x => x.Id == customerId).FirstOrDefault();
-            if(messageDone!="")
+            if (messageDone != "")
             {
                 ViewBag.RemindDone = messageDone;
             }
@@ -602,39 +635,39 @@ namespace AlwasataNew.Controllers
         }
 
         [HttpPost]
-        public IActionResult CustomerStateComment(int customerId, string employeeId, int stateId,int commeunecationTypeId)
+        public IActionResult CustomerStateComment(int customerId, string employeeId, int stateId, int commeunecationTypeId)
         {
             var newRecord = new CustomerCommentstbl();
             var maxOperationId = _context.CustomerCommentstbls.Where(x => x.CustomerId == customerId && x.StateId == stateId && x.TypeOfCommunicationId == commeunecationTypeId).Count();
-            if(maxOperationId != 0)
+            if (maxOperationId != 0)
             {
-                newRecord.Id=maxOperationId+1;
+                newRecord.Id = maxOperationId + 1;
             }
             else
             {
                 newRecord.Id = 1;
             }
             newRecord.CustomerId = customerId;
-            newRecord.EmployeeId=employeeId;
+            newRecord.EmployeeId = employeeId;
             newRecord.StateId = stateId;
-            newRecord.TypeOfCommunicationId=commeunecationTypeId;
+            newRecord.TypeOfCommunicationId = commeunecationTypeId;
             newRecord.date = DateTime.Now.ToString();
             _context.CustomerCommentstbls.Add(newRecord);
             _context.SaveChanges();
 
-            if(newRecord.StateId == 1)
+            if (newRecord.StateId == 1)
             {
-               var result = _context.CustomerCommentstbls.Where(x=>x.CustomerId==newRecord.CustomerId && x.TypeOfCommunicationId==newRecord.TypeOfCommunicationId&x.StateId==0).ToList();
+                var result = _context.CustomerCommentstbls.Where(x => x.CustomerId == newRecord.CustomerId && x.TypeOfCommunicationId == newRecord.TypeOfCommunicationId & x.StateId == 0).ToList();
                 _context.CustomerCommentstbls.RemoveRange(result);
                 _context.SaveChanges();
             }
 
-            if(newRecord.StateId == 0 && newRecord.TypeOfCommunicationId==1)
+            if (newRecord.StateId == 0 && newRecord.TypeOfCommunicationId == 1)
             {
                 var getCountPhoneNoAnswer = _context.CustomerCommentstbls.Where(x => x.CustomerId == newRecord.CustomerId && x.TypeOfCommunicationId == 1 && x.StateId == 0).Count();
-                if(getCountPhoneNoAnswer == 3)
+                if (getCountPhoneNoAnswer == 3)
                 {
-                    var customerResult = _context.Customers.Where(x=>x.Id==newRecord.CustomerId).FirstOrDefault();
+                    var customerResult = _context.Customers.Where(x => x.Id == newRecord.CustomerId).FirstOrDefault();
                     customerResult.CustomerState = "لم يرد";
                     _context.Customers.Update(customerResult);
                     _context.SaveChanges();
@@ -659,7 +692,7 @@ namespace AlwasataNew.Controllers
 
         public List<Customer> GetAllCustomer()
         {
-            
+
             if (User.IsInRole("Admin"))
             {
                 var allCustomer = _context.Customers.OrderBy(x => x.CreatedAt).AsNoTracking().ToList();
@@ -672,7 +705,7 @@ namespace AlwasataNew.Controllers
                 return allCustomer;
             }
 
-            
+
         }
 
         public JsonResult GetAllCustomerWithKeyWord(string text)
@@ -759,5 +792,12 @@ namespace AlwasataNew.Controllers
             }
         }
 
+        public JsonResult getCustomerByState(string state, string followBy)
+        {
+            var ListCustomer = new List<Customer>();
+            ListCustomer = _context.Customers.Where(x => x.CustomerState == state && x.FollowBy == followBy).ToList();
+
+            return Json(ListCustomer);
+        }
     }
 }
