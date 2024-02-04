@@ -6,13 +6,30 @@
 @model List<string>
 <link rel="stylesheet" href="~/css/site.css" />
 <style>
-   a{
-       color:black;
-       font-weight:bold;
-   }
-   .iconA{
-        color: #615dff;
-   }
+a{
+    color:black;
+    font-weight:bold;
+}
+.iconA{
+    color: #615dff;
+}
+
+.AllCustomers{
+    display:flex;
+    justify-content:space-around;
+    align-items:center
+}
+.Customers{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    flex-direction:column;
+    gap:10px;
+    padding:3px;
+}
 </style>
 
 
@@ -25,6 +42,7 @@
 <div class="container-fluid" style="display:none">
     <!--  Row 1 -->
     <div class="row" style="display:flex;justify-content:center">
+       
         @if (User.IsInRole("Admin"))
         {
             <div class="allInformation col-md-12">
@@ -37,6 +55,26 @@
                 <span class="all">
                     جميع العملاء : <span>@dbContext.Customers.Count()</span>
                 </span>
+            </div>
+            <div class="col-md-12 AllCustomers">
+                <a asp-controller="Report" asp-action="CustomerReports" asp-route-CustomersType="اخرى">
+                    <div class="Customers" style="background-color: #b6ecb659;color: #040;">
+                        <div style ="border:1px solid;border-radius:50%;display:flex;justify-content:center;align-items:center;width:170px;height:170px;flex-direction:column;gap:10px;">
+                            <span style="font-weight:bold">5000</span>
+                            عملاء من مصادر اخرى
+                            <i class="fa-solid fa-mug-hot fa-2x"></i>
+                        </div>
+                    </div>
+                </a>
+                <a asp-controller="Report" asp-action="CustomerReports" asp-route-CustomersType="حملات">
+                    <div class="Customers" style="background-color: #6fb3c85e;color: #9d0000;">
+                        <div style="border:1px solid;border-radius:50%;display:flex;justify-content:center;align-items:center;width:170px;height:170px;flex-direction:column;gap:10px;">
+                            <span style="font-weight:bold">12002</span>
+                            عملاء من الحملات
+                            <i class="fa-solid fa-fire fa-2x"></i>
+                        </div>
+                    </div>
+                </a>
             </div>
             <h2 style="text-align:center;margin:30px auto;">جميع الموظفين</h2>
         }
@@ -55,7 +93,7 @@
                                     <img class="rounded-circle avatar" alt="ProfilePicture" src="~/assets/images/defaultPictureForProfile.jpg" />
                                 }
                             </div>
-                    <span style="margin:15px auto;display:block;font-size:18px;font-weight:bold"> @user.FirstName @user.LastName</span>
+                    <span style="margin:15px auto;display:block;font-size:18px;font-weight:bold">@user.FirstName @user.LastName</span>
                             <span class="empRole">
                                 @{
                                     var result = @dbContext.Roles.Where(x => x.Id == dbContext.UserRoles.Where(x => x.UserId == user.Id).Select(x => x.RoleId).FirstOrDefault()).Select(x => x.Name).FirstOrDefault();
@@ -80,29 +118,6 @@
                                     <div class="custState">
                                         <div class="row" style="display:flex;justify-content:center">
 
-
-                                        @* <div class="divState col-sm-6 col-md-3">
-                                            <span>منتظر</span>
-                                            <i class="fa-solid fa-bars-progress" style="color:#1c52bb"></i>
-                                            <a asp-action="ShowListOfCustomerByState" asp-controller="Customer" asp-route-state="منتظر" asp-route-empName="@empName">
-                                            <div class="StateCount">@dbContext.Customers.Where(x=>x.FollowBy==empName && x.CustomerState=="منتظر").Count()</div>
-                                            </a>
-                                        </div>
-                                        <div class="divState col-sm-6 col-md-3">
-                                            <span>متفاعل</span>
-                                            <i class="fa-solid fa-battery-full" style="color:green"></i>
-                                            <a asp-action="ShowListOfCustomerByState" asp-controller="Customer" asp-route-state="متفاعل" asp-route-empName="@empName">
-                                            <div class="StateCount">@dbContext.Customers.Where(x=>x.FollowBy==empName && x.CustomerState=="متفاعل").Count()</div>
-                                            </a>
-                                        </div>
-
-                                        <div class="divState col-sm-6 col-md-3">
-                                            <span>لم يرد</span>
-                                            <i class="fa-solid fa-phone-slash" style="color:darkred"></i>
-                                            <a asp-action="ShowListOfCustomerByState" asp-controller="Customer" asp-route-state="لم يرد" asp-route-empName="@empName">
-                                            <div class="StateCount">@dbContext.Customers.Where(x=>x.FollowBy==empName && x.CustomerState=="لم يرد").Count()</div>
-                                            </a>
-                                        </div> *@
 
                                         <div class="divState col-md-3">
                                             <span>جديد</span>
