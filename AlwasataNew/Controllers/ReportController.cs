@@ -18,12 +18,30 @@ namespace AlwasataNew.Controllers
             return View();
         }
 
-
-        public IActionResult CustomerReports()
+        [HttpGet]
+        public IActionResult CustomerReports(string? CustomersType)
         {
             using var dbContext = new ApplicationDbContext();
-            var customers = dbContext.Customers.AsNoTracking().ToList();
-            return View(customers);
+            var customers = new List<Customer>();
+            if (CustomersType != null)
+            {
+                if (CustomersType == "حملات")
+                {
+                    customers = dbContext.Customers.Where(x => x.CustomerComeFrom == "Internet" || x.CustomerComeFrom == "حملات التسويق").AsNoTracking().OrderByDescending(x => x.CreatedAt).ToList();
+                }
+                else
+                {
+                    customers = dbContext.Customers.Where(x => x.CustomerComeFrom != "Internet" && x.CustomerComeFrom != "حملات التسويق").AsNoTracking().OrderByDescending(x => x.CreatedAt).ToList();
+                }
+                return View(customers);
+            }
+            else
+            {
+                customers = dbContext.Customers.AsNoTracking().OrderByDescending(x => x.CreatedAt).ToList();
+                return View(customers);
+            }
+
+
         }
 
         public IActionResult EmployeeReports()
@@ -50,15 +68,17 @@ namespace AlwasataNew.Controllers
                 }
                 else
                 {
+
                     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
                     var resultt = dbContext.Users.Where(x => x.Id == userId).Select(x => new { FName = x.FirstName, LName = x.LastName }).FirstOrDefault();
 
                     string EmployeeName = resultt.FName + " " + resultt.LName;
 
-
                     var allCustomer = dbContext.Customers.Where(x => x.FollowBy == EmployeeName).OrderBy(x => x.CreatedAt).AsNoTracking().ToList();
+
                     return allCustomer;
+
                 }
 
             }
@@ -221,7 +241,7 @@ namespace AlwasataNew.Controllers
             return Json(ListCustomer);
         }
 
-        public JsonResult GetAllCustomersBetweenDate(string sDate,string eDate)
+        public JsonResult GetAllCustomersBetweenDate(string sDate, string eDate)
         {
             var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             string constr = configuration.GetConnectionString("DefaultConnection");

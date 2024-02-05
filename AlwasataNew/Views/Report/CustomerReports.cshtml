@@ -50,13 +50,13 @@
                                 </div>
                            </div> *@
                            <div class="tableDiv">
-                                <div class="FilterCustomers" dir="rtl">
+                                @* <div class="FilterCustomers" dir="rtl">
                                     <div>
                                         <span>ابحث عن عميل</span>
                                         <input type="text" id="keyWord" placeholder="ادخل ماتريد البحث عنه" />
                                     </div>
                                     <div class="hint">يتم البحث من خلال الاسم او اسم الشركة او رقم الهاتف او الايميل</div>
-                                </div>
+                                </div> *@
                                 <div class="table-responsive" style="max-height:525px;">
                                     <table class="table table-striped text-center">
                                         <thead>
@@ -66,11 +66,12 @@
                                                 <th>تم انشائه بتاريخ</th>
                                                 <th>اسم الشركة</th>
                                                 <th>رقم الهاتف</th>
-                                                 <th>الايميل</th>
                                                 <th>نوع العميل</th>
                                                 <th>حالة العميل</th>
                                                 <th>الموظف المتابع له</th>
                                                 <th>تم انشائه بواسطة</th>
+                                                <th>العمليات</th>
+                                                
                                             </tr>
                                         </thead>
                                         <tbody id="TableBody">
@@ -108,9 +109,7 @@
                                                         }
                                                     </td>
                                                     <td>@customer.Phone</td>
-                                                    <td>
-                                                        <a href="mailto: @customer.Email">@customer.Email</a>
-                                                    </td>
+                                                    
                                                     <td>@customer.Type</td>
                                                     <td>
                                                         @if (customer.CustomerState == "متفاعل")
@@ -148,6 +147,9 @@
                                                 </td>
                                                     <td>
                                                         @customer.CreatedBy
+                                                    </td>
+                                                    <td>
+                                                        <a class="btn btn-outline-info" asp-controller="Customer" asp-action="CustomerStateComment" asp-route-customerId="@customer.Id"> <i class="fa-regular fa-comment"></i> اترك تعليقاً</a>
                                                     </td>
                                                 </tr>
                                             }
