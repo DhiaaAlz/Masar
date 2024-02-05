@@ -22,8 +22,26 @@ namespace AlwasataNew.Controllers
         public IActionResult CustomerReports(string? CustomersType)
         {
             using var dbContext = new ApplicationDbContext();
-            var customers = dbContext.Customers.AsNoTracking().ToList();
-            return View(customers);
+            var customers = new List<Customer>();
+            if(CustomersType != null)
+            {
+                if (CustomersType == "حملات")
+                {
+                    customers = dbContext.Customers.Where(x => x.CustomerComeFrom == "Internet" || x.CustomerComeFrom == "حملات التسويق").AsNoTracking().ToList();
+                }
+                else
+                {
+                    customers = dbContext.Customers.Where(x => x.CustomerComeFrom != "Internet" && x.CustomerComeFrom != "حملات التسويق").AsNoTracking().ToList();
+                }
+                return View(customers);
+            }
+            else
+            {
+                customers = dbContext.Customers.AsNoTracking().ToList();
+                return View(customers);
+            }
+           
+            
         }
 
         public IActionResult EmployeeReports()
