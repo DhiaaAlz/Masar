@@ -147,11 +147,36 @@
                                         <i class="fa-regular fa-circle-check" style="color:green"></i>
                                         <a asp-action="ShowListOfCustomerByState" asp-controller="Customer" asp-route-state="تعميد" asp-route-empId="@empId">
                                             <div class="StateCount">@dbContext.Customers.Where(x => x.FollowBy == empId && x.CustomerState == "تعميد").Count()</div>
-                                        </a>
+                                            </a>
+                                        </div>
+                                        
+                                        @* <div class="divState col-sm-6 col-md-3">
+                                            <span>غير متفاعل</span>
+                                            <i class="fa-solid fa-heart-crack" style="color:#d70000"></i>
+                                            <a asp-action="ShowListOfCustomerByState" asp-controller="Customer" asp-route-state="غير متفاعل" asp-route-empName="@empName">
+                                            <div class="StateCount">@dbContext.Customers.Where(x=>x.FollowBy==empName && x.CustomerState=="غير متفاعل").Count()</div>
+                                            </a>
+                                        </div> *@
+
+                                       @*  <div class="divState col-sm-6 col-md-3">
+                                            <span>مكتمل</span>
+                                            <i class="fa-regular fa-circle-check" style="color:green"></i>
+                                            <a asp-action="ShowListOfCustomerByState" asp-controller="Customer" asp-route-state="مكتمل" asp-route-empName="@empName">
+                                            <div class="StateCount">@dbContext.Customers.Where(x=>x.FollowBy==empName && x.CustomerState=="مكتمل").Count()</div>
+                                            </a>
+                                        </div>
+
+                                        <div class="divState col-sm-6 col-md-3">
+                                            <span>مقابلة</span>
+                                            <i class="fa-solid fa-handshake-simple" style="color:gray"></i>
+                                            <a asp-action="ShowListOfCustomerByState" asp-controller="Customer" asp-route-state="مقابلة" asp-route-empName="@empName">
+                                            <div class="StateCount">@dbContext.Customers.Where(x=>x.FollowBy==empName && x.CustomerState=="مقابلة").Count()</div>
+                                            </a>
+                                        </div> *@
+                                        
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
 
                         @if (User.IsInRole("Admin"))
                         {
@@ -187,3 +212,5 @@
         $(".container-fluid").fadeIn(500);
     });
 </script>
+
+
