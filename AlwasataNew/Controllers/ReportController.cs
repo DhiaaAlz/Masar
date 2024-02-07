@@ -13,35 +13,71 @@ namespace AlwasataNew.Controllers
     [Authorize]
     public class ReportController : Controller
     {
+        private readonly ApplicationDbContext _context;
+        public ReportController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
         public IActionResult Index()
         {
             return View();
         }
 
         [HttpGet]
-        public IActionResult CustomerReports(string? CustomersType)
+        public IActionResult CustomerReports()
         {
-            using var dbContext = new ApplicationDbContext();
-            var customers = new List<Customer>();
-            if(CustomersType != null)
+            var customers=_context.Customers.AsNoTracking().ToList();
+            return View(customers);            
+        }
+
+        public IActionResult CampaignsCustomers(DateTime? date)
+        {
+            var customers=new List<Customer>();
+            if (date!=null)
             {
-                if (CustomersType == "حملات")
+                var newDate = Convert.ToDateTime(date);
+                var list = _context.Customers.Where(x => x.CustomerComeFrom == "Internet" || x.CustomerComeFrom == "حملات التسويق").AsNoTracking().ToList();
+                foreach (var item in list)
                 {
-                    customers = dbContext.Customers.Where(x => x.CustomerComeFrom == "Internet" || x.CustomerComeFrom == "حملات التسويق").AsNoTracking().ToList();
+                    if(Convert.ToDateTime(item.CreatedAt).Month==newDate.Month)
+                    {
+                        customers.Add(item);
+                    }
                 }
-                else
-                {
-                    customers = dbContext.Customers.Where(x => x.CustomerComeFrom != "Internet" && x.CustomerComeFrom != "حملات التسويق").AsNoTracking().ToList();
-                }
-                return View(customers);
+
             }
             else
             {
-                customers = dbContext.Customers.AsNoTracking().ToList();
-                return View(customers);
+                customers = _context.Customers.Where(x => x.CustomerComeFrom == "Internet" || x.CustomerComeFrom == "حملات التسويق").AsNoTracking().ToList();
             }
-           
-            
+            return View(customers);
+        }
+
+        public IActionResult OtherSourcesCustomers(string? customerType)
+        {
+            var customers=new List<Customer>();
+            if (customerType!=null)
+            {
+                if(customerType=="متابعين")
+                {
+                    customers = _context.Customers.Where(x => x.CustomerComeFrom != "Internet" && x.CustomerComeFrom != "حملات التسويق" && x.FollowBy!=null).AsNoTracking().ToList();
+
+                }
+                else
+                {
+                    customers = _context.Customers.Where(x => x.CustomerComeFrom != "Internet" && x.CustomerComeFrom != "حملات التسويق" && x.FollowBy==null).AsNoTracking().ToList();
+
+                }
+
+                return View(customers);
+
+            }
+            else
+            {
+                 customers = _context.Customers.Where(x => x.CustomerComeFrom != "Internet" && x.CustomerComeFrom != "حملات التسويق").AsNoTracking().ToList();
+
+            }
+            return View(customers);
         }
 
         public IActionResult EmployeeReports()

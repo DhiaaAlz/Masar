@@ -429,6 +429,8 @@ namespace AlwasataNew.Controllers
                 ProjectModel = project.Model,
                 FollowBy = customer.FollowBy,
                 ForCompany = customer.CompanyId,
+                SecondEmail=customer.SecondEmail,
+                SecondPhone = customer.SecondPhone,
             };
 
             return View(CustomerInformation);
@@ -472,6 +474,7 @@ namespace AlwasataNew.Controllers
                 ModelState.AddModelError("Phone", "هذا رقم الهاتف مستخدم من قبل عميل اخر!");
                 return View(model);
             }
+
             var clientSource = "";
 
             if (model.CustomerComeFrom == "داتا" || model.CustomerComeFrom == "اخر")
@@ -491,12 +494,14 @@ namespace AlwasataNew.Controllers
                 clientSource = "لايوجد";
             }
 
+
             customer.CustomerName = model.CustomerName;
             customer.Phone = model.Phone;
             customer.Email = model.Email;
             customer.Type = model.Type;
             customer.CompanyId = _context.Companies.Where(x => x.Id == model.ForCompany).Select(x => x.Id).FirstOrDefault();
-
+            customer.SecondPhone = model.SecondPhone;
+            customer.SecondEmail = model.SecondEmail;
 
             customer.CompanyName = model.CompanyName;
             customer.EmployeeName = model.EmployeeName;
@@ -507,9 +512,19 @@ namespace AlwasataNew.Controllers
 
             if (model.CustomerComeFrom != null)
             {
-                customer.CustomerComeFrom = model.CustomerComeFrom;
-                customer.ClientSource = clientSource;
+                if (model.CustomerComeFrom == "اختر")
+                {
+                    customer.CustomerComeFrom = null;
+                    customer.ClientSource = null;
+                }
+                else
+                {
+                    customer.CustomerComeFrom = model.CustomerComeFrom;
+                    customer.ClientSource = clientSource;
+                }
+               
             }
+            
 
             //update project
             project.Description = model.ProjectDescription;
@@ -637,44 +652,58 @@ namespace AlwasataNew.Controllers
         [HttpPost]
         public IActionResult CustomerStateComment(int customerId, string employeeId, int stateId, int commeunecationTypeId)
         {
-            var newRecord = new CustomerCommentstbl();
-            var maxOperationId = _context.CustomerCommentstbls.Where(x => x.CustomerId == customerId && x.StateId == stateId && x.TypeOfCommunicationId == commeunecationTypeId).Count();
-            if (maxOperationId != 0)
+            var customer = _context.Customers.Where(x => x.Id == customerId).FirstOrDefault();
+
+            if (stateId==-1)
             {
-                newRecord.Id = maxOperationId + 1;
+                var result = _context.CustomerCommentstbls.Where(x => x.CustomerId == customerId && x.TypeOfCommunicationId==commeunecationTypeId).ToList();
+                _context.CustomerCommentstbls.RemoveRange(result);
+                _context.SaveChanges();
+                return View(customer);
             }
             else
             {
-                newRecord.Id = 1;
-            }
-            newRecord.CustomerId = customerId;
-            newRecord.EmployeeId = employeeId;
-            newRecord.StateId = stateId;
-            newRecord.TypeOfCommunicationId = commeunecationTypeId;
-            newRecord.date = DateTime.Now.ToString();
-            _context.CustomerCommentstbls.Add(newRecord);
-            _context.SaveChanges();
-
-            if (newRecord.StateId == 1)
-            {
-                var result = _context.CustomerCommentstbls.Where(x => x.CustomerId == newRecord.CustomerId && x.TypeOfCommunicationId == newRecord.TypeOfCommunicationId & x.StateId == 0).ToList();
-                _context.CustomerCommentstbls.RemoveRange(result);
-                _context.SaveChanges();
-            }
-
-            if (newRecord.StateId == 0 && newRecord.TypeOfCommunicationId == 1)
-            {
-                var getCountPhoneNoAnswer = _context.CustomerCommentstbls.Where(x => x.CustomerId == newRecord.CustomerId && x.TypeOfCommunicationId == 1 && x.StateId == 0).Count();
-                if (getCountPhoneNoAnswer == 3)
+                var newRecord = new CustomerCommentstbl();
+                var maxOperationId = _context.CustomerCommentstbls.Where(x => x.CustomerId == customerId && x.StateId == stateId && x.TypeOfCommunicationId == commeunecationTypeId).Count();
+                if (maxOperationId != 0)
                 {
-                    var customerResult = _context.Customers.Where(x => x.Id == newRecord.CustomerId).FirstOrDefault();
-                    customerResult.CustomerState = "لم يرد";
-                    _context.Customers.Update(customerResult);
+                    newRecord.Id = maxOperationId + 1;
+                }
+                else
+                {
+                    newRecord.Id = 1;
+                }
+                newRecord.CustomerId = customerId;
+                newRecord.EmployeeId = employeeId;
+                newRecord.StateId = stateId;
+                newRecord.TypeOfCommunicationId = commeunecationTypeId;
+                newRecord.date = DateTime.Now.ToString();
+                _context.CustomerCommentstbls.Add(newRecord);
+                _context.SaveChanges();
+
+                if (newRecord.StateId == 1)
+                {
+                    var result = _context.CustomerCommentstbls.Where(x => x.CustomerId == newRecord.CustomerId && x.TypeOfCommunicationId == newRecord.TypeOfCommunicationId & x.StateId == 0).ToList();
+                    _context.CustomerCommentstbls.RemoveRange(result);
                     _context.SaveChanges();
                 }
+
+                if (newRecord.StateId == 0 && newRecord.TypeOfCommunicationId == 1)
+                {
+                    var getCountPhoneNoAnswer = _context.CustomerCommentstbls.Where(x => x.CustomerId == newRecord.CustomerId && x.TypeOfCommunicationId == 1 && x.StateId == 0).Count();
+                    if (getCountPhoneNoAnswer == 3)
+                    {
+                        var customerResult = _context.Customers.Where(x => x.Id == newRecord.CustomerId).FirstOrDefault();
+                        customerResult.CustomerState = "لم يرد";
+                        _context.Customers.Update(customerResult);
+                        _context.SaveChanges();
+                    }
+                }
+                
+                return View(customer);
+
             }
-            var customer = _context.Customers.Where(x => x.Id == customerId).FirstOrDefault();
-            return View(customer);
+            
 
         }
 

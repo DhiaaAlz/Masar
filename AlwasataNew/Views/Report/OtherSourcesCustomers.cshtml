@@ -31,69 +31,36 @@
                     <div class="col-md-12">
                         <div class="card">
                             <h3 style="margin-top:20px;">عدد العملاء : <span style="font-weight:bold;color:darkred;margin:10px;" id="customerCount">@Model.Count()</span></h3>
-                           @* <div class="sortButtons">
-                               <button class="btn btn-primary" id="btnBetween">اظهار العملاء بين تاريخين</button>
-                               <button class="btn btn-primary" id="btnYear">اظهار العملاء في هذه السنة</button>
-                               <button class="btn btn-primary" id="btnMonth">اظهار العملاء في هذا الشهر</button>
-                           </div>
-                           <div id="towDate">
-                               <div>
-                                   <span>تاريخ البداية : </span><input type="date" id="startD" style="padding:3px;border-radius:9px;border:1px solid;outline:none"/>
-                               </div>
-                                <div>
-                                   <span>تاريخ النهاية : </span><input type="date" id="endD" style="padding:3px;border-radius:9px;border:1px solid;outline:none" />
-                                </div>
-                                <div>
-                                    <a class="btn btn-primary" id="btnOk" asp-action="CustomerReports" asp-route-sDate="">
-                                        حسناً
-                                    </a>
-                                </div>
-                           </div> *@
-                           <div class="tableDiv">
-                                @* <div class="FilterCustomers" dir="rtl">
-                                    <div>
-                                        <span>ابحث عن عميل</span>
-                                        <input type="text" id="keyWord" placeholder="ادخل ماتريد البحث عنه" />
-                                    </div>
-                                    <div class="hint">يتم البحث من خلال الاسم او اسم الشركة او رقم الهاتف او الايميل</div>
-                                </div> *@
+                            <div class="sortButtons">
+                                <a asp-action="OtherSourcesCustomers" asp-route-customerType="متابعين" class="btn btn-outline-success">العملاء المتابعين</a>
+                                <a asp-action="OtherSourcesCustomers" asp-route-customerType="غير متابعين" class="btn btn-outline-danger">العملاء الغير متابعين</a>
+                            </div>
+                            <div class="tableDiv">
+                               
                                 <div class="table-responsive" style="max-height:525px;">
                                     <table class="table table-striped text-center">
                                         <thead>
                                             <tr class="bg-primary text-white mt-4">
 
-                                                <th></th>
                                                 <th>اسم العميل</th>
                                                 <th>تم انشائه بتاريخ</th>
                                                 <th>اسم الشركة</th>
-                                                <th>رقم الهاتف</th>
                                                 <th>نوع العميل</th>
                                                 <th>حالة العميل</th>
-                                                <th>الموظف المتابع له</th>
-                                                <th>تم انشائه بواسطة</th>
                                                 <th>العمليات</th>
-                                                
+
                                             </tr>
                                         </thead>
                                         <tbody id="TableBody">
-                                            @{int i=0;}
+                                            @{
+                                                int i = 0;
+                                            }
                                             @foreach (var customer in Model)
                                             {
 
                                                 <tr>
+                                                  
                                                     <td>
-                                                        
-                                                        <span>@{i = i + 1;}@i</span>
-                                                    </td>
-                                                    <td>
-                                                       @*  @if (customer.CustomerName == null)
-                                                        {
-                                                            <span>اسم الموظف : @customer.EmployeeName</span>
-                                                        }
-                                                        else
-                                                        {
-                                                            <span>@customer.CustomerName</span>
-                                                        } *@
                                                         <span>@(customer.CustomerName == null ? "لا يوجد" : @customer.CustomerName)</span>
                                                     </td>
                                                     <td>
@@ -109,8 +76,8 @@
                                                             <span>@customer.CompanyName</span>
                                                         }
                                                     </td>
-                                                    <td>@customer.Phone</td>
-                                                    
+                                             
+
                                                     <td>@customer.Type</td>
                                                     <td>
                                                         @if (customer.CustomerState == "متفاعل")
@@ -132,23 +99,8 @@
                                                             </a>
                                                         }
                                                     </td>
-                                                            @*<td>@string.Join(" , ",customer.ProjectsId.ToList())</td> *@
-                                                    <td>
-                                                        @if(customer.FollowBy == null)
-                                                        {
-                                                            <span style="color:darkred;font-weight:bold;">لا يوجد</span>
-                                                        }
-                                                        else
-                                                        {
-                                                            using var dbContext = new ApplicationDbContext();
-                                                            var empName = dbContext.Users.Where(x => x.Id == customer.FollowBy).Select(n => new { n.FirstName, n.LastName }).FirstOrDefault();
-                                                            <span>@empName.FirstName @empName.LastName</span>
-                                                        }
-                                                
-                                                    </td>
-                                                    <td>
-                                                        @customer.CreatedBy
-                                                    </td>
+                                                    
+                                                    
                                                     <td>
                                                         <a class="btn btn-outline-info" asp-controller="Customer" asp-action="CustomerStateComment" asp-route-customerId="@customer.Id"> <i class="fa-regular fa-comment"></i></a>
                                                     </td>
@@ -158,20 +110,9 @@
                                     </table>
                                 </div>
 
-                               @*  <div class="SortCustomers" dir="rtl">
-                                    <div>
-                                        <span> فرز العملاء بحسب الحالة</span>
-                                        <button id="new">جديد</button>
-                                        <button id="notAnswer">لم يرد</button>
-                                        <button id="answer">رد</button>
-                                        <button id="active">متفاعل</button>
-                                        <button id="unActive">غير متفاعل</button>
-                                        <button id="following">متابعة</button>
-                                        <button id="ok">تعميد</button>
-                                    </div>
-                                </div>  *@
+                                
 
-                           </div>
+                            </div>
                         </div>
                     </div>
 
@@ -181,5 +122,5 @@
     </div>
 </div>
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script> 
-<script src="~/assets/js/customerReport.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+@* <script src="~/assets/js/customerReport.js"></script> *@

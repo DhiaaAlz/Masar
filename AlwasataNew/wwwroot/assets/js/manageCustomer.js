@@ -31,7 +31,7 @@ $("#keyWord").keyup(() => {
                 + "<td>"
                 + "<a class='btn btn-primary' href='../Customer/ShowProjects/" + data[i].id + "'>تفاصيل المشاريع </a> "
                 + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + data[i].id + "'>تعديل معلومات العميل</a> "
-                + "<a class='btn btn-outline-success' href='mailto: " + data[i].email + "'>مراسلة العميل</a>"
+
                 + "<a class='btn btn-outline-info' href='../Customer/CustomerStateComment?customerId=" + data[i].id + "'><i class='fa-regular fa-comment'></i> اترك تعليقاً</a>"
                 + "</td>"
                 + "</tr>");
@@ -63,7 +63,7 @@ $("#comp-1").click(() => {
                     + "<td>"
                     + "<a class='btn btn-primary' href='../Customer/ShowProjects/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
                     + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
-                    + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
+
                     + "</td>"
                     + "</tr>"
                 );
@@ -91,7 +91,7 @@ $("#comp-2").click(() => {
                     + "<td>"
                     + "<a class='btn btn-primary' href='../Customer/ShowProjects/" + AllCustomer[i].id + "'> تفاصيل المشاريع </a> "
                     + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
-                    + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
+
                     + "</td>"
                     + "</tr>");
         }
@@ -117,7 +117,7 @@ $("#comp-3").click(() => {
                 + "<td>"
                 + "<a class='btn btn-primary' href='../Customer/ShowProjects/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
                 + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
-                + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
+
                 + "</td>"
                 + "</tr>");
         }
@@ -142,7 +142,7 @@ $("#comp-4").click(() => {
                 + "<td>"
                 + "<a class='btn btn-primary' href='../Customer/ShowProjects/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
                 + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
-                + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
+
                 + "</td>"
                 + "</tr>");
         }
@@ -150,27 +150,6 @@ $("#comp-4").click(() => {
 });
 
 
-$("#active").click(() => {
-    $("#TableBody").empty();
-
-    for (let i = 0; i < AllCustomer.length; i++) {
-        if (AllCustomer[i].customerState == "متفاعل") {
-            $("#TableBody").append(
-                "<tr><td>" + AllCustomer[i].customerName + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td>"
-                + "<td>"
-                + "<a href='../Customer/CustomerStateComment?customerId=" + AllCustomer[i].id + "' class='customerSta'><span style='position: relative'> "
-                + AllCustomer[i].customerState
-                + "<span class='addComm'>اضف تعليقاً</span></span></a></td>"
-                + "<td>"
-                + "<a class='btn btn-primary' href='../Customer/ShowProjects/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
-                + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
-                + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
-                + "</td>"
-                + "</tr>");
-        }
-
-    }
-});
 
 $("#answer").click(() => {
     $("#TableBody").empty();
@@ -186,7 +165,6 @@ $("#answer").click(() => {
                 + "<td>"
                 + "<a class='btn btn-primary' href='../Customer/ShowProjects/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
                 + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
-                + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
                 + "</td>"
                 + "</tr>");
         }
@@ -208,7 +186,7 @@ $("#notAnswer").click(() => {
                 + "<td>"
                 + "<a class='btn btn-primary' href='../Customer/ShowProjects/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
                 + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
-                + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
+
                 + "</td>"
                 + "</tr>");
         }
@@ -217,28 +195,6 @@ $("#notAnswer").click(() => {
 
 
 
-
-$("#unActive").click(() => {
-    $("#TableBody").empty();
-
-    for (let i = 0; i < AllCustomer.length; i++) {
-        if (AllCustomer[i].customerState == "غير متفاعل") {
-            $("#TableBody").append(
-                "<tr><td>" + AllCustomer[i].customerName + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td>"
-                + "<td>"
-                + "<a href='../Customer/CustomerStateComment?customerId=" + AllCustomer[i].id + "' class='customerSta'><span style='position: relative'> "
-                + AllCustomer[i].customerState
-                + "<span class='addComm'>اضف تعليقاً</span></span></a></td>"
-                + "<td>"
-                + "<a class='btn btn-primary' href='../Customer/ShowProjects/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
-                + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
-                + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
-                + "</td>"
-                + "</tr>");
-        }
-
-    }
-});
 
 
 $("#following").click(() => {
@@ -252,7 +208,7 @@ $("#following").click(() => {
                 + "<td>"
                 + "<a class='btn btn-primary' href='../Customer/ShowProjects/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
                 + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
-                + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
+                
                 + "</td>"
                 + "</tr>");
         }
@@ -276,7 +232,7 @@ $("#ok").click(() => {
                 + "<td>"
                 + "<a class='btn btn-primary' href='../Customer/ShowProjects/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
                 + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
-                + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
+               
                 + "</td>"
                 + "</tr>");
         }
@@ -298,7 +254,7 @@ $("#new").click(() => {
                 + "<td>"
                 + "<a class='btn btn-primary' href='../Customer/ShowProjects/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
                 + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
-                + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
+                
                 + "</td>"
                 + "</tr>");
         }
@@ -321,7 +277,7 @@ $("#data").click(() => {
                 + "<td>"
                 + "<a class='btn btn-primary' href='../Customer/ShowProjects/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
                 + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
-                + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
+                
                 + "</td>"
                 + "</tr>");
         }
@@ -343,7 +299,7 @@ $("#Internet").click(() => {
                 + "<td>"
                 + "<a class='btn btn-primary' href='../Customer/ShowProjects/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
                 + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
-                + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
+        
                 + "</td>"
                 + "</tr>");
         }
@@ -366,7 +322,7 @@ $("#marketers").click(() => {
                 + "<td>"
                 + "<a class='btn btn-primary' href='../Customer/ShowProjects/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
                 + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
-                + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
+           
                 + "</td>"
                 + "</tr>");
         }
@@ -388,7 +344,7 @@ $("#employees").click(() => {
                 + "<td>"
                 + "<a class='btn btn-primary' href='../Customer/ShowProjects/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
                 + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
-                + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
+               
                 + "</td>"
                 + "</tr>");
         }
@@ -410,7 +366,7 @@ $("#other").click(() => {
                 + "<td>"
                 + "<a class='btn btn-primary' href='../Customer/ShowProjects/" + AllCustomer[i].id + "'>تفاصيل المشاريع </a> "
                 + "<a class='btn btn-outline-primary' href='../Customer/EditInformation/" + AllCustomer[i].id + "'>تعديل معلومات العميل</a> "
-                + "<a class='btn btn-outline-success' href='mailto: " + AllCustomer[i].email + "'>مراسلة العميل</a>"
+          
                 + "</td>"
                 + "</tr>");
         }

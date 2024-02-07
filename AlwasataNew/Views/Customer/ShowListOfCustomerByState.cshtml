@@ -65,9 +65,6 @@
                                                 <th>تم انشائه بتاريخ</th>
                                                 <th>اسم الشركة</th>
                                                 <th>رقم الهاتف</th>
-                                                <th>الايميل</th>
-                                                <th>نوع العميل</th>
-                                                <th>الموظف المتابع له</th>
                                                 <th>تم انشائه بواسطة</th>
                                                 <th>العمليات</th>
                                             </tr>
@@ -112,30 +109,17 @@
                                                         }
                                                     </td>
                                                     <td>@customer.Phone</td>
-                                                    <td>
-                                                            <a href="mailto: @customer.Email">@customer.Email</a>
-                                                    </td>
-                                                    <td>@customer.Type</td>
-                                                   
-                                                         
-                                                    <td>
-                                                        @if (customer.FollowBy == null)
-                                                        {
-                                                            <span style="color:darkred;font-weight:bold;">لا يوجد</span>
-                                                        }
-                                                        else
-                                                        {
-                                                            using var dbContext = new ApplicationDbContext();
-                                                            var result = dbContext.Users.Where(x => x.Id == customer.FollowBy).Select(n => new { n.FirstName, n.LastName }).FirstOrDefault();
-                                                            @result.FirstName <span> </span> @result.LastName
-                                                        }
-                                                    </td>
+                                                    
+                                                    
+                                                    
+                                                    
                                                     <td>
                                                         @customer.CreatedBy     
                                                     </td>
                                                     <td>
-                                                        <a class="btn btn-outline-info" asp-controller="Customer" asp-action="CustomerStateComment" asp-route-customerId="@customer.Id"> <i class="fa-regular fa-comment"></i> اترك تعليقاً</a>
-                                                        <a class="btn btn-outline-primary" asp-controller="Customer" asp-action="EditInformation" asp-route-Id="@customer.Id">تعديل المعلومات </a></td>
+                                                        <a class="btn btn-outline-info" asp-controller="Customer" asp-action="CustomerStateComment" asp-route-customerId="@customer.Id"> <i class="fa-regular fa-comment"></i></a>
+                                                        <a class="btn btn-outline-primary" asp-controller="Customer" asp-action="EditInformation" asp-route-Id="@customer.Id"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                    </td>
                                                 </tr>
                                             }
                                         </tbody>
@@ -164,8 +148,8 @@
                                                             <th>تم انشائه بتاريخ</th>
                                                             <th>اسم الشركة</th>
                                                             <th>رقم الهاتف</th>
-                                                            <th>الايميل</th>
-                                                            <th>نوع العميل</th>
+                                                            
+                                                            
                                                             <th>العمليات</th>
                                                         </tr>
                                                     </thead>
@@ -202,14 +186,10 @@
                     + "<td>"
                     + data[i].phone
                     +"</td>"
+                    
+                    
                     + "<td>"
-                    + data[i].email
-                    + "</td>"
-                    + "<td>"
-                    + data[i].type
-                    + "</td>"
-                    + "<td>"
-                    + "<a class= 'btn btn-outline-info' href='../Customer/CustomerStateComment?customerId=" + data[i].id + "'> <i class='fa-regular fa-comment'></i> اترك تعليقاً</a>  <a class='btn btn-outline-primary' href='../Customer/EditInformation/" + data[i].id + "'> تعديل المعلومات </a>"
+                    + "<a class= 'btn btn-outline-info' href='../Customer/CustomerStateComment?customerId=" + data[i].id + "'> <i class='fa-regular fa-comment'></i></a>  <a class='btn btn-outline-primary' href='../Customer/EditInformation/" + data[i].id + "'> <i class='fa-solid fa-pen-to-square'></i> </a>"
 
 
                     + "</td>"
@@ -232,14 +212,10 @@
                     + "<td>"
                     + data[i].phone
                     +"</td>"
-                    + "<td>"
-                    +data[i].email
-                    + "</td>"
-                    + "<td>"
-                    + data[i].type
-                    + "</td>"
+                    
+                    
                     + "<td>" 
-                    + "<a class= 'btn btn-outline-info' href='../Customer/CustomerStateComment?customerId=" + data[i].id + "'> <i class='fa-regular fa-comment'></i> اترك تعليقاً</a>  <a class='btn btn-outline-primary' href='../Customer/EditInformation/" + data[i].id + "'> تعديل المعلومات </a>"
+                    + "<a class= 'btn btn-outline-info' href='../Customer/CustomerStateComment?customerId=" + data[i].id + "'> <i class='fa-regular fa-comment'></i></a>  <a class='btn btn-outline-primary' href='../Customer/EditInformation/" + data[i].id + "'> <i class='fa-solid fa-pen-to-square'></i> </a>"
 
 
                     + "</td>"

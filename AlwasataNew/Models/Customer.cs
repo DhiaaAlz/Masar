@@ -24,6 +24,8 @@ namespace AlwasataNew.Models
         public string? CustomerComeFrom { get; set; }
         public string? CustomerDescription { get; set; }
         public string? ClientSource { get; set; }
+        public string? SecondPhone { get; set; }
+        public string? SecondEmail { get; set; }
         public ICollection<Project>? Projects { get; } = new List<Project>();
     }
 

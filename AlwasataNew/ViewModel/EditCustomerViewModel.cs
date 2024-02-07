@@ -73,6 +73,10 @@ namespace AlwasataNew.ViewModel
 
         [Display(Name = "مصدر العميل")]
         public string? ClientSourceMarkter { get; set; }
+        [Display(Name = "ايميل ثاني")]
+        public string? SecondEmail { get; set; }
+        [Display(Name = "رقم هاتف ثاني")]
+        public string? SecondPhone { get; set; }
 
         [Display(Name = "العميل قادم من")]
         public string? CustomerComeFrom { get; set; }

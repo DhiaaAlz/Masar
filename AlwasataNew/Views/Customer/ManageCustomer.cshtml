@@ -120,10 +120,10 @@
                         }
                     </td>
                     <td>
+
                         <a class="btn btn-primary" asp-controller="Customer" asp-action="ShowProjects" asp-route-Id="@customer.Id">تفاصيل المشاريع</a>
-                        <a class="btn btn-outline-primary" asp-controller="Customer" asp-action="EditInformation" asp-route-Id="@customer.Id">تعديل معلومات العميل</a>
-                        <a class="btn btn-outline-success" href="mailto: @customer.Email">مراسلة العميل</a>
-                        <a class="btn btn-outline-info" asp-controller="Customer" asp-action="CustomerStateComment" asp-route-customerId="@customer.Id"> <i class="fa-regular fa-comment"></i> اترك تعليقاً</a>
+                        <a class="btn btn-outline-primary" asp-controller="Customer" asp-action="EditInformation" asp-route-Id="@customer.Id"><i class="fa-solid fa-pen-to-square"></i></a>
+                        <a class="btn btn-outline-info" asp-controller="Customer" asp-action="CustomerStateComment" asp-route-customerId="@customer.Id"> <i class="fa-regular fa-comment"></i> </a>
                         
                     </td>
                 </tr>
@@ -137,13 +137,11 @@
             <button id="new">جديد</button>
             <button id="notAnswer">لم يرد</button>
             <button id="answer">رد</button>
-            <button id="active">متفاعل</button>
-            <button id="unActive">غير متفاعل</button>
             <button id="following">متابعة</button>
             <button id="ok">تعميد</button>
         </div>
         <div>
-            <span> فرز العملاء بحسب الشركة</span>
+            <span>فرز العملاء بحسب الشركة</span>
             @{
                 using var dbContext2 = new ApplicationDbContext();
                 foreach (var item in dbContext2.Companies)
