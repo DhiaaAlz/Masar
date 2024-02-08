@@ -138,6 +138,8 @@
                                                         @customer.ClientSource
                                                     </td>
                                                     <td>
+                                                        <a class="btn btn-outline-info" asp-controller="Customer" asp-action="EditInformation" asp-route-id="@customer.Id"> <i class="fa-regular fa-pen-to-square"></i></a>
+
                                                         <a class="btn btn-outline-info" asp-controller="Customer" asp-action="CustomerStateComment" asp-route-customerId="@customer.Id"> <i class="fa-regular fa-comment"></i></a>
                                                     </td>
                                                 </tr>

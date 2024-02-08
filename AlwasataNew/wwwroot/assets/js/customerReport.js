@@ -63,7 +63,7 @@ $("#Follow").click(() => {
     for (let i = 0; i < AllCustomer.length; i++) {
         if (AllCustomer[i].followBy != null && (AllCustomer[i].customerComeFrom == 'Internet' || AllCustomer[i].customerComeFrom =='حملات التسويق')) {
             $("#TableBody").append(
-                "<tr><td>" + AllCustomer[i].customerName + "</td><td>" + AllCustomer[i].createdAt + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td><td>" + AllCustomer[i].type + "</td><td>" + AllCustomer[i].customerState + "</td><td>" + AllCustomer[i].clientSource + "</td><td><a class='btn btn-outline-info' href='../Customer/CustomerStateComment?customerId=" + AllCustomer[i].id + "'><i class='fa-regular fa-comment'></i></a></td>"
+                "<tr><td>" + AllCustomer[i].customerName + "</td><td>" + AllCustomer[i].createdAt + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td><td>" + AllCustomer[i].type + "</td><td>" + AllCustomer[i].customerState + "</td><td>" + AllCustomer[i].clientSource + "</td><td><a class='btn btn-outline-info' href='../Customer/EditInformation?id=" + AllCustomer[i].id + "'><i class='fa-regular fa-pen-to-square'></i></a> <a class='btn btn-outline-info' href='../Customer/CustomerStateComment?customerId=" + AllCustomer[i].id + "'><i class='fa-regular fa-comment'></i></a></td>"
                 + "</tr>");
             count++;
         }
@@ -78,7 +78,7 @@ $("#UnFollow").click(() => {
     for (let i = 0; i < AllCustomer.length; i++) {
         if (AllCustomer[i].followBy == null && (AllCustomer[i].customerComeFrom == 'Internet' || AllCustomer[i].customerComeFrom == 'حملات التسويق')) {
             $("#TableBody").append(
-                "<tr><td>" + AllCustomer[i].customerName + "</td><td>" + AllCustomer[i].createdAt + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td><td>" + AllCustomer[i].type + "</td><td>" + AllCustomer[i].customerState + "</td><td>" + AllCustomer[i].clientSource + "</td><td><a class='btn btn-outline-info' href='../Customer/CustomerStateComment?customerId=" + AllCustomer[i].id + "'><i class='fa-regular fa-comment'></i></a></td>"
+                "<tr><td>" + AllCustomer[i].customerName + "</td><td>" + AllCustomer[i].createdAt + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td><td>" + AllCustomer[i].type + "</td><td>" + AllCustomer[i].customerState + "</td><td>" + AllCustomer[i].clientSource + "</td><td><a class='btn btn-outline-info' href='../Customer/EditInformation?id=" + AllCustomer[i].id + "'><i class='fa-regular fa-pen-to-square'></i></a> <a class='btn btn-outline-info' href='../Customer/CustomerStateComment?customerId=" + AllCustomer[i].id + "'><i class='fa-regular fa-comment'></i></a></td>"
                 + "</tr>");
             count++;
         }
@@ -87,35 +87,6 @@ $("#UnFollow").click(() => {
     document.getElementById("customerCount").innerHTML = count;
 });
 
-$("#FollowOther").click(() => {
-    $("#TableBody").empty();
-    let count = 0;
-    for (let i = 0; i < AllCustomer.length; i++) {
-        if (AllCustomer[i].followBy != null && (AllCustomer[i].customerComeFrom != 'Internet' && AllCustomer[i].customerComeFrom != 'حملات التسويق')) {
-            $("#TableBody").append(
-                "<tr><td>" + AllCustomer[i].customerName + "</td><td>" + AllCustomer[i].createdAt + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td><td>" + AllCustomer[i].type + "</td><td>" + AllCustomer[i].customerState + "</td><td>" + AllCustomer[i].clientSource + "</td><td><a class='btn btn-outline-info' href='../Customer/CustomerStateComment?customerId=" + AllCustomer[i].id + "'><i class='fa-regular fa-comment'></i></a></td>"
-                + "</tr>");
-            count++;
-        }
-
-    }
-    document.getElementById("customerCount").innerHTML = count;
-});
-
-$("#UnFollowOther").click(() => {
-    $("#TableBody").empty();
-    let count = 0;
-    for (let i = 0; i < AllCustomer.length; i++) {
-        if (AllCustomer[i].followBy == null && (AllCustomer[i].customerComeFrom != 'Internet' && AllCustomer[i].customerComeFrom != 'حملات التسويق')) {
-            $("#TableBody").append(
-                "<tr><td>" + AllCustomer[i].customerName + "</td><td>" + AllCustomer[i].createdAt + "</td><td>" + AllCustomer[i].companyName + "</td><td>" + AllCustomer[i].phone + "</td><td>" + AllCustomer[i].type + "</td><td>" + AllCustomer[i].customerState + "</td><td>" + AllCustomer[i].clientSource + "</td><td><a class='btn btn-outline-info' href='../Customer/CustomerStateComment?customerId=" + AllCustomer[i].id + "'><i class='fa-regular fa-comment'></i></a></td>"
-                + "</tr>");
-            count++;
-        }
-
-    }
-    document.getElementById("customerCount").innerHTML = count;
-});
 
 
 

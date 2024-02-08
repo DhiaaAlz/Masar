@@ -37,6 +37,7 @@ namespace AlwasataNew.Controllers
             {
                 var newDate = Convert.ToDateTime(date);
                 var list = _context.Customers.Where(x => x.CustomerComeFrom == "Internet" || x.CustomerComeFrom == "حملات التسويق").AsNoTracking().ToList();
+                list = list.OrderByDescending(x => Convert.ToDateTime(x.CreatedAt)).ToList();
                 foreach (var item in list)
                 {
                     if(Convert.ToDateTime(item.CreatedAt).Month==newDate.Month)
@@ -49,6 +50,7 @@ namespace AlwasataNew.Controllers
             else
             {
                 customers = _context.Customers.Where(x => x.CustomerComeFrom == "Internet" || x.CustomerComeFrom == "حملات التسويق").AsNoTracking().ToList();
+                customers = customers.OrderByDescending(x => Convert.ToDateTime(x.CreatedAt)).ToList();
             }
             return View(customers);
         }
@@ -61,11 +63,12 @@ namespace AlwasataNew.Controllers
                 if(customerType=="متابعين")
                 {
                     customers = _context.Customers.Where(x => x.CustomerComeFrom != "Internet" && x.CustomerComeFrom != "حملات التسويق" && x.FollowBy!=null).AsNoTracking().ToList();
-
+                    customers=customers.OrderByDescending(x=>Convert.ToDateTime(x.CreatedAt)).ToList();
                 }
                 else
                 {
                     customers = _context.Customers.Where(x => x.CustomerComeFrom != "Internet" && x.CustomerComeFrom != "حملات التسويق" && x.FollowBy==null).AsNoTracking().ToList();
+                    customers = customers.OrderByDescending(x => Convert.ToDateTime(x.CreatedAt)).ToList();
 
                 }
 
@@ -75,6 +78,7 @@ namespace AlwasataNew.Controllers
             else
             {
                  customers = _context.Customers.Where(x => x.CustomerComeFrom != "Internet" && x.CustomerComeFrom != "حملات التسويق").AsNoTracking().ToList();
+                customers = customers.OrderByDescending(x => Convert.ToDateTime(x.CreatedAt)).ToList();
 
             }
             return View(customers);
