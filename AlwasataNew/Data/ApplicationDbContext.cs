@@ -82,5 +82,14 @@ namespace AlwasataNew.Data
         public DbSet<CustomerCommentstbl> CustomerCommentstbls { get; set; }
         public DbSet<RemindCustomer> RemindCustomers { get; set; }
 
+        //استبيان تصميم داخلي
+        public DbSet<InteriorDesignQuestionnaire> InteriorDesignQuestionnaires { get; set; }
+        //الدور الاول
+        public DbSet<FirstFloorQuestionnaire> FirstFloorQuestionnaires { get; set; }
+        //الدور الارضي
+        public DbSet<GroundFloorQuestionnaire> GroundFloorQuestionnaires { get; set; }
+        //الواجهات
+        public DbSet<Interfaces> Interfaces { get; set; }
+
     }
 }

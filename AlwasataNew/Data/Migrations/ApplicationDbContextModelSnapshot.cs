@@ -289,6 +289,151 @@ namespace AlwasataNew.Data.Migrations
                     b.ToTable("customerStateTbl");
                 });
 
+            modelBuilder.Entity("AlwasataNew.Models.FirstFloorQuestionnaire", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("FirstFloorHall")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("InteriorDesignQuestionnaireId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("MasterBedroom")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Other")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Room1")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FirstFloorQuestionnaires");
+                });
+
+            modelBuilder.Entity("AlwasataNew.Models.GroundFloorQuestionnaire", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("ExternalAttachment")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("GroundFloorHall")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("InteriorDesignQuestionnaireId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Kitchen")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("MenCouncil")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Other")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("WCMenCouncil")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("WCWomenCouncil")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("WomenCouncil")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GroundFloorQuestionnaires");
+                });
+
+            modelBuilder.Entity("AlwasataNew.Models.Interfaces", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("BackInterfaces")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("FrontInterfaces")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("InteriorDesignQuestionnaireId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("SideInterfaces")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("SideInterfaces2")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Interfaces");
+                });
+
+            modelBuilder.Entity("AlwasataNew.Models.InteriorDesignQuestionnaire", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Basment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BuldingArea")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClientName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DesignStyle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("FirstFloorQuestionnaireId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GroundFloorQuestionnaireId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("InterfacesId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProjectType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SurfaceFloor")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("InteriorDesignQuestionnaires");
+                });
+
             modelBuilder.Entity("AlwasataNew.Models.Project", b =>
                 {
                     b.Property<int>("Id")
