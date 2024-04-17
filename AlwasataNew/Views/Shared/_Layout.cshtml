@@ -3,6 +3,11 @@
 @using System.Security.Claims;
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@inject ApplicationDbContext _context;
+@{
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var userEmail = _context.Users.Where(x => x.Id == userId).Select(x => x.Email).FirstOrDefault();
+}
 <!DOCTYPE html>
 <html lang="ar">
 <head>
@@ -42,8 +47,6 @@
                             <span class="hide-menu">
                                 @{
                                     using var dbContext = new ApplicationDbContext();
-
-                                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
                                     var resultt = dbContext.Users.Where(x => x.Id == userId).Select(x => new { FName = x.FirstName, LName = x.LastName }).FirstOrDefault();
 
@@ -145,8 +148,19 @@
                                 <span class="hide-menu">تقارير</span>
                             </a>
                         </li>
-                        
-                   
+
+                        @if (userEmail == "designdirector@almanzooralshamel.com")
+                        {
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="~/Questionnaire/QuestionnaireInteriorDesign" aria-expanded="false">
+                                    <span>
+                                        <i class="ti ti-cards"></i>
+                                    </span>
+                                    <span class="hide-menu">تقرير استبيان تصميم داخلي</span>
+                                </a>
+                            </li>
+                        }
+
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="~/Tasks/Index" aria-expanded="false">
                                 <span>

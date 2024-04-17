@@ -110,58 +110,65 @@
                             <div class="myRowCheckBox">
                                 <div class="dviCheckBoxTitle">نوع المشروع</div>
                                 <div style="display:flex;gap:15px">
-                                    <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" name="villa" id="vila">
-                                        <label class="form-check-label" for="vila">
-                                            فيلا سكنية
-                                        </label>
-                                    </div>
-                                    <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" name="ResidentialBuilding" id="hb">
-                                        <label class="form-check-label" for="hb">
-                                            عمارة سكنية
-                                        </label>
-                                    </div>
-                                    <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" name="CommercialBuilding" id="bc">
-                                        <label class="form-check-label" for="bc">
-                                            مبنى تجاري
-                                        </label>
-                                    </div>
-                                    <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" name="institutionOffice" id="ob">
-                                        <label class="form-check-label" for="ob">
-                                            مكتب اداري
-                                        </label>
-                                    </div>
-                                    <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" name="institutionBuilding" id="mb">
-                                        <label class="form-check-label" for="mb">
-                                            مبنى اداري
-                                        </label>
-                                    </div>
-                                    <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" name="shop" id="m">
-                                        <label class="form-check-label" for="m">
-                                            محل
-                                        </label>
-                                    </div>
-                                    <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" name="apartment" id="h">
-                                        <label class="form-check-label" for="h">
-                                            شقة
-                                        </label>
-                                    </div>
-                                    <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" name="projectTypeOther" id="projectTypeOther" onchange="projectTypeOtherChange()">
-                                        <label class="form-check-label" for="projectTypeOther">
-                                            اخرى
-                                        </label>
-                                    </div>
-                                    <div id="ProjectTypeOtherDiv" style="display:none">
-                                        <input type="text" id="ProjectTypeOtherText" name="projectTypeOtherInput" placeholder=" نوع المشروع">
+                                    @if(Model.ClientName !=null)
+                                    {
+                                        <span style="margin-top:10px;font-weight:bold">@Model.ProjectType</span>
+                                    }
+                                    else
+                                    {
+                                        <div class="form-check" style="margin-top:10px;width:fit-content">
+                                            <input class="form-check-input" type="checkbox" name="villa" id="vila">
+                                            <label class="form-check-label" for="vila">
+                                                فيلا سكنية
+                                            </label>
+                                        </div>
+                                        <div class="form-check" style="margin-top:10px;width:fit-content">
+                                            <input class="form-check-input" type="checkbox" name="ResidentialBuilding" id="hb">
+                                            <label class="form-check-label" for="hb">
+                                                عمارة سكنية
+                                            </label>
+                                        </div>
+                                        <div class="form-check" style="margin-top:10px;width:fit-content">
+                                            <input class="form-check-input" type="checkbox" name="CommercialBuilding" id="bc">
+                                            <label class="form-check-label" for="bc">
+                                                مبنى تجاري
+                                            </label>
+                                        </div>
+                                        <div class="form-check" style="margin-top:10px;width:fit-content">
+                                            <input class="form-check-input" type="checkbox" name="institutionOffice" id="ob">
+                                            <label class="form-check-label" for="ob">
+                                                مكتب اداري
+                                            </label>
+                                        </div>
+                                        <div class="form-check" style="margin-top:10px;width:fit-content">
+                                            <input class="form-check-input" type="checkbox" name="institutionBuilding" id="mb">
+                                            <label class="form-check-label" for="mb">
+                                                مبنى اداري
+                                            </label>
+                                        </div>
+                                        <div class="form-check" style="margin-top:10px;width:fit-content">
+                                            <input class="form-check-input" type="checkbox" name="shop" id="m">
+                                            <label class="form-check-label" for="m">
+                                                محل
+                                            </label>
+                                        </div>
+                                        <div class="form-check" style="margin-top:10px;width:fit-content">
+                                            <input class="form-check-input" type="checkbox" name="apartment" id="h">
+                                            <label class="form-check-label" for="h">
+                                                شقة
+                                            </label>
+                                        </div>
+                                        <div class="form-check" style="margin-top:10px;width:fit-content">
+                                            <input class="form-check-input" type="checkbox" name="projectTypeOther" id="projectTypeOther" onchange="projectTypeOtherChange()">
+                                            <label class="form-check-label" for="projectTypeOther">
+                                                اخرى
+                                            </label>
+                                        </div>
+                                        <div id="ProjectTypeOtherDiv" style="display:none">
+                                            <input type="text" id="ProjectTypeOtherText" name="projectTypeOtherInput" placeholder=" نوع المشروع">
 
-                                    </div>
+                                        </div>
+                                    }
 
 
                                 </div>
@@ -169,36 +176,43 @@
                             <div class="myRowCheckBox">
                                 <div class="dviCheckBoxTitle">طراز المشروع</div>
                                 <div style="display:flex;gap:15px">
-                                    <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" name="modern" id="modern">
-                                        <label class="form-check-label" for="modern">
-                                            مودرن
-                                        </label>
-                                    </div>
-                                    <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" name="classic" id="classic">
-                                        <label class="form-check-label" for="classic">
-                                            كلاسيك
-                                        </label>
-                                    </div>
-                                    <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" name="newClassic" id="newClassic">
-                                        <label class="form-check-label" for="newClassic">
-                                            نيو كلاسيك
-                                        </label>
-                                    </div>
+                                    @if(Model.ClientName != null)
+                                    {
+                                        <span style="margin-top:10px;font-weight:bold">@Model.DesignStyle</span>
+                                    }
+                                    else
+                                    {
+                                        <div class="form-check" style="margin-top:10px;width:fit-content">
+                                            <input class="form-check-input" type="checkbox" name="modern" id="modern">
+                                            <label class="form-check-label" for="modern">
+                                                مودرن
+                                            </label>
+                                        </div>
+                                        <div class="form-check" style="margin-top:10px;width:fit-content">
+                                            <input class="form-check-input" type="checkbox" name="classic" id="classic">
+                                            <label class="form-check-label" for="classic">
+                                                كلاسيك
+                                            </label>
+                                        </div>
+                                        <div class="form-check" style="margin-top:10px;width:fit-content">
+                                            <input class="form-check-input" type="checkbox" name="newClassic" id="newClassic">
+                                            <label class="form-check-label" for="newClassic">
+                                                نيو كلاسيك
+                                            </label>
+                                        </div>
 
 
-                                    <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" value="" id="projectTypeOtherDesign" onchange="projectDesignOtherChange()">
-                                        <label class="form-check-label" for="projectTypeOtherDesign">
-                                            اخرى
-                                        </label>
-                                    </div>
-                                    <div id="ProjectTypeOtherDivDesign" style="display:none">
-                                        <input type="text" name="OtherDesignStyle" id="ProjectTypeOtherText" placeholder=" طراز المشروع">
+                                        <div class="form-check" style="margin-top:10px;width:fit-content">
+                                            <input class="form-check-input" type="checkbox" value="" id="projectTypeOtherDesign" onchange="projectDesignOtherChange()">
+                                            <label class="form-check-label" for="projectTypeOtherDesign">
+                                                اخرى
+                                            </label>
+                                        </div>
+                                        <div id="ProjectTypeOtherDivDesign" style="display:none">
+                                            <input type="text" name="OtherDesignStyle" id="ProjectTypeOtherText" placeholder=" طراز المشروع">
 
-                                    </div>
+                                        </div>
+                                    }
 
 
                                 </div>

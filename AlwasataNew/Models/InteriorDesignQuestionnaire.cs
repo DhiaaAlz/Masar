@@ -28,6 +28,9 @@ namespace AlwasataNew.Models
         [Display(Name = "البدروم")]
         public string Basment { get; set; }
 
+        [Display(Name = "تم ارسال عرض سعر")]
+        public bool IsOfferPriceSent { get; set; }
+
         public int GroundFloorQuestionnaireId { get; set; }
 
         public int FirstFloorQuestionnaireId { get; set; }

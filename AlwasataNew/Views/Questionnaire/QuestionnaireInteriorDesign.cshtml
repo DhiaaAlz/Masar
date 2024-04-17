@@ -1,0 +1,53 @@
+﻿
+@model List<InteriorDesignQuestionnaire>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+
+<div class="container">
+    <div class="row" style="justify-content:center">
+        <div class="col-md-12">
+            <h3 style="text-align:center;margin-bottom:50px">استبيان تصميم داخلي</h3>
+            <div class="table-responsive" style="max-height:525px;">
+                <table class="table table-striped">
+                    <thead>
+                        <tr class="bg-primary text-white mt-4">
+                            <th>#</th>
+                            <th>اسم العميل</th>
+                            <th>رقم الهاتف</th>
+                            <th>تم ارسال عرض سعر</th>
+                            <th>تفاصيل</th>
+                        </tr>
+                    </thead>
+                    <tbody id="">
+                        @foreach(var item in Model)
+                        {
+                            <tr>
+                                <td></td>
+                                <td>@item.ClientName</td>
+                                <td>@item.PhoneNumber</td>
+                                <td>
+                                    @{
+                                        if(item.IsOfferPriceSent)
+                                        {
+                                            <span style="color:darkgreen;font-weight:bold">تم الارسال</span>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-success" asp-action="SentOfferPrice" asp-route-id="@item.Id">تم الارسال</a>
+                                        }
+                                    }
+                                </td>
+                                <td><a asp-action="InteriorDesign" asp-route-id="@item.Id" class="btn btn-primary">تفاصيل</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
