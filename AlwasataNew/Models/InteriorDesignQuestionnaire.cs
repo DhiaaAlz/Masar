@@ -5,7 +5,7 @@ namespace AlwasataNew.Models
     public class InteriorDesignQuestionnaire
     {
         [Display(Name = "رقم الاستبيان")]
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         [Display(Name = "اسم العميل")]
         public string ClientName { get; set; }

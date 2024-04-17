@@ -28,7 +28,7 @@ namespace AlwasataNew.Models
         public bool ExternalAttachment { get; set; }
 
         [Display(Name = "اخرى")]
-        public string Other { get; set; }
+        public string? Other { get; set; }
 
         public int InteriorDesignQuestionnaireId { get; set; }
 

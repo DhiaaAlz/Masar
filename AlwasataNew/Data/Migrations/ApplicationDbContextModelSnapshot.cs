@@ -307,7 +307,6 @@ namespace AlwasataNew.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Other")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Room1")
@@ -342,7 +341,6 @@ namespace AlwasataNew.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Other")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("WCMenCouncil")
@@ -389,8 +387,11 @@ namespace AlwasataNew.Data.Migrations
 
             modelBuilder.Entity("AlwasataNew.Models.InteriorDesignQuestionnaire", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Basment")
                         .IsRequired()

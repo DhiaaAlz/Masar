@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AlwasataNew.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240416132050_UpdateInteriorDesignQuestionnaireTbl")]
-    partial class UpdateInteriorDesignQuestionnaireTbl
+    [Migration("20240416203935_AddInteriorDesignQuestionnaireTables")]
+    partial class AddInteriorDesignQuestionnaireTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -392,8 +392,15 @@ namespace AlwasataNew.Data.Migrations
 
             modelBuilder.Entity("AlwasataNew.Models.InteriorDesignQuestionnaire", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Basment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BuldingArea")
                         .IsRequired()
@@ -421,6 +428,10 @@ namespace AlwasataNew.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProjectType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SurfaceFloor")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

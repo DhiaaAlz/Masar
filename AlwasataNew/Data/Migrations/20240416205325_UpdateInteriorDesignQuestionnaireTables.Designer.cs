@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AlwasataNew.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240416125351_AdddInteriorDesignQuestionnaireTbls")]
-    partial class AdddInteriorDesignQuestionnaireTbls
+    [Migration("20240416205325_UpdateInteriorDesignQuestionnaireTables")]
+    partial class UpdateInteriorDesignQuestionnaireTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -310,7 +310,6 @@ namespace AlwasataNew.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Other")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Room1")
@@ -345,7 +344,6 @@ namespace AlwasataNew.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Other")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("WCMenCouncil")
@@ -392,14 +390,25 @@ namespace AlwasataNew.Data.Migrations
 
             modelBuilder.Entity("AlwasataNew.Models.InteriorDesignQuestionnaire", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Basment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BuldingArea")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClientName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DesignStyle")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -416,11 +425,11 @@ namespace AlwasataNew.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProjectDesign")
+                    b.Property<string>("ProjectType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProjectType")
+                    b.Property<string>("SurfaceFloor")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

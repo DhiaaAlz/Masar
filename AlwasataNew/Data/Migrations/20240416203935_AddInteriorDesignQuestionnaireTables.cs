@@ -5,7 +5,7 @@
 namespace AlwasataNew.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AdddInteriorDesignQuestionnaireTbls : Migration
+    public partial class AddInteriorDesignQuestionnaireTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -69,12 +69,15 @@ namespace AlwasataNew.Data.Migrations
                 name: "InteriorDesignQuestionnaires",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ClientName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProjectType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProjectDesign = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DesignStyle = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BuldingArea = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SurfaceFloor = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Basment = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     GroundFloorQuestionnaireId = table.Column<int>(type: "int", nullable: false),
                     FirstFloorQuestionnaireId = table.Column<int>(type: "int", nullable: false),
                     InterfacesId = table.Column<int>(type: "int", nullable: false)

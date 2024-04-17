@@ -81,6 +81,10 @@
         <div class="col-md-12" style="display:flex;justify-content:center">
             <img src="~/images/المنظور الشامل لوجو.png" style="width:500px"/>
         </div>
+        @if(ViewBag.message !=null)
+        {
+            <h4 id="message" style="text-align:center;color:darkgreen">@ViewBag.message</h4>
+        }
         <div class="col-md-12">
             <h2 style="text-align:center;font-weight:bold;margin-top:40px;color:#4a6ccc">استبيان تصميم داخلي</h2>
         </div>
@@ -155,7 +159,7 @@
                                         </label>
                                     </div>
                                     <div id="ProjectTypeOtherDiv" style="display:none">
-                                        <input type="text" value="" id="ProjectTypeOtherText" name="projectTypeOtherInput" placeholder=" نوع المشروع">
+                                        <input type="text" id="ProjectTypeOtherText" name="projectTypeOtherInput" placeholder=" نوع المشروع">
 
                                     </div>
 
@@ -166,19 +170,19 @@
                                 <div class="dviCheckBoxTitle">طراز المشروع</div>
                                 <div style="display:flex;gap:15px">
                                     <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" value="" id="modern">
+                                        <input class="form-check-input" type="checkbox" name="modern" id="modern">
                                         <label class="form-check-label" for="modern">
                                             مودرن
                                         </label>
                                     </div>
                                     <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" value="" id="classic">
+                                        <input class="form-check-input" type="checkbox" name="classic" id="classic">
                                         <label class="form-check-label" for="classic">
                                             كلاسيك
                                         </label>
                                     </div>
                                     <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" value="" id="newClassic">
+                                        <input class="form-check-input" type="checkbox" name="newClassic" id="newClassic">
                                         <label class="form-check-label" for="newClassic">
                                             نيو كلاسيك
                                         </label>
@@ -192,7 +196,7 @@
                                         </label>
                                     </div>
                                     <div id="ProjectTypeOtherDivDesign" style="display:none">
-                                        <input type="text" value="" id="ProjectTypeOtherText" placeholder=" طراز المشروع">
+                                        <input type="text" name="OtherDesignStyle" id="ProjectTypeOtherText" placeholder=" طراز المشروع">
 
                                     </div>
 
@@ -201,7 +205,7 @@
                             </div>
                             <div class="myRow">
                                 <span>مساحة المبنى</span>
-                                <input type="text" placeholder="بالمتر المربع">
+                                <input asp-for="BuldingArea" placeholder="بالمتر المربع" >
                             </div>
                         </div>
 
@@ -223,13 +227,13 @@
                                 <div class="dviCheckBoxTitle"> الدور الارضي</div>
                                 <div style="display:flex;gap:15px">
                                     <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" value="" id="menC">
+                                        <input class="form-check-input" asp-for="GroundFloorQuestionnaire.MenCouncil" id="menC">
                                         <label class="form-check-label" for="menC">
                                             مجلس رجال
                                         </label>
                                     </div>
                                     <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" value="" id="womenC">
+                                        <input class="form-check-input" asp-for="GroundFloorQuestionnaire.WomenCouncil" id="womenC">
                                         <label class="form-check-label" for="womenC">
                                             مجلس نساء
                                         </label>
@@ -237,44 +241,44 @@
 
 
                                     <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" value="" id="groundHall">
+                                        <input class="form-check-input" asp-for="GroundFloorQuestionnaire.GroundFloorHall" id="groundHall">
                                         <label class="form-check-label" for="groundHall">
                                             صالة الدور الارضي
                                         </label>
                                     </div>
 
                                     <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" value="" id="wcMen">
+                                        <input class="form-check-input" asp-for="GroundFloorQuestionnaire.WCMenCouncil" id="wcMen">
                                         <label class="form-check-label" for="wcMen">
                                             حمام مجلس الرجال
                                         </label>
                                     </div>
                                     <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" value="" id="wcWomen">
+                                        <input class="form-check-input" asp-for="GroundFloorQuestionnaire.WCWomenCouncil" id="wcWomen">
                                         <label class="form-check-label" for="wcWomen">
                                             حمام مجلس النساء
                                         </label>
                                     </div>
                                     <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" value="" id="kitchen">
+                                        <input class="form-check-input" asp-for="GroundFloorQuestionnaire.Kitchen" id="kitchen">
                                         <label class="form-check-label" for="kitchen">
                                             المطبخ
                                         </label>
                                     </div>
                                     <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" value="" id="external">
+                                        <input class="form-check-input" asp-for="GroundFloorQuestionnaire.ExternalAttachment" id="external">
                                         <label class="form-check-label" for="external">
                                             الملحق الخارجي
                                         </label>
                                     </div>
                                     <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" value="" id="groundFloorInput" onchange="groundFloorInputChange()">
+                                        <input class="form-check-input" type="checkbox" id="groundFloorInput" onchange="groundFloorInputChange()">
                                         <label class="form-check-label" for="groundFloorInput">
                                             اخرى
                                         </label>
                                     </div>
                                     <div id="groundFloorDiv" style="display:none">
-                                        <input type="text" value="" id="groundFloorDivOther" placeholder="شيئ اخر">
+                                        <input asp-for="GroundFloorQuestionnaire.Other" id="groundFloorDivOther" placeholder="شيئ اخر">
                                     </div>
                                 </div>
 
@@ -284,21 +288,21 @@
                                 <div class="dviCheckBoxTitle"> الدور الاول</div>
                                 <div style="display:flex;gap:15px">
                                     <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" value="" id="mainSleep">
+                                        <input class="form-check-input" asp-for="FirstFloorQuestionnaire.MasterBedroom" id="mainSleep">
                                         <label class="form-check-label" for="mainSleep">
                                             غرفة النوم الرئيسية
                                         </label>
                                     </div>
 
                                     <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" value="" id="hallFirstFloor">
+                                        <input class="form-check-input" asp-for="FirstFloorQuestionnaire.FirstFloorHall" id="hallFirstFloor">
                                         <label class="form-check-label" for="hallFirstFloor">
                                             صالة الدور الاول
                                         </label>
                                     </div>
 
                                     <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" value="" id="onec">
+                                        <input class="form-check-input" asp-for="FirstFloorQuestionnaire.Room1" id="onec">
                                         <label class="form-check-label" for="onec">
                                             غرفة 1
                                         </label>
@@ -310,7 +314,7 @@
                                         </label>
                                     </div>
                                     <div id="firstFloorDiv" style="display:none">
-                                        <input type="text" value="" id="firstFloorDivOther" placeholder="شيئ اخر">
+                                        <input asp-for="FirstFloorQuestionnaire.Other" id="firstFloorDivOther" placeholder="شيئ اخر">
                                     </div>
                                 </div>
 
@@ -319,7 +323,7 @@
                             <div class="myRowCheckBox">
                                 <div class="dviCheckBoxTitle">دور  السطح</div>
                                 <div style="display:flex;gap:15px">
-                                <textarea name="satahFloor" style="margin:10px 0px;width:500px;height:100px;">
+                                <textarea asp-for="SurfaceFloor" style="margin:10px 0px;width:500px;height:100px;">
 
                                 </textarea>
                                 </div>
@@ -327,7 +331,7 @@
                             <div class="myRowCheckBox">
                                 <div class="dviCheckBoxTitle">البدروم</div>
                                 <div style="display:flex;gap:15px">
-                                <textarea name="badroom" style="margin:10px 0px;width:500px;height:100px;">
+                                <textarea asp-for="Basment" style="margin:10px 0px;width:500px;height:100px;">
 
                                 </textarea>
                                 </div>
@@ -336,25 +340,25 @@
                                 <div class="dviCheckBoxTitle">الواجهات</div>
                                 <div style="display:flex;gap:15px">
                                     <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" value="" id="frontInterface">
+                                        <input class="form-check-input" asp-for="Interfaces.FrontInterfaces" id="frontInterface">
                                         <label class="form-check-label" for="frontInterface">
                                             الواجهات الامامية
                                         </label>
                                     </div>
                                     <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" value="" id="sideInterface">
+                                        <input class="form-check-input" asp-for="Interfaces.SideInterfaces" id="sideInterface">
                                         <label class="form-check-label" for="sideInterface">
                                             الواجهات الجانبية
                                         </label>
                                     </div>
                                     <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" value="" id="sideInterface2">
+                                        <input class="form-check-input" asp-for="Interfaces.SideInterfaces2" id="sideInterface2">
                                         <label class="form-check-label" for="sideInterface2">
                                             الواجهات الجانبية 2
                                         </label>
                                     </div>
                                     <div class="form-check" style="margin-top:10px;width:fit-content">
-                                        <input class="form-check-input" type="checkbox" value="" id="backInterface">
+                                        <input class="form-check-input" asp-for="Interfaces.BackInterfaces" id="backInterface">
                                         <label class="form-check-label" for="backInterface">
                                             الواجهات الخلفية
                                         </label>
@@ -417,5 +421,9 @@
 
     }
 
+    if ($("#message").css("display") == "block") {
+        $("#message").fadeOut(3000);
+    }
+    
 
 </script>

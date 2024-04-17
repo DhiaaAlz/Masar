@@ -16,7 +16,7 @@ namespace AlwasataNew.Models
         public bool FirstFloorHall { get; set; }
 
         [Display(Name = "اخرى")]
-        public string Other { get; set; }
+        public string? Other { get; set; }
         public int InteriorDesignQuestionnaireId { get; set; }
 
     }
